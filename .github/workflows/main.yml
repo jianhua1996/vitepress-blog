@@ -1,8 +1,8 @@
+name: CI/CD # 此工作流程（workflow）的名字
 on:
   push: # 触发此文件运行的条件
     branchs:
       - build-deploy
-name: CI/CD # 此工作流程（workflow）的名字
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,4 +22,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.2.2
         with:
           branch: build-deploy
-          folder: dist
+          folder: .vitepress/dist
