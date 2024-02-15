@@ -1,9 +1,11 @@
 import { getPosts, getPostLength } from './theme/serverUtils'
 import { buildBlogRSS } from './theme/rss'
 
+const base = '/vitepress-blog/'
+
 async function config() {
   return {
-    base: '/vitepress-blog/',
+    base,
     lang: 'en-US',
     title: 'jianhua1996的博客',
     description: '',
@@ -43,7 +45,7 @@ async function config() {
     themeConfig: {
       // repo: "clark-cui/homeSite",
       logo: '/horse.svg',
-      avator: '/logo.jpg',
+      avator: `${base}logo.jpg`,
       search: {
         provider: 'local'
       },
