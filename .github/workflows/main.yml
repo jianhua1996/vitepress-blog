@@ -7,6 +7,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Install pnpm
+        run: npm i pnpm -g
+
       - name: Checkout
         uses: actions/checkout@v2
 
