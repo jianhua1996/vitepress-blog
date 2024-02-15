@@ -1,0 +1,25 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "Clark Cui",
+    "home_page_url": "https://clark-cui.top/",
+    "feed_url": "https://clark-cui.top/feed.json",
+    "description": "Clark Cui' Blog",
+    "icon": "https://clark-cui.top/horse.svg",
+    "author": {
+        "name": "Clark Cui",
+        "url": "https://clark-cui.top"
+    },
+    "items": [
+        {
+            "content_html": "<h1>测试一下呢呢</h1>\n<p>测试测试</p>\n<pre><code class=\"language-javascript\">console.log('test test')\n</code></pre>\n",
+            "url": "https://clark-cui.top/posts/作为测试文章.html",
+            "title": "测试文章",
+            "summary": "测试测试",
+            "date_modified": "2024-02-15T00:00:00.000Z",
+            "author": {
+                "name": "Clark Cui",
+                "url": "https://clark-cui.top"
+            }
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://clark-cui.top/</id>
+    <title>Clark Cui</title>
+    <updated>2024-02-15T09:17:31.622Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <author>
+        <name>Clark Cui</name>
+        <email>rongchuancui@gmail.com</email>
+        <uri>https://clark-cui.top</uri>
+    </author>
+    <link rel="alternate" href="https://clark-cui.top/"/>
+    <link rel="self" href="https://clark-cui.top/feed.atom"/>
+    <subtitle>Clark Cui' Blog</subtitle>
+    <logo>https://clark-cui.top/horse.svg</logo>
+    <icon>https://clark-cui.top/horse.svg</icon>
+    <rights>MIT License</rights>
+    <entry>
+        <title type="html"><![CDATA[测试文章]]></title>
+        <id>https://clark-cui.top/posts/作为测试文章.html</id>
+        <link href="https://clark-cui.top/posts/作为测试文章.html"/>
+        <updated>2024-02-15T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[测试测试]]></summary>
+        <content type="html"><![CDATA[<h1>测试一下呢呢</h1>
+<p>测试测试</p>
+<pre><code class="language-javascript">console.log('test test')
+</code></pre>
+]]></content>
+        <author>
+            <name>Clark Cui</name>
+            <email>rongchuancui@gmail.com</email>
+            <uri>https://clark-cui.top</uri>
+        </author>
+    </entry>
+</feed>

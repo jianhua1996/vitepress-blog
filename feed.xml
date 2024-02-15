@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Clark Cui</title>
+        <link>https://clark-cui.top/</link>
+        <description>Clark Cui' Blog</description>
+        <lastBuildDate>Thu, 15 Feb 2024 09:17:31 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <image>
+            <title>Clark Cui</title>
+            <url>https://clark-cui.top/horse.svg</url>
+            <link>https://clark-cui.top/</link>
+        </image>
+        <copyright>MIT License</copyright>
+        <atom:link href="https://clark-cui.top/feed.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[测试文章]]></title>
+            <link>https://clark-cui.top/posts/作为测试文章.html</link>
+            <guid>https://clark-cui.top/posts/作为测试文章.html</guid>
+            <pubDate>Thu, 15 Feb 2024 00:00:00 GMT</pubDate>
+            <description><![CDATA[测试测试]]></description>
+            <content:encoded><![CDATA[<h1>测试一下呢呢</h1>
+<p>测试测试</p>
+<pre><code class="language-javascript">console.log('test test')
+</code></pre>
+]]></content:encoded>
+            <author>rongchuancui@gmail.com (Clark Cui)</author>
+        </item>
+    </channel>
+</rss>
