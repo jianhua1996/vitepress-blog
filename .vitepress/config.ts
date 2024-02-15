@@ -3,6 +3,7 @@ import { buildBlogRSS } from './theme/rss'
 
 async function config() {
   return {
+    base: '/vitepress-blog/',
     lang: 'en-US',
     title: 'jianhua1996的博客',
     description: '',
