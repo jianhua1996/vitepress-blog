@@ -19,14 +19,14 @@ onContentUpdated(() => {
   // reset gittalk element for update
   deleteChild();
   const gitalk = new Gitalk({
-    clientID: "a8430bf8a0464113ee24",
-    clientSecret: "df4cbf03c4ceca8a39076e6b7a0fb878e55534e2",
+    clientID: "43c37b709f50815a4f17",
+    clientSecret: "cb980d38e188502197cddb3dd28ffdd84155b983",
     repo: "blog-comments",
-    owner: "clark-cui",
-    admin: ["clark-cui"],
+    owner: "jianhua1996",
+    admin: ["jianhua1996"],
     id: location.pathname.substring(0, 50), // Ensure uniqueness and length less than 50
     language: "zh-CN",
-    distractionFreeMode: true, // Facebook-like distraction free mode
+    distractionFreeMode: false, // Facebook-like distraction free mode
   });
   gitalk.render("gitalk-container");
 });
