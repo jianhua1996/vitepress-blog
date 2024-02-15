@@ -1,10 +1,8 @@
 <template>
   <footer>
-    Powered by
-    <a href="https://github.com/clark-cui/" target="_blank" title="作者"
-      >clark-cui</a
-    >
-    | Copyright © 2019-{{ date }} | MIT License
+    Theme Powered by
+    clark-cui
+    | Copyright ©
   </footer>
 </template>
 <script lang="ts" setup>
@@ -20,10 +18,12 @@ footer {
   background: var(--vp-c-bg);
   color: var(--vp-c-text);
 }
+
 a {
   color: var(--vp-c-brand);
   font-weight: bold;
 }
+
 a:hover {
   text-decoration: none;
   color: var(--vp-c-hover);
