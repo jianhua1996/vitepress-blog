@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2024-02-20T01:52:05.114Z</updated>
+    <updated>2024-02-25T11:48:03.363Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -19,7 +19,7 @@
         <title type="html"><![CDATA[python 中的一些语法糖释义]]></title>
         <id>https://clark-cui.top/posts/python 中的一些语法糖释义.html</id>
         <link href="https://clark-cui.top/posts/python 中的一些语法糖释义.html"/>
-        <updated>2024-02-20T00:00:00.000Z</updated>
+        <updated>2024-02-25T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h1>python 中的一些语法糖释义</h1>
 <h3>with 关键字</h3>
 <blockquote>
@@ -52,17 +52,17 @@ finally:
         <title type="html"><![CDATA[爬虫核心]]></title>
         <id>https://clark-cui.top/posts/爬虫核心.html</id>
         <link href="https://clark-cui.top/posts/爬虫核心.html"/>
-        <updated>2024-02-20T00:00:00.000Z</updated>
+        <updated>2024-02-25T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h1>爬虫核心</h1>
-<h3>1. HTTP 协议</h3>
+<h3>1. HTTP协议</h3>
 <blockquote>
-<p>爬虫就是模拟浏览器去服务器获取数据过程的程序</p>
+<p>爬虫就是模拟浏览器去服务器获取数据这一过程的程序</p>
 </blockquote>
 <ul>
 <li>
 <p><strong>请求首行</strong></p>
 <p><em>(POST /api/v1/auth/password/login?password=123 HTTP/1.1)</em></p>
-<p><u>请求方法+请求路径+query 参数+http 协议版本</u></p>
+<p><u>请求方法+请求路径+query参数+http协议版本</u></p>
 </li>
 <li>
 <p><strong>请求头</strong></p>
@@ -75,7 +75,7 @@ finally:
 <li>
 <p><strong>响应首行</strong></p>
 <p><em>(HTTP1.1 200 ok)</em></p>
-<p><u>http 协议版本+响应状态码+状态信息</u></p>
+<p><u>http协议版本+响应状态码+状态信息</u></p>
 </li>
 <li>
 <p><strong>响应头</strong></p>
@@ -92,38 +92,47 @@ finally:
 </blockquote>
 <ul>
 <li>
-<p><strong>补 User-Agent</strong></p>
+<p><strong>补User-Agent</strong></p>
 </li>
 <li>
-<p><strong>补 Referer</strong></p>
+<p><strong>补Referer</strong></p>
 <p><em>(防盗链通常校验这个值)</em></p>
 </li>
 <li>
-<p><strong>补 Cookie</strong></p>
-<p><em>(需要登陆的网站通常需要校验 Cookie)</em></p>
+<p><strong>补Cookie</strong></p>
+<p><em>(需要登陆的网站通常需要校验Cookie)</em></p>
 </li>
 <li>
-<p><strong>补加密参数</strong></p>
+<p><strong>补加密参数（重点）</strong></p>
 <p><em>(一些网站会把请求参数做某种加密，在服务端进行解密验证，我们需要逆向出对应的加密方式，并进行模拟)</em></p>
 </li>
 </ul>
 <h3>3. 常见加密方式</h3>
 <blockquote>
-<p>常见的加密方式有 base64 转码、md5 摘要、aes 对称加密等</p>
+<p>常见的加密方式有base64转码、md5摘要、aes对称加密、rsa非对称加密等</p>
 </blockquote>
 <ul>
 <li>
-<p><strong>base64 转码</strong></p>
-<p><em>base64 包括的字符有大写字母 A-Z、小写字母 a-z、数字 0-9、符号 &quot;+&quot;、&quot;/&quot;（再加上作为垫字的 &quot;=&quot;，实际上是 65 个字符)</em></p>
+<p><strong>base64转码</strong></p>
+<p><em>base64包括的字符有大写字母 A-Z、小写字母 a-z、数字 0-9、符号 &quot;+&quot;、&quot;/&quot;（再加上作为垫字的 &quot;=&quot;，实际上是 65 个字符)</em></p>
 </li>
 <li>
-<p><strong>md5 摘要</strong></p>
-<p><em>md5 全称 Message Digest Algorithmn，是一种被广泛使用的密码散列函数，可以产生出一个 128 bit 的散列值（hash value），用于确保信息传输完整一致。md5 常见的分为取 16 位和取 32 位两种格式</em></p>
+<p><strong>md5摘要</strong></p>
+<p><em>md5全称Message Digest Algorithmn，是一种被广泛使用的密码散列函数，它可以产生出一个 128 bit 的散列值（hash value），用于确保信息传输完整一致。常见的md5摘要分为<u>取16位和取32位两种格式</u>（都是从同一组数据中取的）。从严格意义上来说，md5不是一种加密方式，而是一种摘要方式，<u>它的过程是不可逆的</u>，类似的摘要方式还有md2、md4、hmac-md5、sha等</em></p>
 </li>
 <li>
-<p><strong>aes 对称加密</strong></p>
+<p><strong>aes对称加密</strong></p>
+<p><em>对称加密是指可以用同一个密钥将数据进行加密和解密的加密方式，类似的加密方式还有des</em></p>
+</li>
+<li>
+<p><strong>rsa非对称加密</strong></p>
+<p><em>非对称加密是指必须用两个不同的密钥（公钥和私钥，公钥用于加密数据，私钥用于解密数据）将数据进行加密和解密的加密方式</em></p>
 </li>
 </ul>
+<h3>4. 关于补加密参数</h3>
+<blockquote>
+<p>补加密参数的过程，就是我们所说的js逆向的过程。它的目标是：通过一些调试手段(常见的像chrome devtools中的断点调试、函数跟栈、全局搜索)拿到网站中生成的加密参数值或者生成加密参数的代码，让其运行在本地的爬虫程序中，从而达到绕过浏览器直接向服务器获取数据的目的。</p>
+</blockquote>
 ]]></content>
         <author>
             <name>Clark Cui</name>
