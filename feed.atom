@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2024-02-29T03:22:08.190Z</updated>
+    <updated>2024-10-05T05:52:59.159Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -16,31 +16,255 @@
     <icon>https://clark-cui.top/horse.svg</icon>
     <rights>MIT License</rights>
     <entry>
-        <title type="html"><![CDATA[python 中的一些语法糖释义]]></title>
-        <id>https://clark-cui.top/posts/python 中的一些语法糖释义.html</id>
-        <link href="https://clark-cui.top/posts/python 中的一些语法糖释义.html"/>
-        <updated>2024-02-29T00:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h1>python 中的一些语法糖释义</h1>
-<h3>with 关键字</h3>
+        <title type="html"><![CDATA[Flutter 组件学习（一）]]></title>
+        <id>https://clark-cui.top/posts/Flutter 组件学习（一）.html</id>
+        <link href="https://clark-cui.top/posts/Flutter 组件学习（一）.html"/>
+        <updated>2024-10-05T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h2>1. Container 组件</h2>
+<p>Container 组件是 Flutter 中的<code>布局组件</code>，可以类比为 web 开发中的 div 标签。</p>
+<p>它属于单一子组件的容器，接受<code>一个</code> child 参数作为子组件， child 类型<strong>可以是任何 widget，包括其他的 Container 组件</strong>。</p>
+<p><strong>容器在没有子元素的情况下会尽量变得尽可能大，除非传入的约束条件是无界的</strong>，在这种情况下，它们会尽量变得尽可能小。</p>
+<pre><code class="language-dart">Container(
+  decoration: BoxDecoration(
+    color: Colors.blue,
+  ),
+)
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_container1.png" alt="图片1"></p>
+<p><strong>有子元素的容器会根据其子元素的大小来调整自身大小</strong>。</p>
+<pre><code class="language-dart">Container(
+  decoration: BoxDecoration(
+    color: Colors.blue,
+  ),
+  child: Text('Hello World!'),
+),
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_container2.png" alt="图片2"></p>
 <blockquote>
-<p>Python 中的  with  关键字用于异常处理，它封装了  try…except…finally  编码范式，提高了易用性，使代码更清晰可读。</p>
+<p>Tips: 如果你希望所有的元素都在安全区域展示，不被系统状态栏、导航栏等系统元素遮挡，可以使用 SafeArea 组件。</p>
 </blockquote>
-<p>如果不使用不使用 with，也不使用 try…except…finally</p>
-<pre><code class="language-python">file = open('./test_runoob.txt', 'w')
-file.write('hello world !')
-file.close()
+<pre><code class="language-dart">SafeArea(
+  child: Container(
+    decoration: BoxDecoration(
+      color: Colors.blue,
+    ),
+    child: Text('Hello World!'),
+  ),
+)
 </code></pre>
-<p>如果使用 try…except…finally</p>
-<pre><code class="language-python">file = open('./test_runoob.txt', 'w')
-try:
-    file.write('hello world')
-finally:
-    file.close()
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_container3.png" alt="图片3"></p>
+<p>如果你给 Container 组件设置了 width 和 height，那么它将会按照你指定的尺寸而不是子组件的尺寸来进行布局。</p>
+<pre><code class="language-dart">SafeArea(
+  child: Container(
+    decoration: BoxDecoration(
+      color: Colors.blue,
+    ),
+    width: 100,
+    height: 100,
+    child: Text('Hello World!'),
+  ),
+)
 </code></pre>
-<p>使用 with 关键字</p>
-<pre><code class="language-python">with open('./test_runoob.txt', 'w') as file:
-    file.write('hello world !')
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_container4.png" alt="图片4"></p>
+<h3>1.1 关于外边距（magin）和内边距（padding）</h3>
+<p>container 组件可以通过 margin 和 padding 属性来设置外边距和内边距。（flutter中外边距和内边距的概念等同于web开发中的 margin 和 padding）</p>
+<p>生成内外边距的方法：</p>
+<ul>
+<li>EdgeInsets.all 生成四个方向上都相同的内外边距</li>
+<li>EdgeInsets.symmetric 按照水平或垂直方向生成内外边距</li>
+<li>EdgeInsets.fromLTRB 按照左、上、右、下四个方向生成内外边距</li>
+<li>EdgeInsets.only 按照指定方向生成内外边距</li>
+</ul>
+<pre><code class="language-dart">SafeArea(
+  child: Container(
+    // margin: EdgeInsets.all(10),
+    // padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+    padding:
+        const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
+    decoration: const BoxDecoration(
+      color: Colors.blue,
+    ),
+    width: 100,
+    height: 100,
+    child: const Text('Hello World!'),
+  ),
+),
+
 </code></pre>
+<h2>2. Rows 和 Columns 组件</h2>
+<p>Rows 和 Columns 组件同样是 Flutter 中的<code>布局组件</code>，可以类比为 web 开发中的 flex 布局。</p>
+<p>它们都属于多子组件的容器，接受<code>多个</code> child 参数作为子组件，入口参数为<code>children</code>， children指定的子组件类型<strong>可以是任何 widget 或 widget 集合，包括其他的 Rows 和 Columns 组件</strong>。</p>
+<pre><code class="language-dart">SafeArea(
+  child: Column(
+    children: [
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+        ),
+        width: 100,
+        height: 100,
+        child: const Text('Hello World!'),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.yellow,
+        ),
+        width: 100,
+        height: 100,
+        child: const Text('Hello World!'),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.green,
+        ),
+        width: 100,
+        height: 100,
+        child: const Text('Hello World!'),
+      ),
+    ],
+  ),
+),
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_rows_columns.png" alt="图片5"></p>
+<p><strong>Columns 组件总是会在垂直方向上尽可能的占用空间，而 Rows 组件总是在水平方向上尽可能的占用空间。</strong></p>
+<p>如图所示：</p>
+<p><img src="../public/Snipaste_phone_rows_columns2.png" alt="图片6"></p>
+<blockquote>
+<p>如果你希望更改这个默认行为，可以通过更改 mainAxisSize 属性来控制 Rows 和 Columns 组件在主轴方向上的尺寸分配。</p>
+<pre><code class="language-dart">Column(
+  mainAxisSize: MainAxisSize.min,
+)
+</code></pre>
+</blockquote>
+<p>另外，Columns 组件还可以设置 verticalDirection 属性来控制子组件的排列方向。</p>
+<pre><code class="language-dart">
+SafeArea(
+  child: Column(
+    // mainAxisSize: MainAxisSize.min,
+    verticalDirection: VerticalDirection.up,
+    children: [
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+        ),
+        width: 100,
+        height: 100,
+        child: const Text('Hello World!'),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.yellow,
+        ),
+        width: 100,
+        height: 100,
+        child: const Text('Hello World!'),
+      ),
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.green,
+        ),
+        width: 100,
+        height: 100,
+        child: const Text('Hello World!'),
+      ),
+    ],
+  ),
+)
+
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_rows_columns3.png" alt="图片7"></p>
+<p>以及，通过 <code>mainAxisAlignment</code> 属性来控制子组件在主轴方向上的对齐方式，有效的值有：</p>
+<ul>
+<li>MainAxisAlignment.start</li>
+<li>MainAxisAlignment.end</li>
+<li>MainAxisAlignment.center</li>
+<li>MainAxisAlignment.spaceBetween</li>
+<li>MainAxisAlignment.spaceAround</li>
+<li>MainAxisAlignment.spaceEvenly 子组件间距均匀分布</li>
+</ul>
+<p>通过 <code>crossAxisAlignment</code> 属性来控制子组件在交叉轴方向上的对齐方式，有效的值有：</p>
+<ul>
+<li>CrossAxisAlignment.start</li>
+<li>CrossAxisAlignment.end</li>
+<li>CrossAxisAlignment.center</li>
+<li>CrossAxisAlignment.stretch  拉伸子组件，占满交叉轴方向的全部空间</li>
+<li>CrossAxisAlignment.baseline</li>
+</ul>
+<p><strong>这些基本上和 web 开发中的 flex 布局的概念是一致的， mainAxisAlignment 和 crossAxisAlignment 也和 justify-content 和 align-items 相对应</strong></p>
+<h2>3. Image 组件与图片导入</h2>
+<p>Image 组件是 Flutter 中的<code>图片组件</code>，用来展示图片。</p>
+<p>它提供多种构造函数，用于指定加载图像的多种方式：</p>
+<ul>
+<li>Image.asset 加载本地资源图片</li>
+<li>Image.network 加载网络图片</li>
+<li>Image.file 加载本地文件图片</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/widgets/Image-class.html">查看上述方式的详细用法</a></p>
+<p>Image组件支持的图片格式有： <strong>JPEG, PNG, GIF, Animated GIF, WebP, Animated WebP, BMP, and WBMP</strong>。</p>
+<p>默认的构造函数中，通过<code>image</code>参数传入一个指定的<code>ImageProvider</code>类型的值，就可以加载指定的图片。</p>
+<p><code>ImageProvider</code> 是一个抽象类，用于提供图片资源。常见的 ImageProvider 类型有 <code>AssetImage</code>、<code>NetworkImage</code>、<code>FileImage</code> 等。</p>
+<pre><code class="language-dart"> Image(
+  image: AssetImage('assets/images/xxx.png'),
+  width: 100,
+  height: 100,
+),
+</code></pre>
+<blockquote>
+<p>需要注意的是，在使用<code>AssetImage</code>类型的<code>ImageProvider</code>时，需要先在 pubspec.yaml 文件中配置图片资源路径。</p>
+<p><img src="../public/Snipaste_phone_image.png" alt="图片8"></p>
+</blockquote>
+<h2>4. Text 组件与自定义字体</h2>
+<p>Text 组件是 Flutter 中的<code>文本组件</code>，用来展示文本。</p>
+<p>通过指定<code>style</code>参数，可以设置文本的字体大小、颜色、粗细、斜体等样式。<a href="https://api.flutter-io.cn/flutter/widgets/Text-class.html">查看更多样式设置</a></p>
+<pre><code class="language-dart">Text(
+  'Hello World!',
+  style: TextStyle(
+    fontSize: 20,
+    color: Colors.blue,
+    fontWeight: FontWeight.bold,
+    fontStyle: FontStyle.italic,
+  ),
+),
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_text.png" alt="图片9"></p>
+<h3>4.1 自定义字体</h3>
+<p>Flutter 支持自定义字体，通过 <code>fontFamily</code> 参数指定字体名称，就可以使用该字体渲染文本。</p>
+<pre><code class="language-dart">const Text(
+  'Hello World!',
+  style: TextStyle(
+    fontSize: 20,
+    color: Colors.blue,
+    fontWeight: FontWeight.bold,
+    fontStyle: FontStyle.italic,
+    fontFamily: 'PlaywriteDEGrund',
+  ),
+),
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_custom_font2.png" alt="图片11"></p>
+<blockquote>
+<p>需要注意的是，自定义字体同样需要在 pubspec.yaml 文件中配置和导入。</p>
+<p><img src="../public/Snipaste_phone_custom_font.png" alt="图片10"></p>
+</blockquote>
+<h2>5. Icon 组件</h2>
+<p>Icon 组件是 Flutter 中的<code>图标组件</code>，用来展示具体的图标类型。</p>
+<p>通常的做法是<strong>通过指定 flutter 中预定义的 material IconData 枚举值来展示具体的图标</strong>。<a href="https://api.flutter-io.cn/flutter/material/Icons-class.html">查看所有图标类型</a></p>
+<pre><code class="language-dart">Icon(
+  Icons.favorite,
+  size: 30,
+  color: Colors.red,
+),
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_icon.png" alt="图片12"></p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
@@ -52,7 +276,7 @@ finally:
         <title type="html"><![CDATA[事件循环]]></title>
         <id>https://clark-cui.top/posts/事件循环.html</id>
         <link href="https://clark-cui.top/posts/事件循环.html"/>
-        <updated>2024-02-29T00:00:00.000Z</updated>
+        <updated>2024-10-05T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器的进程模型</h2>
 <h3>进程与线程</h3>
 <p>进程是正在运行的<u>程序的实例</u>，每个进程都有自己<u>独立的</u>一块内存空间，有了进程之后，才可以运行程序的代码。一个进程至少有一个线程，叫做主线程，一个进程也可以运行多个线程，多个线程可以共享数据。</p>
@@ -167,7 +391,7 @@ Promise.resolve().then(函数)
         <title type="html"><![CDATA[浏览器渲染原理]]></title>
         <id>https://clark-cui.top/posts/浏览器渲染原理.html</id>
         <link href="https://clark-cui.top/posts/浏览器渲染原理.html"/>
-        <updated>2024-02-29T00:00:00.000Z</updated>
+        <updated>2024-10-05T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器是如何渲染页面的</h2>
 <h3>什么是渲染</h3>
 <p>把html字符串转换为像素点信息的过程就可以叫做渲染</p>
@@ -243,102 +467,6 @@ Promise.resolve().then(函数)
 <p>repaint的本质就是重新根据分层信息计算了绘制指令。</p>
 <p>当改动了可见样式后，就需要重新计算，触发repaint流程。</p>
 <p>由于元素的布局信息也属于可见样式，所以reflow一定会引起repaint</p>
-]]></content>
-        <author>
-            <name>Clark Cui</name>
-            <email>rongchuancui@gmail.com</email>
-            <uri>https://clark-cui.top</uri>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[爬虫核心]]></title>
-        <id>https://clark-cui.top/posts/爬虫核心.html</id>
-        <link href="https://clark-cui.top/posts/爬虫核心.html"/>
-        <updated>2024-02-29T00:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h1>爬虫核心</h1>
-<h3>1. HTTP协议</h3>
-<blockquote>
-<p>爬虫就是模拟浏览器去服务器获取数据这一过程的程序</p>
-</blockquote>
-<ul>
-<li>
-<p><strong>请求首行</strong></p>
-<p>(POST /api/v1/auth/password/login?password=123 HTTP/1.1)</p>
-<p><u>请求方法+请求路径+query参数+http协议版本</u></p>
-</li>
-<li>
-<p><strong>请求头</strong></p>
-<p>（Content-Type: application/json\r\nUser-Agent: xxx...）</p>
-</li>
-<li>
-<p><strong>请求体</strong></p>
-<p>(空行之后的数据)</p>
-</li>
-<li>
-<p><strong>响应首行</strong></p>
-<p>(HTTP1.1 200 ok)</p>
-<p><u>http协议版本+响应状态码+状态信息</u></p>
-</li>
-<li>
-<p><strong>响应头</strong></p>
-<p>（同请求头）</p>
-</li>
-<li>
-<p><strong>响应体</strong></p>
-<p>(空行之后的数据)</p>
-</li>
-</ul>
-<h3>2. 反反爬策略</h3>
-<blockquote>
-<p>常见的反爬策略是通过区分请求头来鉴别爬虫程序和浏览器正常访问的</p>
-</blockquote>
-<ul>
-<li>
-<p><strong>补User-Agent</strong></p>
-</li>
-<li>
-<p><strong>补Referer</strong></p>
-<p>(防盗链通常校验这个值)</p>
-</li>
-<li>
-<p><strong>补Cookie</strong></p>
-<p>(需要登陆的网站通常需要校验Cookie)</p>
-</li>
-<li>
-<p><strong>补加密参数（重点）</strong></p>
-<p>(一些网站会把请求参数做某种加密，在服务端进行解密验证，我们需要逆向出对应的加密方式，并进行模拟)</p>
-</li>
-</ul>
-<h3>3. 常见加密方式</h3>
-<blockquote>
-<p>常见的加密方式有base64转码、md5摘要、aes对称加密、rsa非对称加密等</p>
-</blockquote>
-<ul>
-<li>
-<p><strong>base64转码</strong></p>
-<p>base64包括的字符有大写字母 A-Z、小写字母 a-z、数字 0-9、符号 &quot;+&quot;、&quot;/&quot;（再加上作为垫字的 &quot;=&quot;，实际上是 65 个字符)</p>
-</li>
-<li>
-<p><strong>md5摘要</strong></p>
-<p>md5全称Message Digest Algorithmn，是一种被广泛使用的密码散列函数，它可以产生出一个 128 bit 的散列值（hash value），用于确保信息传输完整一致。常见的md5摘要分为<u>取16位和取32位两种格式</u>（都是从同一组数据中取的）。从严格意义上来说，md5不是一种加密方式，而是一种摘要方式，<u>它的过程是不可逆的</u>，类似的摘要方式还有md2、md4、hmac-md5、sha等</p>
-</li>
-<li>
-<p><strong>aes对称加密</strong></p>
-<p>对称加密是指可以用同一个密钥将数据进行加密和解密的加密方式，类似的加密方式还有des</p>
-</li>
-<li>
-<p><strong>rsa非对称加密</strong></p>
-<p>非对称加密是指必须用两个不同的密钥（公钥和私钥，公钥用于加密数据，私钥用于解密数据）将数据进行加密和解密的加密方式</p>
-</li>
-</ul>
-<h3>4. 关于补加密参数</h3>
-<blockquote>
-<p>补加密参数的过程，就是我们所说的js逆向的过程。它的目标是：通过一些调试手段(常见的像chrome devtools中的断点调试、函数跟栈、全局搜索)拿到网站中生成的加密参数值或者生成加密参数的代码，让其运行在本地的爬虫程序中，从而达到绕过浏览器直接向服务器获取数据的目的。</p>
-</blockquote>
-<p>我们可以根据一些常见的加密方式特征逆向出该加密方式，</p>
-<p>常见的像md5的魔法值：</p>
-<p><u>1732584193</u>、<u>1732584194</u>、<u>271733878</u>、<u>271733879</u>（十进制）</p>
-<p><u>0x67452301</u>、<u>0x98badcfe</u>、<u>0x10325476</u>、<u>0xefcdab89</u>（十六进制）</p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
