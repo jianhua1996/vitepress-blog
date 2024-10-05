@@ -4,7 +4,7 @@
         <title>Clark Cui</title>
         <link>https://clark-cui.top/</link>
         <description>Clark Cui' Blog</description>
-        <lastBuildDate>Sat, 05 Oct 2024 06:35:32 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 05 Oct 2024 07:10:12 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -264,6 +264,15 @@ SafeArea(
 </code></pre>
 <p>以上代码效果如下：</p>
 <p><img src="../public/Snipaste_phone_icon.png" alt="图片12"></p>
+]]></content:encoded>
+            <author>rongchuancui@gmail.com (Clark Cui)</author>
+        </item>
+        <item>
+            <title><![CDATA[Flutter 组件学习（二）]]></title>
+            <link>https://clark-cui.top/posts/Flutter 组件学习（二）.html</link>
+            <guid>https://clark-cui.top/posts/Flutter 组件学习（二）.html</guid>
+            <pubDate>Sat, 05 Oct 2024 00:00:00 GMT</pubDate>
+            <content:encoded><![CDATA[<h2>1. Padding 组件</h2>
 ]]></content:encoded>
             <author>rongchuancui@gmail.com (Clark Cui)</author>
         </item>

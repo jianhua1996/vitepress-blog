@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2024-10-05T06:35:32.777Z</updated>
+    <updated>2024-10-05T07:10:12.250Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -265,6 +265,19 @@ SafeArea(
 </code></pre>
 <p>以上代码效果如下：</p>
 <p><img src="../public/Snipaste_phone_icon.png" alt="图片12"></p>
+]]></content>
+        <author>
+            <name>Clark Cui</name>
+            <email>rongchuancui@gmail.com</email>
+            <uri>https://clark-cui.top</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Flutter 组件学习（二）]]></title>
+        <id>https://clark-cui.top/posts/Flutter 组件学习（二）.html</id>
+        <link href="https://clark-cui.top/posts/Flutter 组件学习（二）.html"/>
+        <updated>2024-10-05T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h2>1. Padding 组件</h2>
 ]]></content>
         <author>
             <name>Clark Cui</name>
