@@ -4,7 +4,7 @@
         <title>Clark Cui</title>
         <link>https://clark-cui.top/</link>
         <description>Clark Cui' Blog</description>
-        <lastBuildDate>Sat, 05 Oct 2024 07:10:12 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 06 Oct 2024 11:06:22 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -15,10 +15,10 @@
         <copyright>MIT License</copyright>
         <atom:link href="https://clark-cui.top/feed.xml" rel="self" type="application/rss+xml"/>
         <item>
-            <title><![CDATA[Flutter 组件学习（一）]]></title>
-            <link>https://clark-cui.top/posts/Flutter 组件学习（一）.html</link>
-            <guid>https://clark-cui.top/posts/Flutter 组件学习（一）.html</guid>
-            <pubDate>Sat, 05 Oct 2024 00:00:00 GMT</pubDate>
+            <title><![CDATA[Flutter组件学习（一）]]></title>
+            <link>https://clark-cui.top/posts/Flutter组件学习（一）.html</link>
+            <guid>https://clark-cui.top/posts/Flutter组件学习（一）.html</guid>
+            <pubDate>Sun, 06 Oct 2024 00:00:00 GMT</pubDate>
             <content:encoded><![CDATA[<h2>1. Container 组件</h2>
 <p>Container 组件是 Flutter 中的<code>布局组件</code>，可以类比为 web 开发中的 div 标签。</p>
 <p>它属于单一子组件的容器，接受<code>一个</code> child 参数作为子组件， child 类型<strong>可以是任何 widget，包括其他的 Container 组件</strong>。</p>
@@ -207,7 +207,7 @@ SafeArea(
 </ul>
 <p><a href="https://api.flutter-io.cn/flutter/widgets/Image-class.html">查看上述方式的详细用法</a></p>
 <p>Image组件支持的图片格式有： <strong>JPEG, PNG, GIF, Animated GIF, WebP, Animated WebP, BMP, and WBMP</strong>。</p>
-<p>默认的构造函数中，通过<code>image</code>参数传入一个指定的<code>ImageProvider</code>类型的值，就可以加载指定的图片。</p>
+<p>在默认的构造函数中，通过<code>image</code>参数传入一个指定的<code>ImageProvider</code>类型的值，就可以加载指定的图片。</p>
 <p><code>ImageProvider</code> 是一个抽象类，用于提供图片资源。常见的 ImageProvider 类型有 <code>AssetImage</code>、<code>NetworkImage</code>、<code>FileImage</code> 等。</p>
 <pre><code class="language-dart"> Image(
   image: AssetImage('assets/images/xxx.png'),
@@ -216,7 +216,7 @@ SafeArea(
 ),
 </code></pre>
 <blockquote>
-<p>需要注意的是，在使用<code>AssetImage</code>类型的<code>ImageProvider</code>时，需要先在 pubspec.yaml 文件中配置图片资源路径。</p>
+<p>需要注意的是，在使用<code>AssetImage</code>类型的<code>ImageProvider</code>时，需要先在 pubspec.yaml 文件中配置图片资源路径来导入图片资源。</p>
 <p><img src="../public/Snipaste_phone_image.png" alt="图片8"></p>
 </blockquote>
 <h2>4. Text 组件与自定义字体</h2>
@@ -264,15 +264,210 @@ SafeArea(
 </code></pre>
 <p>以上代码效果如下：</p>
 <p><img src="../public/Snipaste_phone_icon.png" alt="图片12"></p>
+<h2>6. Expanded 组件</h2>
+<p>Expanded 组件同样是 Flutter 中的<code>布局组件</code>，它可以用来扩展其子组件的尺寸。</p>
+<p>使用 <strong>Expanded 组件可以使 Row、Column 或 Flex 布局的子元素沿着主轴扩展以填充可用空间</strong>（例如，对于 Row 是水平扩展，对于 Column 是垂直扩展）。<strong>如果有多个子元素扩展，可用空间将根据弹性因子<code>flex</code>按比例在它们之间进行分配</strong>。</p>
+<blockquote>
+<p>注意： Expanded 组件只能作为 Row、Column 或 Flex 布局的子元素使用。</p>
+</blockquote>
+<p><a href="https://api.flutter-io.cn/flutter/widgets/Expanded-class.html">查看更多 Expanded 组件用法</a></p>
+<pre><code class="language-dart">Row(
+  children: [
+    Expanded(
+      flex: 2, // 比例因子
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue,
+        ),
+        width: 100, // 这里设置的宽度不会生效
+        height: 100,
+        child: Text('Hello World!'),
+      ),
+    ),
+    Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.yellow,
+        ),
+        width: 100, // 这里设置的宽度不会生效
+        height: 100,
+        child: Text('Hello World!'),
+      ),
+    ),
+    Expanded(
+      flex: 2, // 比例因子
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.green,
+        ),
+        width: 100, // 这里设置的宽度不会生效
+        height: 100,
+        child: Text('Hello World!'),
+      ),
+    ),
+  ],
+),
+</code></pre>
+<p>以上代码效果如下：</p>
+<p><img src="../public/Snipaste_phone_expanded.png" alt="图片13"></p>
+<h2>7. Padding 组件</h2>
+<p>Padding 组件也是 Flutter 中的<code>布局组件</code>之一，用来给父组件添加内边距。</p>
+<p>它接受<code>一个</code> padding 参数，该参数是一个<code>EdgeInsetsGeometry</code>类型的值，用来设置四个方向上的内边距。</p>
+<p>具体用法和Container组件中的padding属性类似。<a href="#_1-1-%E5%85%B3%E4%BA%8E%E5%A4%96%E8%BE%B9%E8%B7%9D-magin-%E5%92%8C%E5%86%85%E8%BE%B9%E8%B7%9D-padding">回到 1.1</a></p>
+<p><a href="https://api.flutter-io.cn/flutter/widgets/Padding-class.html">更多 Padding 组件用法</a></p>
+<pre><code class="language-dart">Padding(
+  padding: const EdgeInsets.all(20),
+  child: Container(
+    decoration: BoxDecoration(
+      color: Colors.blue,
+    ),
+    width: 100,
+    height: 100,
+    child: Text('Hello World!'),
+  ),
+),
+</code></pre>
 ]]></content:encoded>
             <author>rongchuancui@gmail.com (Clark Cui)</author>
         </item>
         <item>
-            <title><![CDATA[Flutter 组件学习（二）]]></title>
-            <link>https://clark-cui.top/posts/Flutter 组件学习（二）.html</link>
-            <guid>https://clark-cui.top/posts/Flutter 组件学习（二）.html</guid>
-            <pubDate>Sat, 05 Oct 2024 00:00:00 GMT</pubDate>
-            <content:encoded><![CDATA[<h2>1. Padding 组件</h2>
+            <title><![CDATA[Flutter组件学习（二）]]></title>
+            <link>https://clark-cui.top/posts/Flutter组件学习（二）.html</link>
+            <guid>https://clark-cui.top/posts/Flutter组件学习（二）.html</guid>
+            <pubDate>Sun, 06 Oct 2024 00:00:00 GMT</pubDate>
+            <content:encoded><![CDATA[<h2>1. Card 组件</h2>
+<p>Card 组件是 Flutter 中最常用的组件之一，它可以用来显示一些内容，<strong>它的默认样式是一个略微圆角且带有阴影凸起的面板</strong>，Card 组件可以包含一个子组件，也可以没有子组件。Card 组件的主要属性有：</p>
+<ul>
+<li>color：Card 组件的背景颜色。</li>
+<li>elevation：Card 组件的阴影大小。</li>
+<li>shape：Card 组件的形状。</li>
+<li>clipBehavior：Card 组件的裁剪行为。</li>
+<li>child：Card 组件的子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/Card-class.html">查看更多属性</a></p>
+<p>Card 组件的示例代码如下：</p>
+<pre><code class="language-dart">Card(
+  color: Colors.blue,
+  elevation: 10,
+  child: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      'This is a card',
+      style: TextStyle(color: Colors.white),
+    ),
+  ),
+),
+</code></pre>
+<p>效果如下：</p>
+<p><img src="../public/Snipaste_phone_card.png" alt="图片1"></p>
+<h2>2. ListTile 组件</h2>
+<p>ListTile 组件是 Flutter 中用来显示列表项的组件，通常与 Listview 组件、Card 组件等一起搭配使用，它可以<strong>用来展示一个标题、一段描述、一张图片或者一个小部件</strong>，ListTile 组件的主要属性有：</p>
+<ul>
+<li>leading：ListTile 组件的左侧组件，通常是一个小部件。</li>
+<li>title：ListTile 组件的标题。</li>
+<li>subtitle：ListTile 组件的副标题。</li>
+<li>trailing：ListTile 组件的右侧组件，通常是一个小部件。</li>
+<li>dense：ListTile 组件是否显示为紧凑模式。</li>
+<li>enabled：ListTile 组件是否可以点击。</li>
+<li>onTap：ListTile 组件的点击事件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/ListTile-class.html">查看更多属性</a></p>
+<p>ListTile 组件的示例代码如下：</p>
+<pre><code class="language-dart">ListTile(
+  leading: Icon(Icons.person),
+  title: Text('标题'),
+  subtitle: Text('子标题'),
+  trailing: Icon(Icons.arrow_forward),
+  dense: true,
+  enabled: true,
+  onTap: () {
+    print('ListTile 被点击了');
+  },
+)
+</code></pre>
+<p>效果如下：</p>
+<p><img src="../public/Snipaste_phone_listtile.png" alt="图片2"></p>
+<h2>3. CircleAvatar 组件</h2>
+<p>CircleAvatar 组件是一个圆形的头像组件，它可以<strong>用来显示用户头像或者其他圆形的图片</strong>，CircleAvatar 组件的主要属性有：</p>
+<ul>
+<li>backgroundImage：CircleAvatar 组件的背景图片。</li>
+<li>backgroundColor：CircleAvatar 组件的背景颜色。</li>
+<li>foregroundColor：CircleAvatar 组件的前景颜色。</li>
+<li>radius：CircleAvatar 组件的圆角半径。</li>
+<li>child：CircleAvatar 组件的子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/CircleAvatar-class.html">查看更多属性</a></p>
+<p>CircleAvatar 组件的示例代码如下：</p>
+<pre><code class="language-dart">CircleAvatar(
+  backgroundImage:
+      const NetworkImage('https://www.example.com/example.jpg'),
+  backgroundColor: Colors.lightGreen.shade100,
+  radius: 50,
+  child: const FlutterLogo(
+    size: 50,
+  ),
+),
+</code></pre>
+<p>效果如下：</p>
+<p><img src="../public/Snipaste_phone_circleavatar.png" alt="图片3"></p>
+<h2>4. Divider 组件</h2>
+<p>Divider 组件是一个分割线组件，它可以<strong>用来分隔不同列表项或者不同区域</strong>，Divider 组件的主要属性有：</p>
+<ul>
+<li>height：Divider 组件的高度。</li>
+<li>thickness：Divider 组件的粗细。</li>
+<li>indent：Divider 组件距离左侧距离。</li>
+<li>endIndent：Divider 组件距离右侧距离。</li>
+<li>color：Divider 组件的颜色。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/Divider-class.html">查看更多属性</a></p>
+<p>Divider 组件的示例代码如下：</p>
+<pre><code class="language-dart">Column(
+  children: [
+    CircleAvatar(
+      backgroundImage:
+          const NetworkImage('https://www.example.com/example.jpg'),
+      backgroundColor: Colors.lightGreen.shade100,
+      radius: 50,
+      child: const FlutterLogo(
+        size: 50,
+      ),
+    ),
+    const Divider(
+      height: 10,
+      thickness: 2,
+      indent: 10,
+      endIndent: 10,
+      color: Colors.pink,
+    ),
+  ],
+)
+</code></pre>
+<p>效果如下：</p>
+<p><img src="../public/Snipaste_phone_divider.png" alt="图片4"></p>
+<h2>5. ElevatedButton 组件</h2>
+<p>ElevatedButton 组件是一个<strong>带有阴影的按钮组件</strong>，它可以<strong>用来触发一些重要的操作，比如提交表单、打开新页面</strong>等，ElevatedButton 组件的主要属性有：</p>
+<ul>
+<li>onPressed：按钮点击事件。</li>
+<li>style：按钮样式。</li>
+<li>child：按钮子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/ElevatedButton-class.html">查看更多属性</a></p>
+<p>ElevatedButton 组件的示例代码如下：</p>
+<pre><code class="language-dart">ElevatedButton(
+  onPressed: () {
+    print('按钮被点击了');
+  },
+  style: ElevatedButton.styleFrom(
+    foregroundColor: Colors.white,
+    backgroundColor: Colors.blue,
+    shadowColor: Colors.blue.shade700,
+    elevation: 12,
+  ),
+  child: Text('按钮'),
+),
+</code></pre>
+<p>效果如下：</p>
+<p><img src="../public/Snipaste_phone_elevatedbutton.png" alt="图片5"></p>
 ]]></content:encoded>
             <author>rongchuancui@gmail.com (Clark Cui)</author>
         </item>
@@ -280,7 +475,7 @@ SafeArea(
             <title><![CDATA[事件循环]]></title>
             <link>https://clark-cui.top/posts/事件循环.html</link>
             <guid>https://clark-cui.top/posts/事件循环.html</guid>
-            <pubDate>Sat, 05 Oct 2024 00:00:00 GMT</pubDate>
+            <pubDate>Sun, 06 Oct 2024 00:00:00 GMT</pubDate>
             <content:encoded><![CDATA[<h2>浏览器的进程模型</h2>
 <h3>进程与线程</h3>
 <p>进程是正在运行的<u>程序的实例</u>，每个进程都有自己<u>独立的</u>一块内存空间，有了进程之后，才可以运行程序的代码。一个进程至少有一个线程，叫做主线程，一个进程也可以运行多个线程，多个线程可以共享数据。</p>
@@ -391,7 +586,7 @@ Promise.resolve().then(函数)
             <title><![CDATA[浏览器渲染原理]]></title>
             <link>https://clark-cui.top/posts/浏览器渲染原理.html</link>
             <guid>https://clark-cui.top/posts/浏览器渲染原理.html</guid>
-            <pubDate>Sat, 05 Oct 2024 00:00:00 GMT</pubDate>
+            <pubDate>Sun, 06 Oct 2024 00:00:00 GMT</pubDate>
             <content:encoded><![CDATA[<h2>浏览器是如何渲染页面的</h2>
 <h3>什么是渲染</h3>
 <p>把html字符串转换为像素点信息的过程就可以叫做渲染</p>
