@@ -211,7 +211,7 @@ SafeArea(
 
 以上代码效果如下：
 
-![图片7](../public/Snipaste_phone_rows_columns3.png)
+![图片7](../public/Snipaste_phone_rows_columns3.jpg)
 
 以及，通过 `mainAxisAlignment` 属性来控制子组件在主轴方向上的对齐方式，有效的值有： 
 - MainAxisAlignment.start
