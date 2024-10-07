@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2024-10-07T06:29:52.995Z</updated>
+    <updated>2024-10-07T07:06:39.535Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -15,6 +15,33 @@
     <logo>https://clark-cui.top/horse.svg</logo>
     <icon>https://clark-cui.top/horse.svg</icon>
     <rights>MIT License</rights>
+    <entry>
+        <title type="html"><![CDATA[Flutter小项目展示]]></title>
+        <id>https://clark-cui.top/posts/Flutter小项目展示.html</id>
+        <link href="https://clark-cui.top/posts/Flutter小项目展示.html"/>
+        <updated>2024-10-07T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h2>项目一：天气app</h2>
+<img src="../public/Snipaste_demo_weather.jpg" alt="图片1" style="height: 550px;" />
+<p>项目地址：<a href="https://github.com/jianhua1996/flutter-weather">https://github.com/jianhua1996/flutter-weather</a></p>
+<h2>项目二：音乐播放器</h2>
+<div style="display: flex;">
+    <img src="../public/Snipaste_demo_music_player.jpg" alt="图片2" style="height: 550px;" />
+    <div style="width: 50px;"></div>
+    <img src="../public/Snipaste_demo_music_player2.png" alt="图片3" style="height: 550px;" />
+</div>
+<div style="display: flex;">
+    <img src="../public/Snipaste_demo_music_player3.png" alt="图片4" style="height: 550px;" />
+    <div style="width: 50px;"></div>
+    <img src="../public/Snipaste_demo_music_player5.jpg" alt="图片5" style="height: 550px;" />
+</div>
+<p>项目地址：<a href="https://github.com/jianhua1996/flutter-music-player">https://github.com/jianhua1996/flutter-music-player</a></p>
+]]></content>
+        <author>
+            <name>Clark Cui</name>
+            <email>rongchuancui@gmail.com</email>
+            <uri>https://clark-cui.top</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Flutter组件学习（一）]]></title>
         <id>https://clark-cui.top/posts/Flutter组件学习（一）.html</id>
@@ -179,7 +206,7 @@ SafeArea(
 
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_rows_columns3.png" alt="图片7"></p>
+<p><img src="../public/Snipaste_phone_rows_columns3.jpg" alt="图片7"></p>
 <p>以及，通过 <code>mainAxisAlignment</code> 属性来控制子组件在主轴方向上的对齐方式，有效的值有：</p>
 <ul>
 <li>MainAxisAlignment.start</li>
