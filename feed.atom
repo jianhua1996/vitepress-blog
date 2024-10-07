@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2024-10-06T11:06:22.912Z</updated>
+    <updated>2024-10-07T06:29:52.995Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -19,7 +19,7 @@
         <title type="html"><![CDATA[Flutter组件学习（一）]]></title>
         <id>https://clark-cui.top/posts/Flutter组件学习（一）.html</id>
         <link href="https://clark-cui.top/posts/Flutter组件学习（一）.html"/>
-        <updated>2024-10-06T00:00:00.000Z</updated>
+        <updated>2024-10-07T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>1. Container 组件</h2>
 <p>Container 组件是 Flutter 中的<code>布局组件</code>，可以类比为 web 开发中的 div 标签。</p>
 <p>它属于单一子组件的容器，接受<code>一个</code> child 参数作为子组件， child 类型<strong>可以是任何 widget，包括其他的 Container 组件</strong>。</p>
@@ -339,7 +339,7 @@ SafeArea(
         <title type="html"><![CDATA[Flutter组件学习（二）]]></title>
         <id>https://clark-cui.top/posts/Flutter组件学习（二）.html</id>
         <link href="https://clark-cui.top/posts/Flutter组件学习（二）.html"/>
-        <updated>2024-10-06T00:00:00.000Z</updated>
+        <updated>2024-10-07T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>1. Card 组件</h2>
 <p>Card 组件是 Flutter 中最常用的组件之一，它可以用来显示一些内容，<strong>它的默认样式是一个略微圆角且带有阴影凸起的面板</strong>，Card 组件可以包含一个子组件，也可以没有子组件。Card 组件的主要属性有：</p>
 <ul>
@@ -473,6 +473,35 @@ SafeArea(
 </code></pre>
 <p>效果如下：</p>
 <p><img src="../public/Snipaste_phone_elevatedbutton.png" alt="图片5"></p>
+<h2>6. GestureDetector 组件</h2>
+<p>GestureDetector 组件是一个<strong>手势监听器组件</strong>，它可以<strong>用来监听用户的手势操作，比如滑动、点击、长按等</strong>，GestureDetector 组件的主要属性有：</p>
+<ul>
+<li>onTap：手指单击事件。</li>
+<li>onDoubleTap：手指双击事件。</li>
+<li>onLongPress：手指长按事件。</li>
+<li>child：手势监听器子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/widgets/GestureDetector-class.html">查看更多属性</a></p>
+<p>GestureDetector 组件的示例代码如下：</p>
+<pre><code class="language-dart">GestureDetector(
+  onTap: () {
+    print('手指单击了');
+  },
+  onDoubleTap: () {
+    print('手指双击了');
+  },
+  onLongPress: () {
+    print('手指长按了');
+  },
+  child: Container(
+    width: 100,
+    height: 100,
+    color: Colors.blue,
+  ),
+),
+</code></pre>
+<p>效果如下：</p>
+<p><img src="../public/Snipaste_phone_gesturedetector.png" alt="图片6"></p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
@@ -484,7 +513,7 @@ SafeArea(
         <title type="html"><![CDATA[事件循环]]></title>
         <id>https://clark-cui.top/posts/事件循环.html</id>
         <link href="https://clark-cui.top/posts/事件循环.html"/>
-        <updated>2024-10-06T00:00:00.000Z</updated>
+        <updated>2024-10-07T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器的进程模型</h2>
 <h3>进程与线程</h3>
 <p>进程是正在运行的<u>程序的实例</u>，每个进程都有自己<u>独立的</u>一块内存空间，有了进程之后，才可以运行程序的代码。一个进程至少有一个线程，叫做主线程，一个进程也可以运行多个线程，多个线程可以共享数据。</p>
@@ -599,7 +628,7 @@ Promise.resolve().then(函数)
         <title type="html"><![CDATA[浏览器渲染原理]]></title>
         <id>https://clark-cui.top/posts/浏览器渲染原理.html</id>
         <link href="https://clark-cui.top/posts/浏览器渲染原理.html"/>
-        <updated>2024-10-06T00:00:00.000Z</updated>
+        <updated>2024-10-07T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器是如何渲染页面的</h2>
 <h3>什么是渲染</h3>
 <p>把html字符串转换为像素点信息的过程就可以叫做渲染</p>
