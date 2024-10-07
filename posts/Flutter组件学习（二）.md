@@ -197,3 +197,43 @@ ElevatedButton(
 
 ![图片5](../public/Snipaste_phone_elevatedbutton.png)
 
+## 6. GestureDetector 组件
+
+GestureDetector 组件是一个**手势监听器组件**，它可以**用来监听用户的手势操作，比如滑动、点击、长按等**，GestureDetector 组件的主要属性有：
+
+- onTap：手指单击事件。
+- onDoubleTap：手指双击事件。
+- onLongPress：手指长按事件。
+- child：手势监听器子组件。
+
+[查看更多属性](https://api.flutter-io.cn/flutter/widgets/GestureDetector-class.html)
+
+
+GestureDetector 组件的示例代码如下：
+
+```dart
+GestureDetector(
+  onTap: () {
+    print('手指单击了');
+  },
+  onDoubleTap: () {
+    print('手指双击了');
+  },
+  onLongPress: () {
+    print('手指长按了');
+  },
+  child: Container(
+    width: 100,
+    height: 100,
+    color: Colors.blue,
+  ),
+),
+```
+
+
+效果如下：
+
+![图片6](../public/Snipaste_phone_gesturedetector.png)
+
+
+
