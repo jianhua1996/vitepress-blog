@@ -1,6 +1,6 @@
 ---
 title: Flutter组件学习（二）
-tags: 
+tags:
   - Flutter
   - Dart
   - Widget
@@ -8,10 +8,7 @@ tags:
   - ListTile
   - CircleAvatar
   - Divider
-
-
 ---
-
 
 ## 1. Card 组件
 
@@ -43,9 +40,7 @@ Card(
 
 效果如下：
 
-![图片1](../public/Snipaste_phone_card.png)
-
-
+<ImageBuilder :source="['Snipaste_phone_card.png']" />
 
 ## 2. ListTile 组件
 
@@ -58,7 +53,6 @@ ListTile 组件是 Flutter 中用来显示列表项的组件，通常与 Listvie
 - dense：ListTile 组件是否显示为紧凑模式。
 - enabled：ListTile 组件是否可以点击。
 - onTap：ListTile 组件的点击事件。
-
 
 [查看更多属性](https://api.flutter-io.cn/flutter/material/ListTile-class.html)
 
@@ -78,11 +72,9 @@ ListTile(
 )
 ```
 
-
 效果如下：
 
-![图片2](../public/Snipaste_phone_listtile.png)
-
+<ImageBuilder :source="['Snipaste_phone_listtile.png']" />
 
 ## 3. CircleAvatar 组件
 
@@ -93,7 +85,6 @@ CircleAvatar 组件是一个圆形的头像组件，它可以**用来显示用�
 - foregroundColor：CircleAvatar 组件的前景颜色。
 - radius：CircleAvatar 组件的圆角半径。
 - child：CircleAvatar 组件的子组件。
-
 
 [查看更多属性](https://api.flutter-io.cn/flutter/material/CircleAvatar-class.html)
 
@@ -113,9 +104,7 @@ CircleAvatar(
 
 效果如下：
 
-![图片3](../public/Snipaste_phone_circleavatar.png)
-
-
+<ImageBuilder :source="['Snipaste_phone_circleavatar.jpg']" />
 
 ## 4. Divider 组件
 
@@ -127,10 +116,7 @@ Divider 组件是一个分割线组件，它可以**用来分隔不同列表项�
 - endIndent：Divider 组件距离右侧距离。
 - color：Divider 组件的颜色。
 
-
 [查看更多属性](https://api.flutter-io.cn/flutter/material/Divider-class.html)
-
-
 
 Divider 组件的示例代码如下：
 
@@ -157,23 +143,19 @@ Column(
 )
 ```
 
-
 效果如下：
 
-![图片4](../public/Snipaste_phone_divider.png)
+<ImageBuilder :source="['Snipaste_phone_divider.png']" />
 
 ## 5. ElevatedButton 组件
 
 ElevatedButton 组件是一个**带有阴影的按钮组件**，它可以**用来触发一些重要的操作，比如提交表单、打开新页面**等，ElevatedButton 组件的主要属性有：
 
-
 - onPressed：按钮点击事件。
 - style：按钮样式。
 - child：按钮子组件。
 
-
 [查看更多属性](https://api.flutter-io.cn/flutter/material/ElevatedButton-class.html)
-
 
 ElevatedButton 组件的示例代码如下：
 
@@ -192,10 +174,9 @@ ElevatedButton(
 ),
 ```
 
-
 效果如下：
 
-![图片5](../public/Snipaste_phone_elevatedbutton.png)
+<ImageBuilder :source="['Snipaste_phone_elevatedbutton.png']" />
 
 ## 6. GestureDetector 组件
 
@@ -207,7 +188,6 @@ GestureDetector 组件是一个**手势监听器组件**，它可以**用来监�
 - child：手势监听器子组件。
 
 [查看更多属性](https://api.flutter-io.cn/flutter/widgets/GestureDetector-class.html)
-
 
 GestureDetector 组件的示例代码如下：
 
@@ -230,10 +210,6 @@ GestureDetector(
 ),
 ```
 
-
 效果如下：
 
-![图片6](../public/Snipaste_phone_gesturedetector.png)
-
-
-
+<ImageBuilder :source="['Snipaste_phone_gesturedetector.jpg']" />

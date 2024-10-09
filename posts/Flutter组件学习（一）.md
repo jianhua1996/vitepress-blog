@@ -1,6 +1,6 @@
 ---
 title: Flutter组件学习（一）
-tags: 
+tags:
   - Flutter
   - Dart
   - Widget
@@ -11,17 +11,15 @@ tags:
   - Text
   - Icon
   - SafeArea
-
 ---
 
-
 ## 1. Container 组件
+
 Container 组件是 Flutter 中的`布局组件`，可以类比为 web 开发中的 div 标签。
 
 它属于单一子组件的容器，接受`一个` child 参数作为子组件， child 类型**可以是任何 widget，包括其他的 Container 组件**。
 
 **容器在没有子元素的情况下会尽量变得尽可能大，除非传入的约束条件是无界的**，在这种情况下，它们会尽量变得尽可能小。
-
 
 ```dart
 Container(
@@ -30,9 +28,10 @@ Container(
   ),
 )
 ```
+
 以上代码效果如下：
 
-![图片1](../public/Snipaste_phone_container1.png)
+<ImageBuilder :source="['Snipaste_phone_container1.png']" />
 
 **有子元素的容器会根据其子元素的大小来调整自身大小**。
 
@@ -44,9 +43,10 @@ Container(
   child: Text('Hello World!'),
 ),
 ```
+
 以上代码效果如下：
 
-![图片2](../public/Snipaste_phone_container2.png)
+<ImageBuilder :source="['Snipaste_phone_container2.png']" />
 
 > Tips: 如果你希望所有的元素都在安全区域展示，不被系统状态栏、导航栏等系统元素遮挡，可以使用 SafeArea 组件。
 
@@ -60,9 +60,10 @@ SafeArea(
   ),
 )
 ```
+
 以上代码效果如下：
 
-![图片3](../public/Snipaste_phone_container3.png)
+<ImageBuilder :source="['Snipaste_phone_container3.png']" />
 
 如果你给 Container 组件设置了 width 和 height，那么它将会按照你指定的尺寸而不是子组件的尺寸来进行布局。
 
@@ -81,11 +82,11 @@ SafeArea(
 
 以上代码效果如下：
 
-![图片4](../public/Snipaste_phone_container4.png)
+<ImageBuilder :source="['Snipaste_phone_container4.png']" />
 
 ### 1.1 关于外边距（magin）和内边距（padding）
 
-container 组件可以通过 margin 和 padding 属性来设置外边距和内边距。（flutter中外边距和内边距的概念等同于web开发中的 margin 和 padding）
+container 组件可以通过 margin 和 padding 属性来设置外边距和内边距。（flutter 中外边距和内边距的概念等同于 web 开发中的 margin 和 padding）
 
 生成内外边距的方法：
 
@@ -117,8 +118,7 @@ SafeArea(
 
 Rows 和 Columns 组件同样是 Flutter 中的`布局组件`，可以类比为 web 开发中的 flex 布局。
 
-
-它们都属于多子组件的容器，接受`多个` child 参数作为子组件，入口参数为`children`， children指定的子组件类型**可以是任何 widget 或 widget 集合，包括其他的 Rows 和 Columns 组件**。
+它们都属于多子组件的容器，接受`多个` child 参数作为子组件，入口参数为`children`， children 指定的子组件类型**可以是任何 widget 或 widget 集合，包括其他的 Rows 和 Columns 组件**。
 
 ```dart
 SafeArea(
@@ -155,19 +155,20 @@ SafeArea(
 
 以上代码效果如下：
 
-![图片5](../public/Snipaste_phone_rows_columns.png)
+<ImageBuilder :source="['Snipaste_phone_rows_columns.jpg']" />
 
 **Columns 组件总是会在垂直方向上尽可能的占用空间，而 Rows 组件总是在水平方向上尽可能的占用空间。**
 
 如图所示：
 
-![图片6](../public/Snipaste_phone_rows_columns2.png)
+<ImageBuilder :source="['Snipaste_phone_rows_columns2.png']" />
 
 > 如果你希望更改这个默认行为，可以通过更改 mainAxisSize 属性来控制 Rows 和 Columns 组件在主轴方向上的尺寸分配。
+>
 > ```dart
 > Column(
 >   mainAxisSize: MainAxisSize.min,
->)
+> )
 > ```
 
 另外，Columns 组件还可以设置 verticalDirection 属性来控制子组件的排列方向。
@@ -211,9 +212,10 @@ SafeArea(
 
 以上代码效果如下：
 
-![图片7](../public/Snipaste_phone_rows_columns3.jpg)
+<ImageBuilder :source="['Snipaste_phone_rows_columns3.jpg']" />
 
-以及，通过 `mainAxisAlignment` 属性来控制子组件在主轴方向上的对齐方式，有效的值有： 
+以及，通过 `mainAxisAlignment` 属性来控制子组件在主轴方向上的对齐方式，有效的值有：
+
 - MainAxisAlignment.start
 - MainAxisAlignment.end
 - MainAxisAlignment.center
@@ -222,14 +224,14 @@ SafeArea(
 - MainAxisAlignment.spaceEvenly 子组件间距均匀分布
 
 通过 `crossAxisAlignment` 属性来控制子组件在交叉轴方向上的对齐方式，有效的值有：
+
 - CrossAxisAlignment.start
 - CrossAxisAlignment.end
 - CrossAxisAlignment.center
-- CrossAxisAlignment.stretch  拉伸子组件，占满交叉轴方向的全部空间
+- CrossAxisAlignment.stretch 拉伸子组件，占满交叉轴方向的全部空间
 - CrossAxisAlignment.baseline
 
 **这些基本上和 web 开发中的 flex 布局的概念是一致的， mainAxisAlignment 和 crossAxisAlignment 也和 justify-content 和 align-items 相对应**
-
 
 ## 3. Image 组件与图片导入
 
@@ -243,7 +245,7 @@ Image 组件是 Flutter 中的`图片组件`，用来展示图片。
 
 [查看上述方式的详细用法](https://api.flutter-io.cn/flutter/widgets/Image-class.html)
 
-Image组件支持的图片格式有： **JPEG, PNG, GIF, Animated GIF, WebP, Animated WebP, BMP, and WBMP**。
+Image 组件支持的图片格式有： **JPEG, PNG, GIF, Animated GIF, WebP, Animated WebP, BMP, and WBMP**。
 
 在默认的构造函数中，通过`image`参数传入一个指定的`ImageProvider`类型的值，就可以加载指定的图片。
 
@@ -258,9 +260,8 @@ Image组件支持的图片格式有： **JPEG, PNG, GIF, Animated GIF, WebP, Ani
 ```
 
 > 需要注意的是，在使用`AssetImage`类型的`ImageProvider`时，需要先在 pubspec.yaml 文件中配置图片资源路径来导入图片资源。
-> 
-> ![图片8](../public/Snipaste_phone_image.png)
-> 
+>
+> <ImageBuilder :source="['Snipaste_phone_image.png']" />
 
 ## 4. Text 组件与自定义字体
 
@@ -282,7 +283,7 @@ Text(
 
 以上代码效果如下：
 
-![图片9](../public/Snipaste_phone_text.png)
+<ImageBuilder :source="['Snipaste_phone_text.png']" />
 
 ### 4.1 自定义字体
 
@@ -303,15 +304,11 @@ const Text(
 
 以上代码效果如下：
 
-![图片11](../public/Snipaste_phone_custom_font2.png)
-
+<ImageBuilder :source="['Snipaste_phone_custom_font2.png']" />
 
 > 需要注意的是，自定义字体同样需要在 pubspec.yaml 文件中配置和导入。
 >
-> ![图片10](../public/Snipaste_phone_custom_font.png)
-> 
-> 
-
+> <ImageBuilder :source="['Snipaste_phone_custom_font.png']" />
 
 ## 5. Icon 组件
 
@@ -327,11 +324,9 @@ Icon(
 ),
 ```
 
-
 以上代码效果如下：
 
-![图片12](../public/Snipaste_phone_icon.png)
-
+<ImageBuilder :source="['Snipaste_phone_icon.png']" />
 
 ## 6. Expanded 组件
 
@@ -342,7 +337,6 @@ Expanded 组件同样是 Flutter 中的`布局组件`，它可以用来扩展其
 > 注意： Expanded 组件只能作为 Row、Column 或 Flex 布局的子元素使用。
 
 [查看更多 Expanded 组件用法](https://api.flutter-io.cn/flutter/widgets/Expanded-class.html)
-
 
 ```dart
 Row(
@@ -383,11 +377,9 @@ Row(
 ),
 ```
 
-
 以上代码效果如下：
 
-![图片13](../public/Snipaste_phone_expanded.png)
-
+<ImageBuilder :source="['Snipaste_phone_expanded.png']" />
 
 ## 7. Padding 组件
 
@@ -395,7 +387,7 @@ Padding 组件也是 Flutter 中的`布局组件`之一，用来给父组件添�
 
 它接受`一个` padding 参数，该参数是一个`EdgeInsetsGeometry`类型的值，用来设置四个方向上的内边距。
 
-具体用法和Container组件中的padding属性类似。[回到 1.1](#_1-1-关于外边距-magin-和内边距-padding)
+具体用法和 Container 组件中的 padding 属性类似。[回到 1.1](#_1-1-关于外边距-magin-和内边距-padding)
 
 [更多 Padding 组件用法](https://api.flutter-io.cn/flutter/widgets/Padding-class.html)
 
@@ -412,4 +404,3 @@ Padding(
   ),
 ),
 ```
-

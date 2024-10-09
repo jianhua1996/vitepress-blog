@@ -3,6 +3,7 @@ import DefaultTheme from "vitepress/theme";
 import Archives from "./components/Archives.vue";
 import Tags from "./components/Tags.vue";
 import MyLayout from "./components/MyLayout.vue";
+import ImageBuilder from "./components/ImageBuilder.vue";
 
 import "./custom.css";
 
@@ -15,5 +16,6 @@ export default {
     // register global components
     app.component("Archives", Archives);
     app.component("Tags", Tags);
+    app.component("ImageBuilder", ImageBuilder);
   },
 };
