@@ -22,8 +22,8 @@ onContentUpdated(() => {
   }
   deleteChild(element);
   const gitalk = new Gitalk({
-    clientID: "21ba97714c82cd5e7db9",
-    clientSecret: "9c163baace2fae9fd46fd4f3f6512bf1ea27fcb6",
+    clientID: import.meta.env.VITE_GITHUB_CLIENT_ID,
+    clientSecret: import.meta.env.VITE_GITHUB_CLIENT_SECRET,
     repo: "vitepress-blog-comments",
     owner: "jianhua1996",
     admin: ["jianhua1996"],
