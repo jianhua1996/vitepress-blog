@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <img :src="theme.avator" width="135" height="135" class="avator" />
+    <img :src="theme.avator" class="avator animate__rubberBand animate__animated" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -16,8 +16,8 @@ const { theme } = useData();
 }
 
 .avator {
-  width: 135px;
-  height: 135px;
+  width: 165px;
+  height: 165px;
   object-fit: cover;
   border-radius: 50%;
   border: 5px solid var(--vp-avator-border);

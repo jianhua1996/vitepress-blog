@@ -10,11 +10,11 @@
   </div>
   <div class="pagination">
     <button class="left" v-if="pageCurrent > 1" @click="go(pageCurrent - 1)">
-      Previous page
+      上一页
     </button>
     <div v-if="pagesNum > 1">{{ `${pageCurrent}/${pagesNum}` }}</div>
     <button class="right" v-if="pageCurrent < pagesNum" @click="go(pageCurrent + 1)">
-      Next page
+      下一页
     </button>
   </div>
 </template>
