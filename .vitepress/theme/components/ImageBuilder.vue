@@ -9,7 +9,7 @@
   >
     <img
       v-for="item in source"
-      :src="withBase(`/public/${item}`)"
+      :src="withBase(`/${item}`)"
       alt="image"
       style="object-fit: contain"
       :style="style[size]"
