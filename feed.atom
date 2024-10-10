@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2024-10-09T11:41:02.173Z</updated>
+    <updated>2024-10-10T02:57:27.482Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -20,21 +20,186 @@
         <id>https://clark-cui.top/posts/Flutter小项目展示.html</id>
         <link href="https://clark-cui.top/posts/Flutter小项目展示.html"/>
         <updated>2024-10-09T00:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h2>项目一：天气app</h2>
-<img src="../public/Snipaste_demo_weather.jpg" alt="图片1" style="height: 550px;" />
+        <content type="html"><![CDATA[<h2>项目一：天气 app</h2>
+<ImageBuilder :source="['Snipaste_demo_weather.jpg']" :size="'small'"/>
 <p>项目地址：<a href="https://github.com/jianhua1996/flutter-weather">https://github.com/jianhua1996/flutter-weather</a></p>
 <h2>项目二：音乐播放器</h2>
-<div style="display: flex;">
-    <img src="../public/Snipaste_demo_music_player.jpg" alt="图片2" style="height: 550px;" />
-    <div style="width: 50px;"></div>
-    <img src="../public/Snipaste_demo_music_player2.png" alt="图片3" style="height: 550px;" />
-</div>
-<div style="display: flex;">
-    <img src="../public/Snipaste_demo_music_player3.png" alt="图片4" style="height: 550px;" />
-    <div style="width: 50px;"></div>
-    <img src="../public/Snipaste_demo_music_player5.jpg" alt="图片5" style="height: 550px;" />
-</div>
+<ImageBuilder :source="['Snipaste_demo_music_player.jpg', 'Snipaste_demo_music_player2.jpg', 'Snipaste_demo_music_player3.png', 'Snipaste_demo_music_player5.jpg']" :size="'small'"/>
 <p>项目地址：<a href="https://github.com/jianhua1996/flutter-music-player">https://github.com/jianhua1996/flutter-music-player</a></p>
+]]></content>
+        <author>
+            <name>Clark Cui</name>
+            <email>rongchuancui@gmail.com</email>
+            <uri>https://clark-cui.top</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Flutter组件学习（二）]]></title>
+        <id>https://clark-cui.top/posts/Flutter组件学习（二）.html</id>
+        <link href="https://clark-cui.top/posts/Flutter组件学习（二）.html"/>
+        <updated>2024-10-06T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h2>1. Card 组件</h2>
+<p>Card 组件是 Flutter 中最常用的组件之一，它可以用来显示一些内容，<strong>它的默认样式是一个略微圆角且带有阴影凸起的面板</strong>，Card 组件可以包含一个子组件，也可以没有子组件。Card 组件的主要属性有：</p>
+<ul>
+<li>color：Card 组件的背景颜色。</li>
+<li>elevation：Card 组件的阴影大小。</li>
+<li>shape：Card 组件的形状。</li>
+<li>clipBehavior：Card 组件的裁剪行为。</li>
+<li>child：Card 组件的子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/Card-class.html">查看更多属性</a></p>
+<p>Card 组件的示例代码如下：</p>
+<pre><code class="language-dart">Card(
+  color: Colors.blue,
+  elevation: 10,
+  child: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      'This is a card',
+      style: TextStyle(color: Colors.white),
+    ),
+  ),
+),
+</code></pre>
+<p>效果如下：</p>
+<ImageBuilder :source="['Snipaste_phone_card.png']" />
+<h2>2. ListTile 组件</h2>
+<p>ListTile 组件是 Flutter 中用来显示列表项的组件，通常与 Listview 组件、Card 组件等一起搭配使用，它可以<strong>用来展示一个标题、一段描述、一张图片或者一个小部件</strong>，ListTile 组件的主要属性有：</p>
+<ul>
+<li>leading：ListTile 组件的左侧组件，通常是一个小部件。</li>
+<li>title：ListTile 组件的标题。</li>
+<li>subtitle：ListTile 组件的副标题。</li>
+<li>trailing：ListTile 组件的右侧组件，通常是一个小部件。</li>
+<li>dense：ListTile 组件是否显示为紧凑模式。</li>
+<li>enabled：ListTile 组件是否可以点击。</li>
+<li>onTap：ListTile 组件的点击事件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/ListTile-class.html">查看更多属性</a></p>
+<p>ListTile 组件的示例代码如下：</p>
+<pre><code class="language-dart">ListTile(
+  leading: Icon(Icons.person),
+  title: Text('标题'),
+  subtitle: Text('子标题'),
+  trailing: Icon(Icons.arrow_forward),
+  dense: true,
+  enabled: true,
+  onTap: () {
+    print('ListTile 被点击了');
+  },
+)
+</code></pre>
+<p>效果如下：</p>
+<ImageBuilder :source="['Snipaste_phone_listtile.png']" />
+<h2>3. CircleAvatar 组件</h2>
+<p>CircleAvatar 组件是一个圆形的头像组件，它可以<strong>用来显示用户头像或者其他圆形的图片</strong>，CircleAvatar 组件的主要属性有：</p>
+<ul>
+<li>backgroundImage：CircleAvatar 组件的背景图片。</li>
+<li>backgroundColor：CircleAvatar 组件的背景颜色。</li>
+<li>foregroundColor：CircleAvatar 组件的前景颜色。</li>
+<li>radius：CircleAvatar 组件的圆角半径。</li>
+<li>child：CircleAvatar 组件的子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/CircleAvatar-class.html">查看更多属性</a></p>
+<p>CircleAvatar 组件的示例代码如下：</p>
+<pre><code class="language-dart">CircleAvatar(
+  backgroundImage:
+      const NetworkImage('https://www.example.com/example.jpg'),
+  backgroundColor: Colors.lightGreen.shade100,
+  radius: 50,
+  child: const FlutterLogo(
+    size: 50,
+  ),
+),
+</code></pre>
+<p>效果如下：</p>
+<ImageBuilder :source="['Snipaste_phone_circleavatar.jpg']" />
+<h2>4. Divider 组件</h2>
+<p>Divider 组件是一个分割线组件，它可以<strong>用来分隔不同列表项或者不同区域</strong>，Divider 组件的主要属性有：</p>
+<ul>
+<li>height：Divider 组件的高度。</li>
+<li>thickness：Divider 组件的粗细。</li>
+<li>indent：Divider 组件距离左侧距离。</li>
+<li>endIndent：Divider 组件距离右侧距离。</li>
+<li>color：Divider 组件的颜色。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/Divider-class.html">查看更多属性</a></p>
+<p>Divider 组件的示例代码如下：</p>
+<pre><code class="language-dart">Column(
+  children: [
+    CircleAvatar(
+      backgroundImage:
+          const NetworkImage('https://www.example.com/example.jpg'),
+      backgroundColor: Colors.lightGreen.shade100,
+      radius: 50,
+      child: const FlutterLogo(
+        size: 50,
+      ),
+    ),
+    const Divider(
+      height: 10,
+      thickness: 2,
+      indent: 10,
+      endIndent: 10,
+      color: Colors.pink,
+    ),
+  ],
+)
+</code></pre>
+<p>效果如下：</p>
+<ImageBuilder :source="['Snipaste_phone_divider.png']" />
+<h2>5. ElevatedButton 组件</h2>
+<p>ElevatedButton 组件是一个<strong>带有阴影的按钮组件</strong>，它可以<strong>用来触发一些重要的操作，比如提交表单、打开新页面</strong>等，ElevatedButton 组件的主要属性有：</p>
+<ul>
+<li>onPressed：按钮点击事件。</li>
+<li>style：按钮样式。</li>
+<li>child：按钮子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/material/ElevatedButton-class.html">查看更多属性</a></p>
+<p>ElevatedButton 组件的示例代码如下：</p>
+<pre><code class="language-dart">ElevatedButton(
+  onPressed: () {
+    print('按钮被点击了');
+  },
+  style: ElevatedButton.styleFrom(
+    foregroundColor: Colors.white,
+    backgroundColor: Colors.blue,
+    shadowColor: Colors.blue.shade700,
+    elevation: 12,
+  ),
+  child: Text('按钮'),
+),
+</code></pre>
+<p>效果如下：</p>
+<ImageBuilder :source="['Snipaste_phone_elevatedbutton.png']" />
+<h2>6. GestureDetector 组件</h2>
+<p>GestureDetector 组件是一个<strong>手势监听器组件</strong>，它可以<strong>用来监听用户的手势操作，比如滑动、点击、长按等</strong>，GestureDetector 组件的主要属性有：</p>
+<ul>
+<li>onTap：手指单击事件。</li>
+<li>onDoubleTap：手指双击事件。</li>
+<li>onLongPress：手指长按事件。</li>
+<li>child：手势监听器子组件。</li>
+</ul>
+<p><a href="https://api.flutter-io.cn/flutter/widgets/GestureDetector-class.html">查看更多属性</a></p>
+<p>GestureDetector 组件的示例代码如下：</p>
+<pre><code class="language-dart">GestureDetector(
+  onTap: () {
+    print('手指单击了');
+  },
+  onDoubleTap: () {
+    print('手指双击了');
+  },
+  onLongPress: () {
+    print('手指长按了');
+  },
+  child: Container(
+    width: 100,
+    height: 100,
+    color: Colors.blue,
+  ),
+),
+</code></pre>
+<p>效果如下：</p>
+<ImageBuilder :source="['Snipaste_phone_gesturedetector.jpg']" />
 ]]></content>
         <author>
             <name>Clark Cui</name>
@@ -46,7 +211,7 @@
         <title type="html"><![CDATA[Flutter组件学习（一）]]></title>
         <id>https://clark-cui.top/posts/Flutter组件学习（一）.html</id>
         <link href="https://clark-cui.top/posts/Flutter组件学习（一）.html"/>
-        <updated>2024-10-09T00:00:00.000Z</updated>
+        <updated>2024-10-04T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>1. Container 组件</h2>
 <p>Container 组件是 Flutter 中的<code>布局组件</code>，可以类比为 web 开发中的 div 标签。</p>
 <p>它属于单一子组件的容器，接受<code>一个</code> child 参数作为子组件， child 类型<strong>可以是任何 widget，包括其他的 Container 组件</strong>。</p>
@@ -58,7 +223,7 @@
 )
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_container1.png" alt="图片1"></p>
+<ImageBuilder :source="['Snipaste_phone_container1.png']" />
 <p><strong>有子元素的容器会根据其子元素的大小来调整自身大小</strong>。</p>
 <pre><code class="language-dart">Container(
   decoration: BoxDecoration(
@@ -68,7 +233,7 @@
 ),
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_container2.png" alt="图片2"></p>
+<ImageBuilder :source="['Snipaste_phone_container2.png']" />
 <blockquote>
 <p>Tips: 如果你希望所有的元素都在安全区域展示，不被系统状态栏、导航栏等系统元素遮挡，可以使用 SafeArea 组件。</p>
 </blockquote>
@@ -82,7 +247,7 @@
 )
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_container3.png" alt="图片3"></p>
+<ImageBuilder :source="['Snipaste_phone_container3.png']" />
 <p>如果你给 Container 组件设置了 width 和 height，那么它将会按照你指定的尺寸而不是子组件的尺寸来进行布局。</p>
 <pre><code class="language-dart">SafeArea(
   child: Container(
@@ -96,9 +261,9 @@
 )
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_container4.png" alt="图片4"></p>
+<ImageBuilder :source="['Snipaste_phone_container4.png']" />
 <h3>1.1 关于外边距（magin）和内边距（padding）</h3>
-<p>container 组件可以通过 margin 和 padding 属性来设置外边距和内边距。（flutter中外边距和内边距的概念等同于web开发中的 margin 和 padding）</p>
+<p>container 组件可以通过 margin 和 padding 属性来设置外边距和内边距。（flutter 中外边距和内边距的概念等同于 web 开发中的 margin 和 padding）</p>
 <p>生成内外边距的方法：</p>
 <ul>
 <li>EdgeInsets.all 生成四个方向上都相同的内外边距</li>
@@ -125,7 +290,7 @@
 </code></pre>
 <h2>2. Rows 和 Columns 组件</h2>
 <p>Rows 和 Columns 组件同样是 Flutter 中的<code>布局组件</code>，可以类比为 web 开发中的 flex 布局。</p>
-<p>它们都属于多子组件的容器，接受<code>多个</code> child 参数作为子组件，入口参数为<code>children</code>， children指定的子组件类型<strong>可以是任何 widget 或 widget 集合，包括其他的 Rows 和 Columns 组件</strong>。</p>
+<p>它们都属于多子组件的容器，接受<code>多个</code> child 参数作为子组件，入口参数为<code>children</code>， children 指定的子组件类型<strong>可以是任何 widget 或 widget 集合，包括其他的 Rows 和 Columns 组件</strong>。</p>
 <pre><code class="language-dart">SafeArea(
   child: Column(
     children: [
@@ -158,10 +323,10 @@
 ),
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_rows_columns.png" alt="图片5"></p>
+<ImageBuilder :source="['Snipaste_phone_rows_columns.jpg']" />
 <p><strong>Columns 组件总是会在垂直方向上尽可能的占用空间，而 Rows 组件总是在水平方向上尽可能的占用空间。</strong></p>
 <p>如图所示：</p>
-<p><img src="../public/Snipaste_phone_rows_columns2.png" alt="图片6"></p>
+<ImageBuilder :source="['Snipaste_phone_rows_columns2.png']" />
 <blockquote>
 <p>如果你希望更改这个默认行为，可以通过更改 mainAxisSize 属性来控制 Rows 和 Columns 组件在主轴方向上的尺寸分配。</p>
 <pre><code class="language-dart">Column(
@@ -206,7 +371,7 @@ SafeArea(
 
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_rows_columns3.jpg" alt="图片7"></p>
+<ImageBuilder :source="['Snipaste_phone_rows_columns3.jpg']" />
 <p>以及，通过 <code>mainAxisAlignment</code> 属性来控制子组件在主轴方向上的对齐方式，有效的值有：</p>
 <ul>
 <li>MainAxisAlignment.start</li>
@@ -221,7 +386,7 @@ SafeArea(
 <li>CrossAxisAlignment.start</li>
 <li>CrossAxisAlignment.end</li>
 <li>CrossAxisAlignment.center</li>
-<li>CrossAxisAlignment.stretch  拉伸子组件，占满交叉轴方向的全部空间</li>
+<li>CrossAxisAlignment.stretch 拉伸子组件，占满交叉轴方向的全部空间</li>
 <li>CrossAxisAlignment.baseline</li>
 </ul>
 <p><strong>这些基本上和 web 开发中的 flex 布局的概念是一致的， mainAxisAlignment 和 crossAxisAlignment 也和 justify-content 和 align-items 相对应</strong></p>
@@ -234,7 +399,7 @@ SafeArea(
 <li>Image.file 加载本地文件图片</li>
 </ul>
 <p><a href="https://api.flutter-io.cn/flutter/widgets/Image-class.html">查看上述方式的详细用法</a></p>
-<p>Image组件支持的图片格式有： <strong>JPEG, PNG, GIF, Animated GIF, WebP, Animated WebP, BMP, and WBMP</strong>。</p>
+<p>Image 组件支持的图片格式有： <strong>JPEG, PNG, GIF, Animated GIF, WebP, Animated WebP, BMP, and WBMP</strong>。</p>
 <p>在默认的构造函数中，通过<code>image</code>参数传入一个指定的<code>ImageProvider</code>类型的值，就可以加载指定的图片。</p>
 <p><code>ImageProvider</code> 是一个抽象类，用于提供图片资源。常见的 ImageProvider 类型有 <code>AssetImage</code>、<code>NetworkImage</code>、<code>FileImage</code> 等。</p>
 <pre><code class="language-dart"> Image(
@@ -245,7 +410,7 @@ SafeArea(
 </code></pre>
 <blockquote>
 <p>需要注意的是，在使用<code>AssetImage</code>类型的<code>ImageProvider</code>时，需要先在 pubspec.yaml 文件中配置图片资源路径来导入图片资源。</p>
-<p><img src="../public/Snipaste_phone_image.png" alt="图片8"></p>
+<ImageBuilder :source="['Snipaste_phone_image.png']" />
 </blockquote>
 <h2>4. Text 组件与自定义字体</h2>
 <p>Text 组件是 Flutter 中的<code>文本组件</code>，用来展示文本。</p>
@@ -261,7 +426,7 @@ SafeArea(
 ),
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_text.png" alt="图片9"></p>
+<ImageBuilder :source="['Snipaste_phone_text.png']" />
 <h3>4.1 自定义字体</h3>
 <p>Flutter 支持自定义字体，通过 <code>fontFamily</code> 参数指定字体名称，就可以使用该字体渲染文本。</p>
 <pre><code class="language-dart">const Text(
@@ -276,10 +441,10 @@ SafeArea(
 ),
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_custom_font2.png" alt="图片11"></p>
+<ImageBuilder :source="['Snipaste_phone_custom_font2.png']" />
 <blockquote>
 <p>需要注意的是，自定义字体同样需要在 pubspec.yaml 文件中配置和导入。</p>
-<p><img src="../public/Snipaste_phone_custom_font.png" alt="图片10"></p>
+<ImageBuilder :source="['Snipaste_phone_custom_font.png']" />
 </blockquote>
 <h2>5. Icon 组件</h2>
 <p>Icon 组件是 Flutter 中的<code>图标组件</code>，用来展示具体的图标类型。</p>
@@ -291,7 +456,7 @@ SafeArea(
 ),
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_icon.png" alt="图片12"></p>
+<ImageBuilder :source="['Snipaste_phone_icon.png']" />
 <h2>6. Expanded 组件</h2>
 <p>Expanded 组件同样是 Flutter 中的<code>布局组件</code>，它可以用来扩展其子组件的尺寸。</p>
 <p>使用 <strong>Expanded 组件可以使 Row、Column 或 Flex 布局的子元素沿着主轴扩展以填充可用空间</strong>（例如，对于 Row 是水平扩展，对于 Column 是垂直扩展）。<strong>如果有多个子元素扩展，可用空间将根据弹性因子<code>flex</code>按比例在它们之间进行分配</strong>。</p>
@@ -337,11 +502,11 @@ SafeArea(
 ),
 </code></pre>
 <p>以上代码效果如下：</p>
-<p><img src="../public/Snipaste_phone_expanded.png" alt="图片13"></p>
+<ImageBuilder :source="['Snipaste_phone_expanded.png']" />
 <h2>7. Padding 组件</h2>
 <p>Padding 组件也是 Flutter 中的<code>布局组件</code>之一，用来给父组件添加内边距。</p>
 <p>它接受<code>一个</code> padding 参数，该参数是一个<code>EdgeInsetsGeometry</code>类型的值，用来设置四个方向上的内边距。</p>
-<p>具体用法和Container组件中的padding属性类似。<a href="#_1-1-%E5%85%B3%E4%BA%8E%E5%A4%96%E8%BE%B9%E8%B7%9D-magin-%E5%92%8C%E5%86%85%E8%BE%B9%E8%B7%9D-padding">回到 1.1</a></p>
+<p>具体用法和 Container 组件中的 padding 属性类似。<a href="#_1-1-%E5%85%B3%E4%BA%8E%E5%A4%96%E8%BE%B9%E8%B7%9D-magin-%E5%92%8C%E5%86%85%E8%BE%B9%E8%B7%9D-padding">回到 1.1</a></p>
 <p><a href="https://api.flutter-io.cn/flutter/widgets/Padding-class.html">更多 Padding 组件用法</a></p>
 <pre><code class="language-dart">Padding(
   padding: const EdgeInsets.all(20),
@@ -363,184 +528,10 @@ SafeArea(
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Flutter组件学习（二）]]></title>
-        <id>https://clark-cui.top/posts/Flutter组件学习（二）.html</id>
-        <link href="https://clark-cui.top/posts/Flutter组件学习（二）.html"/>
-        <updated>2024-10-09T00:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h2>1. Card 组件</h2>
-<p>Card 组件是 Flutter 中最常用的组件之一，它可以用来显示一些内容，<strong>它的默认样式是一个略微圆角且带有阴影凸起的面板</strong>，Card 组件可以包含一个子组件，也可以没有子组件。Card 组件的主要属性有：</p>
-<ul>
-<li>color：Card 组件的背景颜色。</li>
-<li>elevation：Card 组件的阴影大小。</li>
-<li>shape：Card 组件的形状。</li>
-<li>clipBehavior：Card 组件的裁剪行为。</li>
-<li>child：Card 组件的子组件。</li>
-</ul>
-<p><a href="https://api.flutter-io.cn/flutter/material/Card-class.html">查看更多属性</a></p>
-<p>Card 组件的示例代码如下：</p>
-<pre><code class="language-dart">Card(
-  color: Colors.blue,
-  elevation: 10,
-  child: Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Text(
-      'This is a card',
-      style: TextStyle(color: Colors.white),
-    ),
-  ),
-),
-</code></pre>
-<p>效果如下：</p>
-<p><img src="../public/Snipaste_phone_card.png" alt="图片1"></p>
-<h2>2. ListTile 组件</h2>
-<p>ListTile 组件是 Flutter 中用来显示列表项的组件，通常与 Listview 组件、Card 组件等一起搭配使用，它可以<strong>用来展示一个标题、一段描述、一张图片或者一个小部件</strong>，ListTile 组件的主要属性有：</p>
-<ul>
-<li>leading：ListTile 组件的左侧组件，通常是一个小部件。</li>
-<li>title：ListTile 组件的标题。</li>
-<li>subtitle：ListTile 组件的副标题。</li>
-<li>trailing：ListTile 组件的右侧组件，通常是一个小部件。</li>
-<li>dense：ListTile 组件是否显示为紧凑模式。</li>
-<li>enabled：ListTile 组件是否可以点击。</li>
-<li>onTap：ListTile 组件的点击事件。</li>
-</ul>
-<p><a href="https://api.flutter-io.cn/flutter/material/ListTile-class.html">查看更多属性</a></p>
-<p>ListTile 组件的示例代码如下：</p>
-<pre><code class="language-dart">ListTile(
-  leading: Icon(Icons.person),
-  title: Text('标题'),
-  subtitle: Text('子标题'),
-  trailing: Icon(Icons.arrow_forward),
-  dense: true,
-  enabled: true,
-  onTap: () {
-    print('ListTile 被点击了');
-  },
-)
-</code></pre>
-<p>效果如下：</p>
-<p><img src="../public/Snipaste_phone_listtile.png" alt="图片2"></p>
-<h2>3. CircleAvatar 组件</h2>
-<p>CircleAvatar 组件是一个圆形的头像组件，它可以<strong>用来显示用户头像或者其他圆形的图片</strong>，CircleAvatar 组件的主要属性有：</p>
-<ul>
-<li>backgroundImage：CircleAvatar 组件的背景图片。</li>
-<li>backgroundColor：CircleAvatar 组件的背景颜色。</li>
-<li>foregroundColor：CircleAvatar 组件的前景颜色。</li>
-<li>radius：CircleAvatar 组件的圆角半径。</li>
-<li>child：CircleAvatar 组件的子组件。</li>
-</ul>
-<p><a href="https://api.flutter-io.cn/flutter/material/CircleAvatar-class.html">查看更多属性</a></p>
-<p>CircleAvatar 组件的示例代码如下：</p>
-<pre><code class="language-dart">CircleAvatar(
-  backgroundImage:
-      const NetworkImage('https://www.example.com/example.jpg'),
-  backgroundColor: Colors.lightGreen.shade100,
-  radius: 50,
-  child: const FlutterLogo(
-    size: 50,
-  ),
-),
-</code></pre>
-<p>效果如下：</p>
-<p><img src="../public/Snipaste_phone_circleavatar.png" alt="图片3"></p>
-<h2>4. Divider 组件</h2>
-<p>Divider 组件是一个分割线组件，它可以<strong>用来分隔不同列表项或者不同区域</strong>，Divider 组件的主要属性有：</p>
-<ul>
-<li>height：Divider 组件的高度。</li>
-<li>thickness：Divider 组件的粗细。</li>
-<li>indent：Divider 组件距离左侧距离。</li>
-<li>endIndent：Divider 组件距离右侧距离。</li>
-<li>color：Divider 组件的颜色。</li>
-</ul>
-<p><a href="https://api.flutter-io.cn/flutter/material/Divider-class.html">查看更多属性</a></p>
-<p>Divider 组件的示例代码如下：</p>
-<pre><code class="language-dart">Column(
-  children: [
-    CircleAvatar(
-      backgroundImage:
-          const NetworkImage('https://www.example.com/example.jpg'),
-      backgroundColor: Colors.lightGreen.shade100,
-      radius: 50,
-      child: const FlutterLogo(
-        size: 50,
-      ),
-    ),
-    const Divider(
-      height: 10,
-      thickness: 2,
-      indent: 10,
-      endIndent: 10,
-      color: Colors.pink,
-    ),
-  ],
-)
-</code></pre>
-<p>效果如下：</p>
-<p><img src="../public/Snipaste_phone_divider.png" alt="图片4"></p>
-<h2>5. ElevatedButton 组件</h2>
-<p>ElevatedButton 组件是一个<strong>带有阴影的按钮组件</strong>，它可以<strong>用来触发一些重要的操作，比如提交表单、打开新页面</strong>等，ElevatedButton 组件的主要属性有：</p>
-<ul>
-<li>onPressed：按钮点击事件。</li>
-<li>style：按钮样式。</li>
-<li>child：按钮子组件。</li>
-</ul>
-<p><a href="https://api.flutter-io.cn/flutter/material/ElevatedButton-class.html">查看更多属性</a></p>
-<p>ElevatedButton 组件的示例代码如下：</p>
-<pre><code class="language-dart">ElevatedButton(
-  onPressed: () {
-    print('按钮被点击了');
-  },
-  style: ElevatedButton.styleFrom(
-    foregroundColor: Colors.white,
-    backgroundColor: Colors.blue,
-    shadowColor: Colors.blue.shade700,
-    elevation: 12,
-  ),
-  child: Text('按钮'),
-),
-</code></pre>
-<p>效果如下：</p>
-<p><img src="../public/Snipaste_phone_elevatedbutton.png" alt="图片5"></p>
-<h2>6. GestureDetector 组件</h2>
-<p>GestureDetector 组件是一个<strong>手势监听器组件</strong>，它可以<strong>用来监听用户的手势操作，比如滑动、点击、长按等</strong>，GestureDetector 组件的主要属性有：</p>
-<ul>
-<li>onTap：手指单击事件。</li>
-<li>onDoubleTap：手指双击事件。</li>
-<li>onLongPress：手指长按事件。</li>
-<li>child：手势监听器子组件。</li>
-</ul>
-<p><a href="https://api.flutter-io.cn/flutter/widgets/GestureDetector-class.html">查看更多属性</a></p>
-<p>GestureDetector 组件的示例代码如下：</p>
-<pre><code class="language-dart">GestureDetector(
-  onTap: () {
-    print('手指单击了');
-  },
-  onDoubleTap: () {
-    print('手指双击了');
-  },
-  onLongPress: () {
-    print('手指长按了');
-  },
-  child: Container(
-    width: 100,
-    height: 100,
-    color: Colors.blue,
-  ),
-),
-</code></pre>
-<p>效果如下：</p>
-<p><img src="../public/Snipaste_phone_gesturedetector.png" alt="图片6"></p>
-]]></content>
-        <author>
-            <name>Clark Cui</name>
-            <email>rongchuancui@gmail.com</email>
-            <uri>https://clark-cui.top</uri>
-        </author>
-    </entry>
-    <entry>
         <title type="html"><![CDATA[事件循环]]></title>
         <id>https://clark-cui.top/posts/事件循环.html</id>
         <link href="https://clark-cui.top/posts/事件循环.html"/>
-        <updated>2024-10-09T00:00:00.000Z</updated>
+        <updated>2024-03-12T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器的进程模型</h2>
 <h3>进程与线程</h3>
 <p>进程是正在运行的<u>程序的实例</u>，每个进程都有自己<u>独立的</u>一块内存空间，有了进程之后，才可以运行程序的代码。一个进程至少有一个线程，叫做主线程，一个进程也可以运行多个线程，多个线程可以共享数据。</p>
@@ -559,17 +550,17 @@ SafeArea(
 </li>
 <li>
 <p><strong>渲染进程</strong></p>
-<p>每个标签页都是一个新的渲染进程，渲染进程的主线程负责执行HTML、CSS、JS代码</p>
+<p>每个标签页都是一个新的渲染进程，渲染进程的主线程负责执行 HTML、CSS、JS 代码</p>
 </li>
 </ol>
 <h3>渲染主线程是如何工作的</h3>
 <p>渲染主线程是浏览器中最繁忙的线程，它处理的任务包括：</p>
 <ul>
 <li>
-<p>解析html</p>
+<p>解析 html</p>
 </li>
 <li>
-<p>解析css</p>
+<p>解析 css</p>
 </li>
 <li>
 <p>计算样式</p>
@@ -581,10 +572,10 @@ SafeArea(
 <p>处理图层</p>
 </li>
 <li>
-<p>每秒把页面画60次</p>
+<p>每秒把页面画 60 次</p>
 </li>
 <li>
-<p>执行全局js代码</p>
+<p>执行全局 js 代码</p>
 </li>
 <li>
 <p>处理事件函数</p>
@@ -602,7 +593,7 @@ SafeArea(
 <li>
 <p>在最开始的时候，渲染主线程会进入一个无线循环</p>
 <pre><code class="language-cpp">for(;;){
-    
+
 }
 </code></pre>
 </li>
@@ -617,7 +608,7 @@ SafeArea(
 <p>在代码执行的过程中，无法立即处理（需要等待）的任务就是异步任务，比如：</p>
 <ul>
 <li>
-<p>计时器安排的任务  <code>setTimeout</code>、<code>setInterval</code></p>
+<p>计时器安排的任务 <code>setTimeout</code>、<code>setInterval</code></p>
 </li>
 <li>
 <p>网络通信后执行的任务 <code>XHR</code>、<code>fetch</code></p>
@@ -627,8 +618,8 @@ SafeArea(
 </li>
 </ul>
 <p>渲染主线程不会等待以上任务的执行，而是继续执行主线程需要执行的代码。当以上任务（由浏览器的其他进程）执行完成时，会把执行后的结果放到队列中进行等待（直到主线程清空后依次从队列中取出）。</p>
-<h3>JS代码为何会阻塞渲染</h3>
-<p>因为js代码和页面渲染都会在渲染主线程中进行执行，而页面的重绘是异步的过程，需要等待主线程的js代码执行完毕。</p>
+<h3>JS 代码为何会阻塞渲染</h3>
+<p>因为 js 代码和页面渲染都会在渲染主线程中进行执行，而页面的重绘是异步的过程，需要等待主线程的 js 代码执行完毕。</p>
 <h3>队列中的任务有优先级吗？</h3>
 <p>队列中的任务没有优先级，都是先进先出</p>
 <p>但是<u>队列有优先级</u></p>
@@ -637,7 +628,7 @@ SafeArea(
 <p>每个任务都有一个任务类型，同一个类型的任务必须在同一个队列，不同类型的任务可以分属不同的队列。在一次事件循环中，浏览器可以根据实际情况从不同队列中取出任务执行</p>
 </li>
 <li>
-<p>浏览器必须准备好一个微队列，<u>微队列中的任务优先于其他所有任务执行</u>（btw:微队列，vip的v）</p>
+<p>浏览器必须准备好一个微队列，<u>微队列中的任务优先于其他所有任务执行</u>（btw:微队列，vip 的 v）</p>
 <p>添加任务到微队列的方式 <code>Promsie</code> 和<code>MutationObserver</code></p>
 <pre><code class="language-javascript">// 立刻把一个函数放到微队列
 Promise.resolve().then(函数)
@@ -655,17 +646,17 @@ Promise.resolve().then(函数)
         <title type="html"><![CDATA[浏览器渲染原理]]></title>
         <id>https://clark-cui.top/posts/浏览器渲染原理.html</id>
         <link href="https://clark-cui.top/posts/浏览器渲染原理.html"/>
-        <updated>2024-10-09T00:00:00.000Z</updated>
+        <updated>2024-03-11T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器是如何渲染页面的</h2>
 <h3>什么是渲染</h3>
-<p>把html字符串转换为像素点信息的过程就可以叫做渲染</p>
+<p>把 html 字符串转换为像素点信息的过程就可以叫做渲染</p>
 <h3>渲染的开始</h3>
-<p>当浏览器的网络线程拿到HTML文档后，会产生一个渲染任务，并将其放到队列中。</p>
+<p>当浏览器的网络线程拿到 HTML 文档后，会产生一个渲染任务，并将其放到队列中。</p>
 <p>在事件循环机制的作用下，渲染主线程取出队列中的渲染任务，开启渲染流程。</p>
 <h3>渲染流水线</h3>
 <ol>
 <li>
-<p>解析HTML文档</p>
+<p>解析 HTML 文档</p>
 </li>
 <li>
 <p>样式计算</p>
@@ -689,19 +680,19 @@ Promise.resolve().then(函数)
 <p>画</p>
 </li>
 </ol>
-<h3>1. 解析HTML - Parse HTML</h3>
-<p>最终结果是把html文档转换成<code>DOM树(文档对象模型)</code>和<code>CSSOM树(CSS 对象模型)</code></p>
-<p>渲染的第一步是解析html。</p>
-<p>解析过程中<u>遇到css解析css</u>，<u>遇到js执行js</u>。为了提高解析效率，浏览器在开始解析前，会启动一个<u>预解析的线程</u>，率先<u>下载</u>html中的<u>外部css文件</u>和<u>外部的js文件</u>。</p>
-<p>如果主线程解析到link位置，此时外部的css文件还没有下载解析好，主线程不会等待，继续后续html的解析。这就是<u>css不会阻塞html解析</u>的根本原因。</p>
-<p>如果主线程解析到script位置，会停止解析html，转而执行js代码或者等待js文件下载完毕并执行后，才继续解析html。这是因为，<u>js代码执行的过程中可能会修改当前构建好的dom</u>树，所以必须先暂停解析。<u>这就是js会阻塞html解析的根本原因</u>。</p>
-<p>第一步完成后，会得到dom树和cssom树，浏览器的默认样式会包含在cssom树中。</p>
+<h3>1. 解析 HTML - Parse HTML</h3>
+<p>最终结果是把 html 文档转换成<code>DOM树(文档对象模型)</code>和<code>CSSOM树(CSS 对象模型)</code></p>
+<p>渲染的第一步是解析 html。</p>
+<p>解析过程中<u>遇到 css 解析 css</u>，<u>遇到 js 执行 js</u>。为了提高解析效率，浏览器在开始解析前，会启动一个<u>预解析的线程</u>，率先<u>下载</u>html 中的<u>外部 css 文件</u>和<u>外部的 js 文件</u>。</p>
+<p>如果主线程解析到 link 位置，此时外部的 css 文件还没有下载解析好，主线程不会等待，继续后续 html 的解析。这就是<u>css 不会阻塞 html 解析</u>的根本原因。</p>
+<p>如果主线程解析到 script 位置，会停止解析 html，转而执行 js 代码或者等待 js 文件下载完毕并执行后，才继续解析 html。这是因为，<u>js 代码执行的过程中可能会修改当前构建好的 dom</u>树，所以必须先暂停解析。<u>这就是 js 会阻塞 html 解析的根本原因</u>。</p>
+<p>第一步完成后，会得到 dom 树和 cssom 树，浏览器的默认样式会包含在 cssom 树中。</p>
 <h3>2. 样式计算 - Recalculate Style</h3>
-<p>主线程会遍历得到的dom树，依次为树中的每个节点计算出它最终的样式，称之为<code>Computed Style</code>。</p>
-<p>在这一过程中，很多预设值会变成绝对值，比如red会变成rgb(255,0,0)；相对单位会变成绝对单位，比如em会变成px</p>
+<p>主线程会遍历得到的 dom 树，依次为树中的每个节点计算出它最终的样式，称之为<code>Computed Style</code>。</p>
+<p>在这一过程中，很多预设值会变成绝对值，比如 red 会变成 rgb(255,0,0)；相对单位会变成绝对单位，比如 em 会变成 px</p>
 <h3>3. 布局 - Layout</h3>
-<p>主线程在进行layout计算的时候也会生成相应的layout树，需要注意的是，<u>dom树和layout树并不是一一对应的</u>。</p>
-<p>比如<code>display: none</code>的节点没有几何信息，因此不会生成到布局树；又比如一些伪元素在dom节点中不存在，但它们拥有几何信息，所以会生成到布局树中。还有匿名行盒、匿名块盒等等这些都会导致dom树和布局树无法一一对应。</p>
+<p>主线程在进行 layout 计算的时候也会生成相应的 layout 树，需要注意的是，<u>dom 树和 layout 树并不是一一对应的</u>。</p>
+<p>比如<code>display: none</code>的节点没有几何信息，因此不会生成到布局树；又比如一些伪元素在 dom 节点中不存在，但它们拥有几何信息，所以会生成到布局树中。还有匿名行盒、匿名块盒等等这些都会导致 dom 树和布局树无法一一对应。</p>
 <h3>4. 分层 - Layer</h3>
 <p>主线程会使用一套复杂的策略对整个布局树进行分层。</p>
 <p>分层的好处是，如果一个节点经常进行变动，则只需要对该层进行后续处理，而不需要对整个树进行处理，提升了效率。</p>
@@ -713,24 +704,24 @@ Promise.resolve().then(函数)
 <p>合成线程首先对每个<u>图层</u>进行<u>分块</u>，将其划分成许多的小区域。这一过程是由<u>多个线程</u>完成的。</p>
 <h3>7. 光栅化 - Raster</h3>
 <p>分块完成后，进入光栅化阶段。</p>
-<p>合成线程会将分块信息交给gpu进程，gpu会以极高的速度进行光栅化。</p>
+<p>合成线程会将分块信息交给 gpu 进程，gpu 会以极高的速度进行光栅化。</p>
 <p><u>光栅化的结果就是一块一块的位图</u>。</p>
 <h3>8. 画 - Draw</h3>
 <p>最后一个阶段就是画</p>
-<p>合成线程从gpu进程中拿到每个块的位图后，生成一个个<u><code>指引（quad）</code>信息</u>。</p>
+<p>合成线程从 gpu 进程中拿到每个块的位图后，生成一个个<u><code>指引（quad）</code>信息</u>。</p>
 <p>指引会标识出每个位图应该画到屏幕的哪个位置，并且会考虑旋转、缩放等变形。</p>
 <p><u>变形发生在合成线程，与渲染主线程无关，这就是<code>transform</code>效率高的原因</u>。</p>
-<p>合成线程会把<code>quad</code>信息交给gpu进程，由gpu进程调用gpu硬件，最终完成屏幕图像的显示。</p>
-<h3>关于reflow</h3>
-<p><u>reflow的本质就是重新计算layout树</u>。</p>
-<p>当进行了影响布局树的操作后，就需要重新计算布局树，触发layout流程。</p>
-<p>为了避免连续多次的布局树反复计算，浏览器会合并这些操作，当js代码全部完成后再进行统一的布局树计算。所以，改动属性造成的reflow是异步完成的。</p>
+<p>合成线程会把<code>quad</code>信息交给 gpu 进程，由 gpu 进程调用 gpu 硬件，最终完成屏幕图像的显示。</p>
+<h3>关于 reflow</h3>
+<p><u>reflow 的本质就是重新计算 layout 树</u>。</p>
+<p>当进行了影响布局树的操作后，就需要重新计算布局树，触发 layout 流程。</p>
+<p>为了避免连续多次的布局树反复计算，浏览器会合并这些操作，当 js 代码全部完成后再进行统一的布局树计算。所以，改动属性造成的 reflow 是异步完成的。</p>
 <p>也正是因为如此，当我们在更改布局属性后立即获取它们的信息，就有可能造成无法获取到最新布局信息的结果。</p>
-<p>浏览器最终在反复权衡之下，决定获取属性时立即reflow。</p>
-<h3>关于repaint</h3>
-<p>repaint的本质就是重新根据分层信息计算了绘制指令。</p>
-<p>当改动了可见样式后，就需要重新计算，触发repaint流程。</p>
-<p>由于元素的布局信息也属于可见样式，所以reflow一定会引起repaint</p>
+<p>浏览器最终在反复权衡之下，决定获取属性时立即 reflow。</p>
+<h3>关于 repaint</h3>
+<p>repaint 的本质就是重新根据分层信息计算了绘制指令。</p>
+<p>当改动了可见样式后，就需要重新计算，触发 repaint 流程。</p>
+<p>由于元素的布局信息也属于可见样式，所以 reflow 一定会引起 repaint</p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
