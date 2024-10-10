@@ -1,17 +1,20 @@
 <template>
-  <div class="pyro" v-if="showFireworksAnimation">
+  <div
+    class="pyro"
+    v-if="showFireworksAnimation"
+  >
     <div class="before"></div>
     <div class="after"></div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { useData } from "vitepress";
+import { useData } from 'vitepress'
 
-const { theme } = useData();
+const { theme } = useData()
 
 // get fireworks animation control
-let showFireworksAnimation = theme.value.showFireworksAnimation;
+let showFireworksAnimation = theme.value.showFireworksAnimation
 </script>
 
 <style scoped>

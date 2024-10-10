@@ -13,7 +13,10 @@
       </span>
     </div>
 
-    <h4 class="header" v-show="selectTag">
+    <h4
+      class="header"
+      v-show="selectTag"
+    >
       <svg
         t="1641783753540"
         class="fas-icon"
@@ -22,7 +25,7 @@
         xmlns="http://www.w3.org/2000/svg"
         p-id="1254"
         :style="{
-          width: '20px',
+          width: '20px'
         }"
       >
         <path
@@ -48,21 +51,21 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref } from "vue";
-import { useData, withBase } from "vitepress";
-import { initTags } from "../utils";
+import { computed, ref } from 'vue'
+import { useData, withBase } from 'vitepress'
+import { initTags } from '../utils'
 
-const { theme } = useData();
-const data = computed(() => initTags(theme.value.posts));
-let selectTag = ref("");
+const { theme } = useData()
+const data = computed(() => initTags(theme.value.posts))
+let selectTag = ref('')
 const toggleTag = (tag: string) => {
-  selectTag.value = tag;
-};
+  selectTag.value = tag
+}
 // set font-size
 const getFontSize = (length: number) => {
-  let size = length * 0.04 + 0.85;
-  return { fontSize: `${size}em` };
-};
+  let size = length * 0.04 + 0.85
+  return { fontSize: `${size}em` }
+}
 </script>
 
 <style scoped>

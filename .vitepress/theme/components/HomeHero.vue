@@ -1,11 +1,14 @@
 <template>
   <div class="content">
-    <img :src="theme.avator" class="avator animate__rubberBand animate__animated" />
+    <img
+      :src="theme.avator"
+      class="avator animate__rubberBand animate__animated"
+    />
   </div>
 </template>
 <script lang="ts" setup>
-import { useData } from "vitepress";
-const { theme } = useData();
+import { useData } from 'vitepress'
+const { theme } = useData()
 </script>
 <style scoped>
 .content {

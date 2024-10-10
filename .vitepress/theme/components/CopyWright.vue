@@ -1,12 +1,8 @@
 <template>
-  <footer>
-    Theme Powered by
-    clark-cui
-    | Copyright ©
-  </footer>
+  <footer>Theme Powered by clark-cui | Copyright ©</footer>
 </template>
 <script lang="ts" setup>
-const date = new Date().getFullYear();
+const date = new Date().getFullYear()
 </script>
 <style scoped>
 footer {

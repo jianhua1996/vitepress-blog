@@ -19,8 +19,8 @@
   /* --vp-font-family-base: "MiSans Medium", "Inter var experimental",
     "Inter var", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif; */
-  --vp-font-family-mono: 'Fira Code VF', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas,
-    'Liberation Mono', 'Courier New', monospace;
+  --vp-font-family-mono: 'Fira Code VF', ui-monospace, SFMono-Regular, 'SF Mono',
+    Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   --vp-avator-border: #ffffff;
 }
 .dark {
@@ -46,4 +46,11 @@
 
 .VPDocOutlineDropdown {
   display: none !important;
+}
+
+@media (min-width: 960px) {
+  #VPContent .content {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }

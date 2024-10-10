@@ -18,17 +18,17 @@
   <CopyWright />
 </template>
 <script lang="ts" setup>
-import DefaultTheme from "vitepress/theme";
-import HomeHero from "./HomeHero.vue";
-import CopyWright from "./CopyWright.vue";
-import Comments from "./Comments.vue";
-import Page from "./Page.vue";
-import Category from "./Category.vue";
-import Title from "./Title.vue";
-const { Layout } = DefaultTheme;
+import DefaultTheme from 'vitepress/theme'
+import HomeHero from './HomeHero.vue'
+import CopyWright from './CopyWright.vue'
+import Comments from './Comments.vue'
+import Page from './Page.vue'
+import Category from './Category.vue'
+import Title from './Title.vue'
+const { Layout } = DefaultTheme
 const back = () => {
-  history.back();
-};
+  history.back()
+}
 </script>
 <style scoped>
 button {
@@ -41,7 +41,7 @@ button {
 }
 
 button::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   transform: scaleX(0);
