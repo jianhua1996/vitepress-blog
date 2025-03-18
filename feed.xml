@@ -4,7 +4,7 @@
         <title>Clark Cui</title>
         <link>https://clark-cui.top/</link>
         <description>Clark Cui' Blog</description>
-        <lastBuildDate>Sat, 08 Mar 2025 02:53:27 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 18 Mar 2025 07:24:37 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -14,6 +14,21 @@
         </image>
         <copyright>MIT License</copyright>
         <atom:link href="https://clark-cui.top/feed.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[前端开发中的常见错觉]]></title>
+            <link>https://clark-cui.top/posts/前端开发常见错觉.html</link>
+            <guid>https://clark-cui.top/posts/前端开发常见错觉.html</guid>
+            <pubDate>Tue, 18 Mar 2025 00:00:00 GMT</pubDate>
+            <content:encoded><![CDATA[<h2>表单元素上的 v-model 绑定</h2>
+<p>一直以来我都有个错觉，认为在 input 元素上，v-model 绑定的是 <code>value</code> 属性和 <code>change</code> 事件，直到后来自己封装某个自定义指令的时候（需要手动触发双向绑定）才发现，分发<code>change</code>事件并没有触发绑定值的更新，遂去翻看文档，发现以下内容。</p>
+<ImageBuilder :source="['错觉_v-model.jpg']" size="large" />
+<p>大无语事件。。。</p>
+<blockquote>
+<p>总结： 官方文档中，<code>v-model</code> 绑定的元素，会分发 <code>input</code> 事件，而 <code>input</code> 事件会触发绑定值的更新。</p>
+</blockquote>
+]]></content:encoded>
+            <author>rongchuancui@gmail.com (Clark Cui)</author>
+        </item>
         <item>
             <title><![CDATA[前端面试题整理（二）]]></title>
             <link>https://clark-cui.top/posts/前端面试题整理（二）.html</link>
