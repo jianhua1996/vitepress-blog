@@ -11,7 +11,7 @@
     },
     "items": [
         {
-            "content_html": "<h2>表单元素上的 v-model 绑定</h2>\n<p>一直以来我都有个错觉，认为在 input 元素上，v-model 绑定的是 <code>value</code> 属性和 <code>change</code> 事件，直到后来自己封装某个自定义指令的时候（需要手动触发双向绑定）才发现，分发<code>change</code>事件并没有触发绑定值的更新，遂去翻看文档，发现以下内容。</p>\n<ImageBuilder :source=\"['错觉_v-model.jpg']\" size=\"large\" />\n<p>大无语事件。。。</p>\n<blockquote>\n<p>总结： 官方文档中，<code>v-model</code> 绑定的元素，会分发 <code>input</code> 事件，而 <code>input</code> 事件会触发绑定值的更新。</p>\n</blockquote>\n",
+            "content_html": "<h2>关于表单元素 input 上的 v-model 绑定</h2>\n<p>一直以来我都有个错觉，认为在 input 等输入类型的表单元素上，v-model 指令绑定的是 <code>value</code> 属性和 <code>change</code> 事件，直到后来自己封装某个自定义指令的时候（需要手动触发一下双向绑定），使用 dispatch 分发 <code>change</code> 事件并没有触发绑定值的更新，遂去翻看文档，发现了以下内容。</p>\n<ImageBuilder :source=\"['错觉_v-model.jpg']\" size=\"large\" />\n<p>看来有些事情还是不能想当然，多看文档总是对的。。。</p>\n<blockquote>\n<p>总结： 官方文档中，input 元素上的 v-model 绑定的是 <code>value</code> 属性和 <code>input</code> 事件。</p>\n</blockquote>\n",
             "url": "https://clark-cui.top/posts/前端开发常见错觉.html",
             "title": "前端开发中的常见错觉",
             "date_modified": "2025-03-18T00:00:00.000Z",

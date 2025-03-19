@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2025-03-18T07:24:37.625Z</updated>
+    <updated>2025-03-19T06:57:57.966Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -20,12 +20,12 @@
         <id>https://clark-cui.top/posts/前端开发常见错觉.html</id>
         <link href="https://clark-cui.top/posts/前端开发常见错觉.html"/>
         <updated>2025-03-18T00:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h2>表单元素上的 v-model 绑定</h2>
-<p>一直以来我都有个错觉，认为在 input 元素上，v-model 绑定的是 <code>value</code> 属性和 <code>change</code> 事件，直到后来自己封装某个自定义指令的时候（需要手动触发双向绑定）才发现，分发<code>change</code>事件并没有触发绑定值的更新，遂去翻看文档，发现以下内容。</p>
+        <content type="html"><![CDATA[<h2>关于表单元素 input 上的 v-model 绑定</h2>
+<p>一直以来我都有个错觉，认为在 input 等输入类型的表单元素上，v-model 指令绑定的是 <code>value</code> 属性和 <code>change</code> 事件，直到后来自己封装某个自定义指令的时候（需要手动触发一下双向绑定），使用 dispatch 分发 <code>change</code> 事件并没有触发绑定值的更新，遂去翻看文档，发现了以下内容。</p>
 <ImageBuilder :source="['错觉_v-model.jpg']" size="large" />
-<p>大无语事件。。。</p>
+<p>看来有些事情还是不能想当然，多看文档总是对的。。。</p>
 <blockquote>
-<p>总结： 官方文档中，<code>v-model</code> 绑定的元素，会分发 <code>input</code> 事件，而 <code>input</code> 事件会触发绑定值的更新。</p>
+<p>总结： 官方文档中，input 元素上的 v-model 绑定的是 <code>value</code> 属性和 <code>input</code> 事件。</p>
 </blockquote>
 ]]></content>
         <author>
