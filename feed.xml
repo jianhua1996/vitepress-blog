@@ -4,7 +4,7 @@
         <title>Clark Cui</title>
         <link>https://clark-cui.top/</link>
         <description>Clark Cui' Blog</description>
-        <lastBuildDate>Wed, 19 Mar 2025 06:57:57 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 21 Mar 2025 03:32:26 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -14,6 +14,93 @@
         </image>
         <copyright>MIT License</copyright>
         <atom:link href="https://clark-cui.top/feed.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[前端面试题整理（三）]]></title>
+            <link>https://clark-cui.top/posts/前端面试题整理（三）.html</link>
+            <guid>https://clark-cui.top/posts/前端面试题整理（三）.html</guid>
+            <pubDate>Thu, 20 Mar 2025 00:00:00 GMT</pubDate>
+            <content:encoded><![CDATA[<h2>什么是协商缓存和强缓存？两者有什么区别？</h2>
+<h3>关于 HTTP 缓存</h3>
+<p>HTTP 缓存是基于 HTTP 协议的一种机制，通过<strong>存储和重用之前请求的资源副本</strong>（如 HTML、CSS、JavaScript、图片等），减少客户端与服务器之间的重复数据传输，从而<strong>提高网页加载速度、降低服务器负载、节省带宽</strong>。其核心目的是通过重用已有的响应数据，避免每次都从源服务器获取资源。</p>
+<p><a href="https://httpwg.org/specs/rfc9111.html">HTTP 缓存标准</a>把缓存分为两类：</p>
+<ul>
+<li><strong>私有缓存</strong>： 私有缓存是绑定到特定客户端的缓存，通常指浏览器缓存。它存储的响应仅对当前用户可见，不与其他用户共享。适用场景：存储用户的个性化内容（如登录后的页面、用户特定数据）。</li>
+<li><strong>共享缓存</strong>：共享缓存位于客户端和服务器之间，存储的响应可被多个用户共享，用于减少服务器负载和网络流量。典型实现：代理服务器（如 Squid、Nginx 反向代理）、CDN 节点、ISP 缓存等。</li>
+</ul>
+<p><strong>关键性区别总结</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特性</th>
+<th>私有缓存</th>
+<th>共享缓存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">存储位置</td>
+<td>客户端</td>
+<td>中间层(代理服务器、CDN、反向代理服务器)</td>
+</tr>
+<tr>
+<td style="text-align:center">共享性</td>
+<td>私有</td>
+<td>共享</td>
+</tr>
+<tr>
+<td style="text-align:center">适用场景</td>
+<td>个性化、登录后的页面、用户特定数据</td>
+<td>公共资源、静态资源(图片、css)</td>
+</tr>
+<tr>
+<td style="text-align:center">控制指令</td>
+<td>Cache-Control: private</td>
+<td>Cache-Control: public</td>
+</tr>
+<tr>
+<td style="text-align:center">安全性</td>
+<td>仅对当前用户可见，安全</td>
+<td>可被多个用户共享，不安全</td>
+</tr>
+</tbody>
+</table>
+<h3>HTTP 缓存控制指令</h3>
+<p>HTTP 缓存主要通过<strong>请求头和响应头中的字段</strong>(如 <code>Cache-Control</code>、<code>Expires</code>、<code>Last-Modified</code>、<code>ETag</code> 等) 控制缓存策略，分为以下两种工作方式：</p>
+<ol>
+<li><strong>强缓存</strong>： 强缓存是指浏览器在第一次请求资源并得到响应后，将响应存储在客户端缓存中，后续再请求相同的资源时，<strong>浏览器会直接从缓存中获取响应，而不会向服务器发起请求</strong>。 由 <code>Cache-Control</code>（HTTP 1.1） 或 <code>Expires</code>（HTTP 1.0） 指令控制，如 <code>Cache-Control: max-age=3600</code>，表示缓存 1 小时。</li>
+<li><strong>协商缓存</strong>：协商缓存是指客户端在请求资源时，会携带一些请求头信息，如 <code>Last-Modified/If-Modified-Since</code>（使用资源最后修改时间判断）、<code>ETag/If-None-Match</code>（使用资源唯一标识符判断） 等， <strong>服务器根据这些请求头信息判断客户端是否需要更新资源</strong>，如果客户端不需要更新，则返回 304 Not Modified，否则返回 200 OK。</li>
+</ol>
+<h3>缓存破坏（解决前端部署后的缓存问题）</h3>
+<p>在现代 Web 开发中，JavaScript 和 CSS 资源会随着开发的进展而频繁更新。但<strong>由于其静态资源文件名未改变，浏览器会优先从缓存中获取，从而导致页面加载时出现旧版本的资源</strong>。为了解决这个问题，我们可以通过一些方法来破坏缓存：</p>
+<ol>
+<li><strong>使用基于版本号或哈希值的文件名</strong>： 在构建时，使用基于版本号或哈希值的文件名，如 <code>main.js?v=1.0.0</code>，这样每次部署后文件名都会改变，从而破坏缓存。（一些成熟的构建工具如 Webpack、Vite 等，都提供了内置的版本号或哈希值生成功能）</li>
+<li><strong>对于主资源禁用缓存</strong>： 与子资源不同，主资源的 URL 不能像子资源 URL 一样被修饰，这时我们可以在 html 的 head 标签中添加以下内容，防止其被浏览器缓存。</li>
+</ol>
+<pre><code class="language-html">&lt;meta
+	http-equiv=&quot;Cache-Control&quot;
+	content=&quot;no-cache, no-store, must-revalidate&quot;
+/&gt;
+&lt;meta
+	http-equiv=&quot;Pragma&quot;
+	content=&quot;no-cache&quot;
+/&gt;
+&lt;meta
+	http-equiv=&quot;Expires&quot;
+	content=&quot;0&quot;
+/&gt;
+</code></pre>
+<blockquote>
+<p>注意： 现代浏览器可能忽略 Meta 标签，因此必须结合 HTTP 头使用。</p>
+</blockquote>
+<pre><code class="language-Nginx">location / {
+    add_header Cache-Control &quot;no-store, no-cache, must-revalidate&quot;;
+    add_header Pragma &quot;no-cache&quot;;
+    expires 0;
+}
+</code></pre>
+]]></content:encoded>
+            <author>rongchuancui@gmail.com (Clark Cui)</author>
+        </item>
         <item>
             <title><![CDATA[前端开发中的常见错觉]]></title>
             <link>https://clark-cui.top/posts/前端开发常见错觉.html</link>
