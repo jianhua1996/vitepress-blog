@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2025-03-22T02:39:00.846Z</updated>
+    <updated>2025-05-24T12:01:54.535Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -16,9 +16,9 @@
     <icon>https://clark-cui.top/horse.svg</icon>
     <rights>MIT License</rights>
     <entry>
-        <title type="html"><![CDATA[前端面试题整理（三）]]></title>
-        <id>https://clark-cui.top/posts/前端面试题整理（三）.html</id>
-        <link href="https://clark-cui.top/posts/前端面试题整理（三）.html"/>
+        <title type="html"><![CDATA[前端面试题整理：杂篇（一）]]></title>
+        <id>https://clark-cui.top/posts/前端面试题整理：杂篇（一）.html</id>
+        <link href="https://clark-cui.top/posts/前端面试题整理：杂篇（一）.html"/>
         <updated>2025-03-20T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>什么是协商缓存和强缓存？两者有什么区别？</h2>
 <h3>关于 HTTP 缓存</h3>
@@ -71,6 +71,9 @@
 <li><strong>强缓存</strong>： 强缓存是指浏览器在第一次请求资源并得到响应后，将响应存储在客户端缓存中，后续再请求相同的资源时，<strong>浏览器会直接从缓存中获取响应，而不会向服务器发起请求</strong>。 由 <code>Cache-Control</code>（HTTP 1.1） 或 <code>Expires</code>（HTTP 1.0） 指令控制，如 <code>Cache-Control: max-age=3600</code>，表示缓存 1 小时。</li>
 <li><strong>协商缓存</strong>：协商缓存是指客户端在请求资源时，会携带一些请求头信息，如 <code>Last-Modified/If-Modified-Since</code>（使用资源最后修改时间判断）、<code>ETag/If-None-Match</code>（使用资源唯一标识符判断） 等， <strong>服务器根据这些请求头信息判断客户端是否需要更新资源</strong>，如果客户端不需要更新，则返回 304 Not Modified，否则返回 200 OK。</li>
 </ol>
+<blockquote>
+<p>关于协商缓存的具体实现，可以参考 express 的源码中关于缓存的实现逻辑。 <a href="https://github.com/expressjs/express/blob/master/lib/request.js#L457">链接地址</a></p>
+</blockquote>
 <h3>缓存破坏（解决前端部署后的缓存问题）</h3>
 <p>在现代 Web 开发中，JavaScript 和 CSS 资源会随着开发的进展而频繁更新。但<strong>由于其静态资源文件名未改变，浏览器会优先从缓存中获取，从而导致页面加载时出现旧版本的资源</strong>。为了解决这个问题，我们可以通过一些方法来破坏缓存：</p>
 <ol>
@@ -99,8 +102,6 @@
     expires 0;
 }
 </code></pre>
-<h2>如果优化 SPA 应用的首屏渲染速度？</h2>
-<p><strong>首屏加载时间：</strong> 指的是浏览器从响应用户输入网址地址，到首屏内容渲染完成的时间，此时整个网页不一定要全部渲染完成，但需要展示当前视窗需要的内容</p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
@@ -109,7 +110,7 @@
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[前端开发中的常见错觉]]></title>
+        <title type="html"><![CDATA[前端工作中的经验与教训]]></title>
         <id>https://clark-cui.top/posts/前端开发常见错觉.html</id>
         <link href="https://clark-cui.top/posts/前端开发常见错觉.html"/>
         <updated>2025-03-18T00:00:00.000Z</updated>
@@ -120,6 +121,62 @@
 <blockquote>
 <p>总结： 官方文档中，input 元素上的 v-model 绑定的是 <code>value</code> 属性和 <code>input</code> 事件。</p>
 </blockquote>
+<h2>Axios 提交 Date 类型数据时的时区自动变更问题</h2>
+<h3>问题描述</h3>
+<p>在使用 <code>Axios</code> 提交 Date 类型的数据时，发现请求体中的时间总是与代码中的时间不一致，这使我非常困惑。这个问题是在某次改项目中的 bug 时发现的，排查了很久。</p>
+<h3>根本原因</h3>
+<p><code>Axios</code> 对于提交的 Date 类型的数据，会将其序列化为时间字符串。<br>
+这里涉及到 <code>JavaScript</code> 语言在序列化 Date 对象时的默认行为：</p>
+<p><strong><code>JavaScript</code> 语言在序列化 Date 对象时（如通过 <code>JSON.stringify</code>），会调用 <code>Date.prototype.toISOString()</code> 方法，将日期转换为 ISO 8601 格式（如 2025-05-04T01:00:00.000Z）</strong>。其中的 Z 表示 UTC 时间（0 时区），而本地时间（如东八区）会被自动转换为 UTC 时间（减去 8 小时）。如图：</p>
+<ImageBuilder :source="['Snipaste_Date序列化的问题.png']" size="large" />
+<blockquote>
+<p>为什么要这样做？JavaScript 语言这样做的合理性： Date 对象的 ISO 序列化是为了标准化时间表示，便于跨系统传输。UTC 时间是国际通用标准，因此 JavaScript 的行为是合理的。</p>
+</blockquote>
+<h3>解决方案</h3>
+<ol>
+<li><strong>不要直接提交 Date 类型的数据</strong>，而是将 Date 对象转换为本地时间字符串，然后再提交。</li>
+<li>后端进行时区处理</li>
+</ol>
+<h2>关于使用 CSS order 属性在不改变 dom 结构的情况下改变元素的显示顺序</h2>
+<p>是这样的，最近我在维护一个项目的时候遇到这样一个需求，<code>页面上有一个元素，它的内部有两个子元素，它们的dom结构从上到下是 A -&gt; B，现在我希望让 B 显示在父盒子的左侧， A 显示在右侧，并且 A 的宽度是父盒子的宽度减去B的宽度（也就是 A 要自适应剩余的宽度）</code>。</p>
+<p>这种情况下使用 flex 布局 + order 属性 正好可以解决这个问题。</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;UTF-8&quot; /&gt;
+		&lt;meta
+			name=&quot;viewport&quot;
+			content=&quot;width=device-width, initial-scale=1.0&quot;
+		/&gt;
+		&lt;title&gt;Document&lt;/title&gt;
+		&lt;style&gt;
+			.container {
+				display: flex;
+				width: 300px;
+				color: #fff;
+			}
+			.item1 {
+				order: 2;
+				flex: 1;
+				background-color: blue;
+			}
+			.item2 {
+				order: 1;
+				width: 50px;
+				background-color: red;
+			}
+		&lt;/style&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div class=&quot;container&quot;&gt;
+			&lt;div class=&quot;item1&quot;&gt;item1&lt;/div&gt;
+			&lt;div class=&quot;item2&quot;&gt;item2&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ImageBuilder :source="['order属性.png']" size="large"/>
+<p>🔗<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/order">查看 mdn 关于 order 属性的描述</a></p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
@@ -128,9 +185,9 @@
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[前端面试题整理（二）]]></title>
-        <id>https://clark-cui.top/posts/前端面试题整理（二）.html</id>
-        <link href="https://clark-cui.top/posts/前端面试题整理（二）.html"/>
+        <title type="html"><![CDATA[前端面试题整理：Vue篇（二）]]></title>
+        <id>https://clark-cui.top/posts/前端面试题整理：Vue篇（二）.html</id>
+        <link href="https://clark-cui.top/posts/前端面试题整理：Vue篇（二）.html"/>
         <updated>2024-10-18T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>Vue-Router 的两种路由模式？</h2>
 <p>Vue-Router 支持两种路由模式：hash 和 history。</p>
@@ -267,9 +324,9 @@ export default router
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[前端面试题整理（一）]]></title>
-        <id>https://clark-cui.top/posts/前端面试题整理（一）.html</id>
-        <link href="https://clark-cui.top/posts/前端面试题整理（一）.html"/>
+        <title type="html"><![CDATA[前端面试题整理：Vue篇（一）]]></title>
+        <id>https://clark-cui.top/posts/前端面试题整理：Vue篇（一）.html</id>
+        <link href="https://clark-cui.top/posts/前端面试题整理：Vue篇（一）.html"/>
         <updated>2024-10-17T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>对 Vue 框架的理解</h2>
 <h3>Vue 是什么?</h3>
@@ -327,7 +384,9 @@ SPA 的实现通常依赖于以下几个核心技术：</p>
 </li>
 </ul>
 <h2>为什么 Vue 中的 data 属性是一个函数而不是一个对象？</h2>
-<p><strong>避免</strong>在组件重用时，多个组件实例共享一个数据对象，进而导致<strong>如果一个实例改变了 data 中的某个值，所有其他的实例也会受到影响的行为</strong>。</p>
+<p>为了实现组件的<strong>数据隔离</strong>。</p>
+<p>当一个组件被多次使用时，如果 data 属性是一个对象，那么多个组件实例将共享同一个 data 对象，这可能导致数据的混乱和不可预测性。</p>
+<p>而如果 data 属性是一个函数，每个组件实例都会调用该函数来返回一个新的 data 对象，这样每个组件实例都会有自己独立的数据副本，避免了数据共享的问题。</p>
 <h2>Vue 组件之间传值有几种方式？</h2>
 <h3>1. 父子组件之间传值</h3>
 <h4>父传子 - props</h4>
@@ -632,6 +691,38 @@ new Vue({
 <li>父 destroyed → 在 所有子组件 destroyed 之后</li>
 </ol>
 <ImageBuilder :source="['lifecycle.jpg']" />
+<h2>v-if 和 v-show 的区别</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特性</th>
+<th style="text-align:center">v-if</th>
+<th style="text-align:center">v-show</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>原理</strong></td>
+<td style="text-align:center">真实的添加/删除 DOM 元素</td>
+<td style="text-align:center">控制 CSS 样式 display</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>编译过程</strong></td>
+<td style="text-align:center">编译时有条件分支</td>
+<td style="text-align:center">编译时无条件分支</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>初始渲染</strong></td>
+<td style="text-align:center">惰性的，如果初始条件为假，则什么也不做</td>
+<td style="text-align:center">不管初始条件如何，始终都会渲染</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>切换开销</strong></td>
+<td style="text-align:center">有较高的切换开销，切换过程中会销毁和重建元素</td>
+<td style="text-align:center">无切换开销，只是简单的基于 CSS 切换</td>
+</tr>
+</tbody>
+</table>
 <h2>v-for 和 v-if 为什么不推荐放在一起</h2>
 <p>同时使用 v-for 和 v-if 会导致优先级不明显，在 vue2 中 v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中，造成性能浪费。</p>
 <h2>watch 和 computed 的区别</h2>
@@ -645,17 +736,17 @@ new Vue({
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">目的</td>
+<td style="text-align:center"><strong>目的</strong></td>
 <td style="text-align:center">基于其他数据生成新的值</td>
 <td style="text-align:center">监听数据的变化，并执行相应的操作</td>
 </tr>
 <tr>
-<td style="text-align:center">返回值</td>
+<td style="text-align:center"><strong>返回值</strong></td>
 <td style="text-align:center">必须</td>
 <td style="text-align:center">不需要</td>
 </tr>
 <tr>
-<td style="text-align:center">缓存</td>
+<td style="text-align:center"><strong>缓存</strong></td>
 <td style="text-align:center">有缓存</td>
 <td style="text-align:center">无缓存</td>
 </tr>
@@ -665,6 +756,25 @@ new Vue({
 <p><code>nextTick</code> 是 Vue 提供的异步方法，用于 <strong>​ 在下次 DOM 更新循环结束之后执行回调</strong>。它解决了数据变化后 ​ 立即操作 DOM 可能获取旧状态 ​ 的问题。</p>
 <h3>为什么需要使用 nextTick？</h3>
 <p>由于 Vue 的异步更新机制，<strong>Vue 在检测到数据变化时，不会立即更新 DOM</strong>，而是开启一个队列，缓冲同一事件循环中的所有数据变更。</p>
+<h2>Vue2 和 Vue3 的区别</h2>
+<h3>响应式系统变更</h3>
+<p>核心 API 由<code>Object.defineProperty</code>改为<code>Proxy</code>，带来了以下地方的优化：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特性</th>
+<th style="text-align:left">Vue2</th>
+<th style="text-align:left">Vue3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">数组响应式方法</td>
+<td style="text-align:left">仅支持 <code>push</code>、<code>pop</code>、<code>shift</code>、<code>unshift</code>、<code>splice</code>、<code>sort</code>、<code>reverse</code></td>
+<td style="text-align:left">支持所有数组方法</td>
+</tr>
+</tbody>
+</table>
 ]]></content>
         <author>
             <name>Clark Cui</name>
