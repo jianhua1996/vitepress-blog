@@ -1,6 +1,7 @@
 import { getPosts, getPostLength } from './theme/serverUtils'
 import { buildBlogRSS } from './theme/rss'
 import mathjax3 from 'markdown-it-mathjax3'
+import { withMermaid, UserConfig } from 'vitepress-plugin-mermaid'
 
 async function config() {
 	return {
@@ -49,7 +50,7 @@ async function config() {
 			showFireworksAnimation: false,
 			lastUpdatedText: '最后更新于'
 		},
-		buildEnd: buildBlogRSS,
+		buildEnd: await buildBlogRSS(),
 		markdown: {
 			theme: {
 				light: 'vitesse-light',
@@ -61,4 +62,12 @@ async function config() {
 		}
 	}
 }
-export default config()
+
+const _config = await config()
+
+export default withMermaid({
+	...(_config as UserConfig),
+	mermaid: {
+		//mermaidConfig !theme here works for light mode since dark theme is forced in dark mode
+	}
+})
