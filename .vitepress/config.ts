@@ -7,6 +7,7 @@ import type { UserConfig } from 'vitepress'
 
 async function config(): Promise<UserConfig> {
 	return {
+		lang: 'zh-CN',
 		base: '/vitepress-blog',
 		title: "jianhua1996's blog",
 		head: [
@@ -14,11 +15,11 @@ async function config(): Promise<UserConfig> {
 				'meta',
 				{
 					name: 'author',
-					content: 'JianHua & Clark Cui'
+					content: 'JianHua'
 				}
 			]
 		],
-		// cleanUrls: "with-subfolders",
+		cleanUrls: true,
 		lastUpdated: true,
 		themeConfig: {
 			// repo: "clark-cui/homeSite",
@@ -55,9 +56,11 @@ async function config(): Promise<UserConfig> {
 		buildEnd: () => buildBlogRSS(),
 		markdown: {
 			theme: {
-				light: 'vitesse-light',
-				dark: 'vitesse-dark'
+				dark: 'one-dark-pro',
+				light: 'one-light'
 			},
+			lineNumbers: true,
+			codeCopyButtonTitle: '复制代码',
 			config: md => {
 				md.use(mathjax3)
 			}
