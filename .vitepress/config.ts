@@ -47,11 +47,13 @@ async function config(): Promise<UserConfig> {
 				}
 			],
 			socialLinks: [{ icon: 'github', link: 'https://github.com/jianhua1996' }],
-			// outline: 2, //设置右侧aside显示层级
-			aside: false,
-			// blogs page show firewokrs animation
+			outline: [2, 4], // outline 中要显示的标题级别
 			showFireworksAnimation: false,
-			lastUpdatedText: '最后更新于'
+			lastUpdatedText: '最后更新于',
+			docFooter: {
+				prev: '上一篇',
+				next: '下一篇'
+			}
 		},
 		buildEnd: () => buildBlogRSS(),
 		markdown: {
