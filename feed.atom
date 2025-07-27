@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2025-05-24T12:01:54.535Z</updated>
+    <updated>2025-07-27T13:09:34.680Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -15,6 +15,650 @@
     <logo>https://clark-cui.top/horse.svg</logo>
     <icon>https://clark-cui.top/horse.svg</icon>
     <rights>MIT License</rights>
+    <entry>
+        <title type="html"><![CDATA[浏览器工作原理（二）]]></title>
+        <id>https://clark-cui.top/posts/浏览器渲染原理（二）.html</id>
+        <link href="https://clark-cui.top/posts/浏览器渲染原理（二）.html"/>
+        <updated>2025-07-27T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h2>浏览器渲染管线</h2>
+<h3>3. 布局阶段 (Layout)</h3>
+<p><strong>具体流程</strong></p>
+<h4>3.1 构建布局树（Layout Tree）</h4>
+<ul>
+<li>从渲染树（包含样式信息的 DOM 树）出发，过滤掉不需要渲染的节点：
+<ul>
+<li>移除 <code>display: none</code> 的元素</li>
+<li><strong>保留 <code>visibility: hidden</code> 的元素</strong>（占据空间但不绘制）</li>
+</ul>
+</li>
+<li>生成仅包含可见元素的布局树</li>
+<li>布局树节点包含：
+<ul>
+<li>几何属性（位置、大小）</li>
+<li>父元素与子元素的层级关系</li>
+</ul>
+</li>
+</ul>
+<h4>3.2 递归计算几何信息</h4>
+<p>从根节点（<code>&lt;html&gt;</code>）递归遍历布局树，计算每个元素的<strong>盒模型</strong>和<strong>定位信息</strong>：</p>
+<ol>
+<li>
+<p><strong>确定包含块（Containing Block）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>定位类型</th>
+<th>包含块规则</th>
+<th>边界类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code>/<code>relative</code></td>
+<td>最近块级祖先的<strong>内容盒</strong><br>(块容器或格式化上下文祖先)</td>
+<td>content box</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>最近非<code>static</code>祖先的<strong>内边距盒</strong><br>(无则使用初始包含块)</td>
+<td>padding box</td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td><strong>视口</strong><br>或设置以下属性的祖先：<br><code>transform</code>/<code>perspective</code>/<code>filter</code>/<code>contain: paint</code></td>
+<td>padding box</td>
+</tr>
+<tr>
+<td><code>sticky</code></td>
+<td>最近<strong>滚动祖先</strong>的内容盒<br>(无则使用视口)</td>
+<td>content box</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>关键概念</strong>：包含块是元素尺寸计算（<code>width/height/padding/margin</code>）和位置计算（<code>top/right/bottom/left</code>）的参考基准。<br><strong>依据</strong>：<a href="https://www.w3.org/TR/CSS2/visudet.html#containing-block-details">Definition of &quot;containing block&quot;</a></p>
+</blockquote>
+</li>
+<li>
+<p><strong>处理盒模型</strong>：</p>
+<ul>
+<li>根据 <code>width/height</code> 计算内容区域</li>
+<li>处理 <code>padding</code>/<code>border</code>/<code>margin</code> 值</li>
+<li><strong>百分比值</strong>：基于包含块的对应尺寸计算</li>
+<li><strong>auto 值</strong>：根据布局模式自动计算</li>
+</ul>
+</li>
+<li>
+<p><strong>处理定位类型</strong>：</p>
+<ul>
+<li><strong>正常流</strong>：
+<ul>
+<li>块级元素：垂直堆叠，宽度填满包含块</li>
+<li>行内元素：水平排列（IFC 上下文）
+<ul>
+<li>计算行高（<code>line-height</code>）</li>
+<li>基线对齐（<code>vertical-align</code>）</li>
+<li>文本对齐（<code>text-align</code>）</li>
+<li>行盒（Line Box）高度计算</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>浮动</strong>：
+<ul>
+<li>计算 <code>float: left/right</code> 位置</li>
+<li>处理文字环绕效果</li>
+</ul>
+</li>
+<li><strong>绝对定位</strong>：
+<ul>
+<li>根据包含块计算精确位置</li>
+<li>完全脱离文档流</li>
+</ul>
+</li>
+<li><strong>固定定位</strong>：
+<ul>
+<li>相对于视口定位</li>
+<li><strong>特例</strong>：祖先设 <code>transform</code> 时锁定在该祖先</li>
+</ul>
+</li>
+<li><strong>粘性定位</strong>：
+<ul>
+<li>在滚动容器内切换相对/固定定位
+<blockquote>
+<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-position/#positioning-schemes">W3C CSS Positioned Layout §2</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>文字排版</strong>：</p>
+<ul>
+<li>在行内格式化上下文（IFC）中计算：
+<ul>
+<li>文本换行位置</li>
+<li>行盒高度（由行内最高元素决定）</li>
+<li>基线对齐（<code>vertical-align</code>）
+<blockquote>
+<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-inline-3/#inline-formatting">W3C CSS Inline Layout §2</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4>3.3 处理复杂布局模式</h4>
+<ul>
+<li>
+<p><strong>Flexbox 布局</strong>：</p>
+<ul>
+<li>计算主轴/交叉轴尺寸</li>
+<li>分配剩余空间（<code>flex-grow/shrink</code>）</li>
+<li>处理项目对齐（<code>justify-content</code>/<code>align-items</code>）
+<blockquote>
+<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-flexbox-1/#layout-algorithm">W3C Flexbox §9</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Grid 布局</strong>：</p>
+<ul>
+<li>计算网格轨道（行/列）尺寸</li>
+<li>放置网格项目到指定区域</li>
+<li>处理网格间隙（<code>gap</code>）
+<blockquote>
+<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-grid-2/#grid-layout-algorithm">W3C Grid Layout §11</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h4>3.4 存储布局结果</h4>
+<ul>
+<li>记录计算得到的几何信息：
+<ul>
+<li>位置坐标（x, y）</li>
+<li>尺寸（width, height）</li>
+<li>盒模型各部分值（content/padding/border/margin）</li>
+</ul>
+</li>
+<li>建立空间关系：
+<ul>
+<li>元素间相对位置</li>
+<li>物理重叠情况（为分层阶段准备）</li>
+</ul>
+</li>
+</ul>
+]]></content>
+        <author>
+            <name>Clark Cui</name>
+            <email>rongchuancui@gmail.com</email>
+            <uri>https://clark-cui.top</uri>
+        </author>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[浏览器工作原理（一）]]></title>
+        <id>https://clark-cui.top/posts/浏览器渲染原理（一）.html</id>
+        <link href="https://clark-cui.top/posts/浏览器渲染原理（一）.html"/>
+        <updated>2025-06-29T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<h2>浏览器的多进程架构</h2>
+<h3>进程与线程</h3>
+<p><strong>进程</strong>：指计算机中已执行的程序，曾经是分时系统的基本运作单位。在面向进程设计的系统中，是程序的基本执行实体；在面向线程设计的系统中，进程本身不是基本执行单位，而是线程的容器。<br>
+<strong>线程</strong>：在计算机科学中，是将进程划分为两个或多个线程（实例）或子进程，由单处理器（单线程）或多处理器（多线程）或多核处理系统并发执行。<br>
+参考：<a href="https://zh.wikipedia.org/zh-cn/%E8%A1%8C%E7%A8%8B">进程</a>、<a href="https://zh.wikipedia.org/zh-cn/%E7%BA%BF%E7%A8%8B">线程</a></p>
+<h3>浏览器的进程架构</h3>
+<p><strong>现代浏览器一般都是多进程架构</strong>，以 Chrome 为例，一个浏览器会启动包括以下进程在内的多个进程，每个进程都有自己的内存空间，进程之间通过 <code>IPC</code> 进行通信：</p>
+<ul>
+<li>浏览器主进程</li>
+<li>GPU 进程</li>
+<li>网络进程</li>
+<li>存储进程</li>
+<li>渲染进程</li>
+<li>插件进程</li>
+</ul>
+<p>下面是浏览器的进程截图：</p>
+<ImageBuilder :source="['浏览器进程架构.png']" size="medium"/>
+<p>其中，<strong>渲染进程</strong>是我们最应该关注的进程，它负责通过一系列渲染步骤（又称作浏览器渲染管线）将 HTML、JavaScript、CSS、图片等资源最终解析为可以显示和交互的页面。</p>
+<p><strong>浏览器中的渲染进程不止会有一个</strong>，通常来讲，我们每次在浏览器中打开一个新的标签页，就会启动一个新的渲染进程。如果是在当前页面打开或跳转，浏览器会判断新页面是否与当前页面属于<strong>同站页面</strong>：</p>
+<blockquote>
+<p>所谓同站：指的是两个 URL 具有<strong>相同的有效顶级域名 + 二级域名部分</strong>，也就是 eTLD+1</p>
+</blockquote>
+<p><strong>如果是同站页面，则复用当前页面的渲染进程，否则就会启动一个新的渲染进程</strong>。</p>
+<blockquote>
+<p>对比同源：指的是 <strong>协议(Scheme)</strong>、<strong>主机名(Hostname)</strong> 和 <strong>端口号(Port)</strong> 完全相同。</p>
+</blockquote>
+<p>如下图所示：<br>
+<ImageBuilder :source="['浏览器进程架构-同站进程复用1.png','浏览器进程架构-同站进程复用2.png','浏览器进程架构-同站进程复用3.png']" size="medium" /></p>
+<p><code>baidu.com</code> 和 <code>tieba.baidu.com</code> 复用同一个浏览器进程，因为它们是同站页面。<br>
+而 <code>baidu.com</code> 和 <code>taobao.com</code> 则不会复用同一个浏览器进程，因为它们不是同站页面。</p>
+<blockquote>
+<p>多进程架构的优势：崩溃隔离，沙箱化等，参考<a href="https://developer.chrome.com/blog/inside-browser-part1?hl=zh-cn#the_benefit_of_multi-process_architecture_in_chrome">Chrome 中多进程架构的好处</a></p>
+</blockquote>
+<hr>
+<h2>浏览器渲染管线</h2>
+<p>我们把从输入数据（通常是 HTML、CSS、JavaScript）到显示结果（屏幕上看到的画面）这整个过程称为浏览器的渲染流程，或者叫渲染管线。</p>
+<p>按照渲染的时间顺序，渲染管线可分为如下几个子阶段：</p>
+<ol>
+<li>构建 DOM 树</li>
+<li>样式计算</li>
+<li>布局阶段</li>
+<li>分层阶段</li>
+<li>绘制阶段</li>
+<li>分块</li>
+<li>光栅化</li>
+<li>合成</li>
+</ol>
+<p>这个过程也被称为<a href="https://developer.mozilla.org/en-US/docs/Web/Performance/Critical_rendering_path">关键渲染路径(Critical Rendering Path)</a>。</p>
+<h3>1. HTML 解析与 DOM 树构建流程</h3>
+<p>HTML 解析是浏览器渲染管线的第一步，它将 HTML 文档转换为 DOM 树。这个过程遵循<a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing">WHATWG HTML 标准</a>中定义的算法。</p>
+<h4>1.1 字节流解码（Byte Decoding）</h4>
+<p><strong>目标</strong>：将原始字节流转换为可读字符<br>
+<strong>编码识别顺序</strong>：</p>
+<ol>
+<li><a href="https://encoding.spec.whatwg.org/#bom-sniff">BOM 嗅探</a> (BOM sniffing)（最高优先级）</li>
+<li>检查 HTTP 响应头中的<code>Content-Type</code>字段（如<code>Content-Type: text/html; charset=UTF-8</code>）</li>
+<li>检查文档是否与一个已确定编码的 <code>Document</code> 关联(需同源)，如果是，使用关联的 <code>Document</code> 编码</li>
+<li>检查 HTML 文档中的 <code>&lt;meta&gt;</code>标签
+<ul>
+<li>对于 HTML5 文档，优先识别<code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code></li>
+<li>对于旧版 HTML，识别<code>&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=GBK&quot;&gt;</code></li>
+</ul>
+</li>
+<li>检查资源地址/用户地区设置</li>
+</ol>
+<blockquote>
+<p>BOM 优先级最高，若存在 BOM 则忽略 HTTP 头中的 charset 声明</p>
+</blockquote>
+<hr>
+<h4>1.2 令牌化（Tokenization）</h4>
+<p><strong>目标</strong>：将字符串切割为有意义的语法单元（Tokens）<br>
+<strong>分词规则</strong>：</p>
+<ul>
+<li><code>&lt;div&gt;</code> → <strong>开始标签 Token</strong></li>
+<li><code>&lt;/div&gt;</code> → <strong>结束标签 Token</strong></li>
+<li><code>id=&quot;app&quot;</code> → <strong>属性 Token</strong>（作为开始标签的一部分）</li>
+<li><code>Hello</code> → <strong>文本 Token</strong>，标签之间的文字</li>
+<li><code>&lt;!-- 注释内容 --&gt;</code> → <strong>注释 Token</strong></li>
+</ul>
+<p>这一阶段会处理 HTML 的 &quot;容错性&quot;：对不规范语法（如未闭合标签、错误嵌套）进行自动修正</p>
+<hr>
+<h4>1.3 DOM 树构建（Tree Construction）</h4>
+<p><strong>目标</strong>：将 Token 序列转换为具有层级关系的 DOM（文档对象模型）树<br>
+<strong>关键机制</strong>：</p>
+<ul>
+<li>使用<a href="https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements">开放元素栈</a>维护元素的层级关系</li>
+<li>根据令牌类型创建相应的节点：
+<ul>
+<li>开始标签令牌创建元素节点</li>
+<li>文本令牌创建文本节点</li>
+<li>注释令牌创建注释节点</li>
+<li>结束标签令牌不创建节点，而是完成元素的构建</li>
+</ul>
+</li>
+<li>每个节点根据 HTML 规范确立父-子-兄弟关系</li>
+</ul>
+<p><strong>HTML 容错处理</strong>：</p>
+<ul>
+<li>自动补全缺失的<code>&lt;html&gt;</code>、<code>&lt;head&gt;</code>、<code>&lt;body&gt;</code>标签</li>
+<li>纠正错误的嵌套顺序（如<code>&lt;p&gt;</code>中嵌套<code>&lt;div&gt;</code>时自动闭合<code>&lt;p&gt;</code>）</li>
+<li>处理未闭合的标签</li>
+</ul>
+<p><strong>脚本处理</strong>：</p>
+<p>当解析器遇到<code>&lt;script&gt;</code>标签时，会暂停 DOM 构建并执行脚本：</p>
+<ol>
+<li>按文档顺序同步阻塞解析（除非标记<code>defer</code>/<code>async</code>）</li>
+<li>脚本仅能访问<strong>已构建</strong>的 DOM 节点</li>
+<li>特殊行为：
+<ul>
+<li><code>document.write()</code>：在解析中调用时<strong>插入新内容并重启解析</strong></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h4>1.4 文档就绪事件（Document Readiness）</h4>
+<p><strong>事件触发逻辑</strong>：</p>
+<pre><code class="language-mermaid">flowchart TD
+    A[DOM树构建完成] --&gt; B[执行defer脚本]
+    B --&gt; C[触发DOMContentLoaded]
+    C --&gt; D[等待图片/CSS加载]
+    D --&gt; E[触发load事件]
+</code></pre>
+<h4>构建过程的核心优化机制</h4>
+<ul>
+<li>
+<p><strong>增量构建（Incremental Build）</strong></p>
+<ul>
+<li>浏览器采用增量构建策略，在解析过程中<strong>分批生成 DOM 节点</strong>（无固定大小阈值），允许用户提前看到部分内容（如文本先显示）</li>
+</ul>
+</li>
+<li>
+<p><strong>预解析扫描器（Preload Scanner）</strong></p>
+<ul>
+<li>主解析器在解析 HTML 时，会启动一个轻量级的扫描器（独立线程）提前发现并下载 CSS/JS/图片资源</li>
+</ul>
+</li>
+<li>
+<p><strong>回流最小化（Layout Thrashing Avoidance）</strong></p>
+<ul>
+<li>构建过程中如果 JS 读取布局属性（如 offsetHeight），会强制触发同步布局计算（重排），导致性能问题，因此应避免在 DOM 构建过程中读取布局属性</li>
+</ul>
+</li>
+</ul>
+<h3>2. 样式计算</h3>
+<p>样式计算是浏览器渲染管线中的关键步骤，它将 DOM 树和 CSS 规则结合生成带有样式的渲染树。此过程遵循<a href="https://www.w3.org/TR/css-syntax-3/">W3C CSS Syntax Level 3</a>和<a href="https://www.w3.org/TR/css-cascade-4/">CSS Cascading and Inheritance Level 4</a>等规范。</p>
+<h4>2.1 CSSOM 树构建</h4>
+<pre><code class="language-mermaid">flowchart TD
+    A[原始CSS文本] --&gt; B[字节流解码]
+    B --&gt; C[令牌化]
+    C --&gt; D[解析CSS规则]
+    D --&gt; E[构建CSSOM树]
+</code></pre>
+<p><strong>关键步骤</strong>：</p>
+<ol>
+<li><strong>CSS 解析器初始化</strong>
+<ul>
+<li>创建样式表对象（CSSStyleSheet）</li>
+<li>初始化规则列表（CSSRuleList）</li>
+</ul>
+</li>
+<li><strong>规则解析</strong>：<pre><code class="language-javascript">// CSS 规范定义的规则类型（根据CSS Object Model规范）
+interface CSSRule {
+	const unsigned short      STYLE_RULE = 1;
+	const unsigned short      CHARSET_RULE = 2;
+	const unsigned short      IMPORT_RULE = 3;
+	const unsigned short      MEDIA_RULE = 4;
+	const unsigned short      FONT_FACE_RULE = 5;
+	const unsigned short      PAGE_RULE = 6;
+	const unsigned short      KEYFRAMES_RULE = 7;
+	const unsigned short      NAMESPACE_RULE = 10;
+}
+</code></pre>
+</li>
+<li><strong>错误处理</strong>：
+<ul>
+<li>根据 <a href="https://www.w3.org/TR/css-syntax-3/#error-handling">CSS Parsing Level 3 规范</a>，跳过无效规则</li>
+<li>保留有效部分继续解析</li>
+</ul>
+</li>
+</ol>
+<h4>2.2 样式规则匹配</h4>
+<p><strong>匹配过程</strong>：</p>
+<pre><code class="language-mermaid">flowchart LR
+    D[DOM节点] --&gt; S[选择器引擎]
+    S --&gt;|遍历| R[CSS规则]
+    R --&gt; M[匹配结果]
+
+</code></pre>
+<p><strong>匹配算法</strong>：</p>
+<ol>
+<li><strong>从右向左匹配</strong>：
+<ul>
+<li>先匹配最具体的选择器部分（如.class 或#id）</li>
+<li>再验证祖先关系（如 div .class）</li>
+</ul>
+</li>
+<li><strong>选择器特异性计算</strong>：</li>
+</ol>
+<pre><code class="language-text">特异性值 = (a, b, c, d)
+a = 来自style属性的规则（存在则为1，否则0）
+b = ID选择器的规则数量
+c = 类/属性/伪类选择器的规则数量
+d = 元素/伪元素选择器的规则数量
+
+</code></pre>
+<ol start="3">
+<li><strong>规则匹配优化</strong>：
+<ul>
+<li>使用 Bloom 过滤器快速排除不匹配规则</li>
+<li>对常见选择器模式建立索引</li>
+</ul>
+</li>
+</ol>
+<h4>2.3 优先级计算（层叠算法）</h4>
+<p>样式层叠遵循<a href="https://www.w3.org/TR/css-cascade-4/#cascading">CSS Cascading and Inheritance 规范</a>定义的层叠顺序：</p>
+<ol>
+<li>
+<p><strong>来源优先级（升序）</strong>：</p>
+<pre><code class="language-text">1. 用户代理声明（user agent declarations）
+2. 用户普通声明（user normal declarations）
+3. 作者普通声明（author normal declarations）
+4. 作者重要声明（author important declarations）
+5. 用户重要声明（user important declarations）
+</code></pre>
+<blockquote>
+<p>名词解释：用户代理声明，浏览器厂商提供的默认样式（即浏览器内置样式）；用户声明，浏览网站的用户定义的样式（比如通过插件书写的样式）；作者声明，由网站开发者编写的 CSS 样式，包括内联样式、嵌入样式、外部样式。</p>
+</blockquote>
+</li>
+<li>
+<p><strong>特异性比较</strong>：</p>
+<ul>
+<li>比较<code>(a,b,c,d)</code>元组，从左到右比较数值</li>
+<li>例如：<code>(1,0,0,0) &gt; (0,2,3,0)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>出现顺序</strong>：</p>
+<ul>
+<li>特异性相同的规则，后出现的覆盖先出现的</li>
+</ul>
+</li>
+</ol>
+<h4>2.4 继承处理</h4>
+<p><strong>继承机制</strong>：</p>
+<pre><code class="language-mermaid">flowchart TB
+    P[父元素] --&gt;|继承属性| C[子元素]
+    C --&gt;|覆盖值| S[指定值]
+</code></pre>
+<p><strong>关键规则</strong>：</p>
+<ol>
+<li>
+<p><strong>可继承属性</strong></p>
+<ul>
+<li>字体相关：font-family, font-size</li>
+<li>文本相关：color, line-height</li>
+<li>可见性：visibility</li>
+<li>列表属性：list-style</li>
+</ul>
+</li>
+<li>
+<p><strong>继承值计算</strong>：</p>
+<p>根据 <a href="https://www.w3.org/TR/css-cascade-4/#inheriting">CSS Cascading and Inheritance 规范</a>：</p>
+<pre><code class="language-javascript">if (property.isInherited) {
+	computedValue = parent.computedValue
+} else {
+	computedValue = initialValue
+}
+</code></pre>
+</li>
+<li>
+<p><strong>特殊关键字</strong>：</p>
+<ul>
+<li>inherit：强制继承父元素值</li>
+<li>initial：使用规范初始值</li>
+<li>unset：自动选择 inherit 或 initial</li>
+<li>revert：回滚到用户代理样式</li>
+</ul>
+</li>
+</ol>
+<h4>2.5 默认值应用</h4>
+<ol>
+<li>
+<p><strong>未定义属性处理</strong>：</p>
+<ul>
+<li>使用属性规范定义的初始值</li>
+<li>例如：display 初始值为 inline</li>
+</ul>
+</li>
+<li>
+<p><strong>CSS 全局关键字</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>initial</td>
+<td>将属性重置为 CSS 规范定义的初始值</td>
+</tr>
+<tr>
+<td>inherit</td>
+<td>继承父元素的值</td>
+</tr>
+<tr>
+<td>unset</td>
+<td>继承属性使用 inherit，非继承属性使用 initial</td>
+</tr>
+<tr>
+<td>revert</td>
+<td>回滚到用户代理样式</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>UA 样式表应用</strong>：</p>
+<pre><code class="language-css">/* 浏览器默认样式示例 */
+html {
+	display: block; /* 根元素初始值为block */
+}
+head {
+	display: none;
+}
+</code></pre>
+</li>
+</ol>
+<h4>2.6 相对值转换</h4>
+<table>
+<thead>
+<tr>
+<th>相对单位</th>
+<th>转换依据</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>em, rem</td>
+<td>字体大小</td>
+<td>1em = 父元素 font-size</td>
+</tr>
+<tr>
+<td>%</td>
+<td>包含块尺寸</td>
+<td>width: 50%</td>
+</tr>
+<tr>
+<td>vw, vh</td>
+<td>视口尺寸</td>
+<td>1vw = 1%视口宽度</td>
+</tr>
+<tr>
+<td>ch, ex</td>
+<td>字符尺寸</td>
+<td>基于当前字体</td>
+</tr>
+<tr>
+<td>calc()</td>
+<td>数学表达式计算</td>
+<td>calc(100% - 20px)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>计算过程</strong>：</p>
+<ol>
+<li>递归解析表达式</li>
+<li>单位统一转换</li>
+<li>最终值计算</li>
+</ol>
+<h4>2.7 样式属性标准化</h4>
+<p><strong>标准化操作</strong>：</p>
+<ol>
+<li>
+<p><strong>简写属性展开</strong>：</p>
+<pre><code class="language-css">/* 输入 */
+margin: 10px;
+
+/* 展开为 */
+margin-top: 10px;
+margin-right: 10px;
+margin-bottom: 10px;
+margin-left: 10px;
+</code></pre>
+</li>
+<li>
+<p><strong>关键字转换</strong>：</p>
+<ul>
+<li>auto → 具体计算值</li>
+<li>currentColor → 解析为当前 color 值</li>
+</ul>
+</li>
+<li>
+<p><strong>规范化值</strong>：</p>
+<ul>
+<li>颜色：#RGB → #RRGGBB</li>
+<li>长度：0px → 0</li>
+<li>角度：360deg → 0deg</li>
+</ul>
+</li>
+</ol>
+<h4>2.8 媒体查询应用</h4>
+<pre><code class="language-mermaid">flowchart LR
+    M[媒体规则] --&gt; C[条件检测]
+    C --&gt;|匹配| A[应用规则]
+    C --&gt;|不匹配| I[忽略规则]
+</code></pre>
+<p><strong>检测维度</strong>：</p>
+<ol>
+<li>设备类型：screen, print, speech</li>
+<li>视口尺寸：width, height</li>
+<li>显示特性：resolution, orientation</li>
+<li>用户偏好：prefers-color-scheme</li>
+</ol>
+<h4>2.9 伪元素/类处理</h4>
+<ol>
+<li>
+<p><strong>伪类匹配</strong>：</p>
+<pre><code class="language-javascript">for (element of DOM) {
+	if (element.matches(':hover')) {
+		applyHoverStyles()
+	}
+}
+</code></pre>
+</li>
+<li>
+<p><strong>伪元素处理</strong>：</p>
+<ul>
+<li>伪元素（如::before, ::after）不是真实 DOM 节点，而是在渲染时生成的虚拟节点</li>
+<li>应用对应样式规则并在渲染树中创建相应渲染对象</li>
+</ul>
+</li>
+</ol>
+<h4>2.10 计算样式树构建</h4>
+<pre><code class="language-mermaid">flowchart LR
+    D[DOM树] --&gt; S[样式计算]
+    S --&gt; C[计算样式树]
+    C --&gt; R[渲染树]
+</code></pre>
+<p><strong>优化机制</strong>：</p>
+<ol>
+<li>增量更新（仅修改受影响节点）</li>
+<li>样式共享（相同样式节点复用）</li>
+<li>缓存计算结果</li>
+</ol>
+]]></content>
+        <author>
+            <name>Clark Cui</name>
+            <email>rongchuancui@gmail.com</email>
+            <uri>https://clark-cui.top</uri>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[前端面试题整理：杂篇（一）]]></title>
         <id>https://clark-cui.top/posts/前端面试题整理：杂篇（一）.html</id>
@@ -1402,93 +2046,6 @@ Promise.resolve().then(函数)
 </code></pre>
 </li>
 </ul>
-]]></content>
-        <author>
-            <name>Clark Cui</name>
-            <email>rongchuancui@gmail.com</email>
-            <uri>https://clark-cui.top</uri>
-        </author>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[浏览器渲染原理]]></title>
-        <id>https://clark-cui.top/posts/浏览器渲染原理.html</id>
-        <link href="https://clark-cui.top/posts/浏览器渲染原理.html"/>
-        <updated>2024-03-11T00:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h2>浏览器是如何渲染页面的</h2>
-<h3>什么是渲染</h3>
-<p>把 html 字符串转换为像素点信息的过程就可以叫做渲染</p>
-<h3>渲染的开始</h3>
-<p>当浏览器的网络线程拿到 HTML 文档后，会产生一个渲染任务，并将其放到队列中。</p>
-<p>在事件循环机制的作用下，渲染主线程取出队列中的渲染任务，开启渲染流程。</p>
-<h3>渲染流水线</h3>
-<ol>
-<li>
-<p>解析 HTML 文档</p>
-</li>
-<li>
-<p>样式计算</p>
-</li>
-<li>
-<p>布局</p>
-</li>
-<li>
-<p>分层</p>
-</li>
-<li>
-<p>绘制</p>
-</li>
-<li>
-<p>分块</p>
-</li>
-<li>
-<p>光栅化</p>
-</li>
-<li>
-<p>画</p>
-</li>
-</ol>
-<h3>1. 解析 HTML - Parse HTML</h3>
-<p>最终结果是把 html 文档转换成<code>DOM树(文档对象模型)</code>和<code>CSSOM树(CSS 对象模型)</code></p>
-<p>渲染的第一步是解析 html。</p>
-<p>解析过程中<u>遇到 css 解析 css</u>，<u>遇到 js 执行 js</u>。为了提高解析效率，浏览器在开始解析前，会启动一个<u>预解析的线程</u>，率先<u>下载</u>html 中的<u>外部 css 文件</u>和<u>外部的 js 文件</u>。</p>
-<p>如果主线程解析到 link 位置，此时外部的 css 文件还没有下载解析好，主线程不会等待，继续后续 html 的解析。这就是<u>css 不会阻塞 html 解析</u>的根本原因。</p>
-<p>如果主线程解析到 script 位置，会停止解析 html，转而执行 js 代码或者等待 js 文件下载完毕并执行后，才继续解析 html。这是因为，<u>js 代码执行的过程中可能会修改当前构建好的 dom</u>树，所以必须先暂停解析。<u>这就是 js 会阻塞 html 解析的根本原因</u>。</p>
-<p>第一步完成后，会得到 dom 树和 cssom 树，浏览器的默认样式会包含在 cssom 树中。</p>
-<h3>2. 样式计算 - Recalculate Style</h3>
-<p>主线程会遍历得到的 dom 树，依次为树中的每个节点计算出它最终的样式，称之为<code>Computed Style</code>。</p>
-<p>在这一过程中，很多预设值会变成绝对值，比如 red 会变成 rgb(255,0,0)；相对单位会变成绝对单位，比如 em 会变成 px</p>
-<h3>3. 布局 - Layout</h3>
-<p>主线程在进行 layout 计算的时候也会生成相应的 layout 树，需要注意的是，<u>dom 树和 layout 树并不是一一对应的</u>。</p>
-<p>比如<code>display: none</code>的节点没有几何信息，因此不会生成到布局树；又比如一些伪元素在 dom 节点中不存在，但它们拥有几何信息，所以会生成到布局树中。还有匿名行盒、匿名块盒等等这些都会导致 dom 树和布局树无法一一对应。</p>
-<h3>4. 分层 - Layer</h3>
-<p>主线程会使用一套复杂的策略对整个布局树进行分层。</p>
-<p>分层的好处是，如果一个节点经常进行变动，则只需要对该层进行后续处理，而不需要对整个树进行处理，提升了效率。</p>
-<p><u>可以通过<code>will-change</code>属性主动影响浏览器的分层结果</u>。</p>
-<h3>5. 绘制 - Paint</h3>
-<p>主线程会为每个层<u>单独生成</u>绘制指令集，用于<u>描述</u>这一层该<u>如何画出来</u>。</p>
-<h3>6. 分块 - Tiling</h3>
-<p>上一步完成后，主线程会将每个图层的绘制信息交给合成线程，剩余工作由合成线程完成。</p>
-<p>合成线程首先对每个<u>图层</u>进行<u>分块</u>，将其划分成许多的小区域。这一过程是由<u>多个线程</u>完成的。</p>
-<h3>7. 光栅化 - Raster</h3>
-<p>分块完成后，进入光栅化阶段。</p>
-<p>合成线程会将分块信息交给 gpu 进程，gpu 会以极高的速度进行光栅化。</p>
-<p><u>光栅化的结果就是一块一块的位图</u>。</p>
-<h3>8. 画 - Draw</h3>
-<p>最后一个阶段就是画</p>
-<p>合成线程从 gpu 进程中拿到每个块的位图后，生成一个个<u><code>指引（quad）</code>信息</u>。</p>
-<p>指引会标识出每个位图应该画到屏幕的哪个位置，并且会考虑旋转、缩放等变形。</p>
-<p><u>变形发生在合成线程，与渲染主线程无关，这就是<code>transform</code>效率高的原因</u>。</p>
-<p>合成线程会把<code>quad</code>信息交给 gpu 进程，由 gpu 进程调用 gpu 硬件，最终完成屏幕图像的显示。</p>
-<h3>关于 reflow</h3>
-<p><u>reflow 的本质就是重新计算 layout 树</u>。</p>
-<p>当进行了影响布局树的操作后，就需要重新计算布局树，触发 layout 流程。</p>
-<p>为了避免连续多次的布局树反复计算，浏览器会合并这些操作，当 js 代码全部完成后再进行统一的布局树计算。所以，改动属性造成的 reflow 是异步完成的。</p>
-<p>也正是因为如此，当我们在更改布局属性后立即获取它们的信息，就有可能造成无法获取到最新布局信息的结果。</p>
-<p>浏览器最终在反复权衡之下，决定获取属性时立即 reflow。</p>
-<h3>关于 repaint</h3>
-<p>repaint 的本质就是重新根据分层信息计算了绘制指令。</p>
-<p>当改动了可见样式后，就需要重新计算，触发 repaint 流程。</p>
-<p>由于元素的布局信息也属于可见样式，所以 reflow 一定会引起 repaint</p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
