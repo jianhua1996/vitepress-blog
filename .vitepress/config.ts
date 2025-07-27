@@ -1,9 +1,11 @@
 import { getPosts, getPostLength } from './theme/serverUtils'
 import { buildBlogRSS } from './theme/rss'
 import mathjax3 from 'markdown-it-mathjax3'
-import { withMermaid, UserConfig } from 'vitepress-plugin-mermaid'
+import { withMermaid } from 'vitepress-plugin-mermaid'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import type { UserConfig } from 'vitepress'
 
-async function config() {
+async function config(): Promise<UserConfig> {
 	return {
 		base: '/vitepress-blog',
 		title: "jianhua1996's blog",
@@ -50,7 +52,7 @@ async function config() {
 			showFireworksAnimation: false,
 			lastUpdatedText: '最后更新于'
 		},
-		buildEnd: await buildBlogRSS(),
+		buildEnd: () => buildBlogRSS(),
 		markdown: {
 			theme: {
 				light: 'vitesse-light',
@@ -59,6 +61,12 @@ async function config() {
 			config: md => {
 				md.use(mathjax3)
 			}
+		},
+		vite: {
+			optimizeDeps: {
+				include: ['mermaid']
+			},
+			plugins: [vueDevTools()]
 		}
 	}
 }
@@ -66,7 +74,7 @@ async function config() {
 const _config = await config()
 
 export default withMermaid({
-	...(_config as UserConfig),
+	..._config,
 	mermaid: {
 		//mermaidConfig !theme here works for light mode since dark theme is forced in dark mode
 	}
