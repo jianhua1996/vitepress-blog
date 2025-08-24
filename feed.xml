@@ -4,7 +4,7 @@
         <title>Clark Cui</title>
         <link>https://clark-cui.top/</link>
         <description>Clark Cui' Blog</description>
-        <lastBuildDate>Mon, 28 Jul 2025 03:22:57 GMT</lastBuildDate>
+        <lastBuildDate>Sun, 24 Aug 2025 05:10:42 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <image>
@@ -15,183 +15,483 @@
         <copyright>MIT License</copyright>
         <atom:link href="https://clark-cui.top/feed.xml" rel="self" type="application/rss+xml"/>
         <item>
+            <title><![CDATA[浏览器工作原理（三）]]></title>
+            <link>https://clark-cui.top/posts/浏览器渲染原理（三）.html</link>
+            <guid>https://clark-cui.top/posts/浏览器渲染原理（三）.html</guid>
+            <pubDate>Sat, 23 Aug 2025 00:00:00 GMT</pubDate>
+            <content:encoded><![CDATA[<h2>浏览器渲染管线</h2>
+<hr>
+<h3>5 绘制（Painting）</h3>
+<p>绘制发生在主线程 ​​，目标是将布局树中的元素转换为<strong>绘制指令列表（Paint Records）</strong> ​​，为后续的合成阶段提供数据支持。</p>
+<pre><code class="language-mermaid">flowchart LR
+  A[布局树] --&gt; B[生成绘制指令]
+  B --&gt; C[光栅化]
+  C --&gt; D[位图数据]
+  D --&gt; E[合成线程处理]
+</code></pre>
+<p><strong>关键步骤说明</strong>：</p>
+<ul>
+<li><strong>生成绘制指令</strong>：主线程遍历布局树，为每个元素生成 <strong>绘制指令列表（Paint Records）</strong>，描述其颜色、背景、边框、文本等视觉属性。</li>
+<li><strong>按层划分任务</strong>：每个合成层（Compositing Layer）独立生成绘制指令，避免跨层混合。</li>
+<li><strong>提交至合成线程</strong>：主线程将绘制指令和图层信息传递给合成线程，完成后续处理。</li>
+</ul>
+<blockquote>
+<p>注意：绘制指令是一种底层的、描述如何渲染元素的抽象操作列表，实际由浏览器引擎生成。我们可以暂时理解为类似 <code>canvas api</code> 的指令集。</p>
+</blockquote>
+<h4>5.1 绘制指令类型</h4>
+<table>
+<thead>
+<tr>
+<th>指令类型</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fillRect</code></td>
+<td>填充矩形区域</td>
+<td>背景颜色、边框</td>
+</tr>
+<tr>
+<td><code>drawText</code></td>
+<td>绘制文本</td>
+<td>字体、颜色、阴影</td>
+</tr>
+<tr>
+<td><code>drawImage</code></td>
+<td>绘制图像</td>
+<td>背景图片、图标</td>
+</tr>
+<tr>
+<td><code>drawBorder</code></td>
+<td>绘制边框</td>
+<td>边框样式、圆角</td>
+</tr>
+<tr>
+<td><code>drawShadow</code></td>
+<td>绘制阴影</td>
+<td>文本阴影、盒阴影</td>
+</tr>
+</tbody>
+</table>
+<h4>5.2 绘制顺序规则</h4>
+<pre><code class="language-mermaid">graph TD
+    A[绘制顺序] --&gt; B[文档流顺序]
+    B --&gt; C[堆叠上下文]
+    C --&gt; D[z-index]
+    D --&gt; E[层叠顺序]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>因素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档流顺序</td>
+<td>默认从上到下、从左到右绘制</td>
+</tr>
+<tr>
+<td>堆叠上下文与 z-index</td>
+<td>不同堆叠上下文的元素按 <code>z-index</code> 排序，同一上下文内按 CSS 层叠规则排序</td>
+</tr>
+</tbody>
+</table>
+<h4>5.3 触发重绘的操作</h4>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>是否触发重绘</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修改颜色、背景</td>
+<td>✅</td>
+<td>如 <code>element.style.backgroundColor = 'red'</code></td>
+</tr>
+<tr>
+<td>修改字体大小</td>
+<td>✅</td>
+<td>如 <code>element.style.fontSize = '20px'</code></td>
+</tr>
+<tr>
+<td>修改 transform</td>
+<td>❌</td>
+<td>直接由合成线程处理</td>
+</tr>
+<tr>
+<td>修改 opacity</td>
+<td>❌</td>
+<td>直接由合成线程处理</td>
+</tr>
+</tbody>
+</table>
+<h4>5.4 绘制指令的优化</h4>
+<p><strong>优化策略</strong>：</p>
+<ul>
+<li><strong>减少绘制指令</strong>：避免频繁修改样式，如批量读写布局属性。</li>
+<li><strong>合并绘制指令</strong>：通过 <code>will-change</code> 或 <code>transform</code> 触发合成层，减少主线程压力。</li>
+<li><strong>简化 CSS 选择器</strong>：避免复杂选择器（如<code>.box .title</code>），减少样式计算时间。</li>
+<li><strong>使用硬件加速</strong>：通过 <code>transform: translateZ(0)</code> 或 <code>will-change: transform</code> 提升合成层性能。</li>
+</ul>
+]]></content:encoded>
+            <author>rongchuancui@gmail.com (Clark Cui)</author>
+        </item>
+        <item>
             <title><![CDATA[浏览器工作原理（二）]]></title>
             <link>https://clark-cui.top/posts/浏览器渲染原理（二）.html</link>
             <guid>https://clark-cui.top/posts/浏览器渲染原理（二）.html</guid>
             <pubDate>Sun, 27 Jul 2025 00:00:00 GMT</pubDate>
             <content:encoded><![CDATA[<h2>浏览器渲染管线</h2>
-<h3>3. 布局阶段 (Layout)</h3>
-<p><strong>具体流程</strong></p>
-<h4>3.1 构建布局树（Layout Tree）</h4>
-<ul>
-<li>从渲染树（包含样式信息的 DOM 树）出发，过滤掉不需要渲染的节点：
-<ul>
-<li>移除 <code>display: none</code> 的元素</li>
-<li><strong>保留 <code>visibility: hidden</code> 的元素</strong>（占据空间但不绘制）</li>
-</ul>
-</li>
-<li>生成仅包含可见元素的布局树</li>
-<li>布局树节点包含：
-<ul>
-<li>几何属性（位置、大小）</li>
-<li>父元素与子元素的层级关系</li>
-</ul>
-</li>
-</ul>
-<h4>3.2 递归计算几何信息</h4>
-<p>从根节点（<code>&lt;html&gt;</code>）递归遍历布局树，计算每个元素的<strong>盒模型</strong>和<strong>定位信息</strong>：</p>
-<ol>
-<li>
-<p><strong>确定包含块（Containing Block）</strong>：</p>
+<hr>
+<h3>3. 布局阶段 (Layout / Reflow)</h3>
+<p>布局阶段是将样式计算结果转换为精确几何尺寸的过程，其核心目标是确定每个可见元素在屏幕上的<strong>位置</strong>和<strong>大小</strong>。</p>
+<h4>3.1 构建布局树（Layout Tree Construction）</h4>
+<p>布局树基于渲染树（包含 DOM 结构和计算样式）构建，增加了精确的几何位置信息：</p>
+<pre><code class="language-mermaid">  flowchart TD
+  A[渲染树] --&gt; B[过滤不可见节点]
+  B --&gt; C[创建布局对象]
+  C --&gt; D[处理匿名盒模型]
+  D --&gt; E[生成布局树]
+</code></pre>
+<p><strong>关键步骤说明</strong>：</p>
 <table>
 <thead>
 <tr>
-<th>定位类型</th>
-<th>包含块规则</th>
-<th>边界类型</th>
+<th>步骤</th>
+<th>操作细节</th>
+<th>关键说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>static</code>/<code>relative</code></td>
-<td>最近块级祖先的<strong>内容盒</strong><br>(块容器或格式化上下文祖先)</td>
-<td>content box</td>
+<td>过滤不可见节点</td>
+<td>移除 <code>display: none</code> 的元素；保留 <code>visibility: hidden</code>（占据空间但不可见）</td>
+<td><code>visibility: hidden</code> 仍参与布局计算</td>
 </tr>
 <tr>
-<td><code>absolute</code></td>
-<td>最近非<code>static</code>祖先的<strong>内边距盒</strong><br>(无则使用初始包含块)</td>
-<td>padding box</td>
+<td>创建布局对象</td>
+<td>为可见元素生成布局对象（LayoutObject），包含样式信息和初始几何属性</td>
+<td>布局对象与 DOM 节点不完全一一对应（如相邻文本节点可能合并）</td>
 </tr>
 <tr>
-<td><code>fixed</code></td>
-<td><strong>视口</strong><br>或设置以下属性的祖先：<br><code>transform</code>/<code>perspective</code>/<code>filter</code>/<code>contain: paint</code></td>
-<td>padding box</td>
+<td>处理匿名盒模型</td>
+<td>补全混合内容流的布局层级（如块级容器内的内联内容）</td>
+<td>解决 CSS 盒模型规则下的内容排列问题（见下表示例）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>匿名盒模型示例</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>匿名盒类型</th>
+<th>产生场景</th>
+<th>示例 HTML</th>
+<th>布局结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>匿名块盒</td>
+<td>块级容器中混合块级元素和内联内容</td>
+<td><code>&lt;div&gt;文本&lt;span&gt;内联&lt;/span&gt;&lt;p&gt;块级&lt;/p&gt;更多文本&lt;/div&gt;</code></td>
+<td>生成包含&quot;文本&quot;和&quot;更多文本&quot;的两个匿名块盒，与<code>&lt;p&gt;</code>块级元素垂直排列</td>
 </tr>
 <tr>
-<td><code>sticky</code></td>
-<td>最近<strong>滚动祖先</strong>的内容盒<br>(无则使用视口)</td>
-<td>content box</td>
+<td>匿名行盒</td>
+<td>块级容器中仅包含内联内容</td>
+<td><code>&lt;p&gt;这是一段需要换行的文本&lt;/p&gt;</code></td>
+<td>文本被包裹在匿名行盒中，根据容器宽度自动换行</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>关键概念</strong>：包含块是元素尺寸计算（<code>width/height/padding/margin</code>）和位置计算（<code>top/right/bottom/left</code>）的参考基准。<br><strong>依据</strong>：<a href="https://www.w3.org/TR/CSS2/visudet.html#containing-block-details">Definition of &quot;containing block&quot;</a></p>
+<p><strong>注意</strong>：匿名盒无法通过 JavaScript 直接访问，但会影响布局计算（如边距折叠、行高计算）。参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_display/Visual_formatting_model#%E7%9B%92%E5%AD%90%E7%94%9F%E6%88%90">MDN 匿名盒</a></p>
 </blockquote>
-</li>
-<li>
-<p><strong>处理盒模型</strong>：</p>
-<ul>
-<li>根据 <code>width/height</code> 计算内容区域</li>
-<li>处理 <code>padding</code>/<code>border</code>/<code>margin</code> 值</li>
-<li><strong>百分比值</strong>：基于包含块的对应尺寸计算</li>
-<li><strong>auto 值</strong>：根据布局模式自动计算</li>
-</ul>
-</li>
-<li>
-<p><strong>处理定位类型</strong>：</p>
-<ul>
-<li><strong>正常流</strong>：
-<ul>
-<li>块级元素：垂直堆叠，宽度填满包含块</li>
-<li>行内元素：水平排列（IFC 上下文）
-<ul>
-<li>计算行高（<code>line-height</code>）</li>
-<li>基线对齐（<code>vertical-align</code>）</li>
-<li>文本对齐（<code>text-align</code>）</li>
-<li>行盒（Line Box）高度计算</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>浮动</strong>：
-<ul>
-<li>计算 <code>float: left/right</code> 位置</li>
-<li>处理文字环绕效果</li>
-</ul>
-</li>
-<li><strong>绝对定位</strong>：
-<ul>
-<li>根据包含块计算精确位置</li>
-<li>完全脱离文档流</li>
-</ul>
-</li>
-<li><strong>固定定位</strong>：
-<ul>
-<li>相对于视口定位</li>
-<li><strong>特例</strong>：祖先设 <code>transform</code> 时锁定在该祖先</li>
-</ul>
-</li>
-<li><strong>粘性定位</strong>：
-<ul>
-<li>在滚动容器内切换相对/固定定位
+<h4>3.2 布局计算（Layout Computation）</h4>
+<p>布局计算的核心是为布局树中的每个节点计算精确的宽度、高度、位置（top/left/right/bottom），依赖<strong>包含块</strong>（元素布局的参考坐标系）。</p>
+<h5>3.2.1 包含块的确定规则</h5>
+<table>
+<thead>
+<tr>
+<th>元素定位类型</th>
+<th>包含块规则</th>
+<th>例外情况（触发新包含块的祖先属性）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static/relative/sticky</code></td>
+<td>由最近的块级祖先元素的<strong>内容盒（content box）</strong> 创建</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>由最近的非<code>static</code>定位祖先元素的<strong>内边距盒（padding box）</strong> 创建；无则用初始包含块</td>
+<td>祖先满足以下任一条件：<br>1. <code>transform/perspective</code> ≠ <code>none</code><br>2. <code>will-change: transform/perspective</code><br>3. <code>filter</code> ≠ <code>none</code> 或者 <code>will-change: filter</code>（Firfox） <br>4. <code>contain: layout/paint/strict/content</code> <br>5. <code>backdrop-filter</code> ≠ <code>none</code>（有争议）</td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td>默认由视口（viewport）或分页媒体的分页区域创建</td>
+<td>同上（<code>transform</code>等属性会改变包含块）</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
-<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-position/#positioning-schemes">W3C CSS Positioned Layout §2</a></p>
+<p>参考：<br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_display/Containing_block">MDN 包含块</a><br>- <a href="https://www.w3.org/TR/css-position-3/#containing-block">W3C CSS Positioned Layout</a></p>
 </blockquote>
-</li>
+<h5>3.2.2 几何属性计算顺序与特殊布局</h5>
+<p>布局计算从根元素（<code>&lt;html&gt;</code>）开始递归处理子元素，核心计算内容包括：</p>
+<table>
+<thead>
+<tr>
+<th>计算内容</th>
+<th>依赖因素</th>
+<th>特殊布局模式的影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>宽度/高度</td>
+<td><code>width/height</code>、<code>padding</code>、<code>border</code>、<code>margin</code>、内容尺寸（如<code>width: auto</code>自适应）</td>
+<td>块级格式化上下文（BFC）会垂直排列元素并合并边距；弹性布局（Flexbox）按主轴分配空间</td>
+</tr>
+<tr>
+<td>位置（top/left）</td>
+<td>包含块的左上角坐标 + 自身定位属性（如<code>position: absolute</code>的<code>left: 10px</code>）</td>
+<td>浮动布局（Float）会脱离文档流，父元素可能高度塌陷；网格布局（Grid）按轨道对齐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>特殊布局模式对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>布局模式</th>
+<th>核心特性</th>
+<th>典型应用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>块级格式化上下文（BFC）</td>
+<td>垂直排列元素、合并边距、包含浮动元素</td>
+<td>防止浮动父元素高度塌陷（<code>overflow: hidden</code>触发 BFC）</td>
+</tr>
+<tr>
+<td>弹性布局（Flexbox）</td>
+<td>主轴/交叉轴空间分配、弹性因子、对齐控制</td>
+<td>一维布局（导航栏、卡片列表）</td>
+</tr>
+<tr>
+<td>网格布局（Grid）</td>
+<td>二维轨道划分、隐式网格创建、对齐控制</td>
+<td>复杂二维布局（仪表盘、网格图库）</td>
+</tr>
+<tr>
+<td>浮动布局（Float）</td>
+<td>元素脱离文档流、文字环绕、父元素高度塌陷</td>
+<td>多列布局（传统新闻网站）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>参考：<br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_display/Block_formatting_context">MDN 块级格式化上下文</a><br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_flexible_box_layout">MDN 弹性布局</a><br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_grid_layout">MDN 网格布局</a><br>- <a href="https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/CSS_layout/Floats">MDN 浮动布局</a></p>
+</blockquote>
+<h4>3.3 增量布局与性能优化</h4>
+<p>为避免全量重排（Full Reflow），浏览器采用<strong>增量布局</strong>策略，仅更新受影响的子树。</p>
+<p><strong>增量布局机制（Incremental Layout）</strong>：</p>
+<pre><code class="language-mermaid">  flowchart LR
+  A[DOM修改] --&gt; B[标记'脏'节点]
+  B --&gt; C{是否在布局边界内？}
+  C --&gt;|是| D[局部重排]
+  C --&gt;|否| E[整树重排]
+</code></pre>
+<p><strong>关键规则</strong>：</p>
+<ul>
+<li><strong>脏节点</strong>：当 DOM 结构、样式或几何属性发生变化时，可能需要重建布局树。</li>
+<li><strong>布局边界</strong>：父节点的布局范围限制（如<code>overflow: hidden</code>的容器会截断子节点的重排影响）。</li>
 </ul>
-</li>
+<blockquote>
+<p>参考：<a href="https://web.dev/articles/howbrowserswork?hl=zh-cn#layout">Web Dev howbrowserswork</a></p>
+</blockquote>
+<p><strong>强制同步布局（Forced Synchronous Layout）</strong>：</p>
+<pre><code class="language-javascript">// 错误示例：连续交叉读写布局属性导致触发多次重排
+// 步骤1：写操作（修改width）
+element.style.width = '100px'
+// 浏览器：暂存这个修改，标记为脏节点，不立即布局
+
+// 步骤2：读操作（获取offsetWidth）
+const width = element.offsetWidth
+// 浏览器：必须返回最新宽度，所以强制执行步骤1的布局计算（第一次布局）
+
+// 步骤3：写操作（修改height）
+element.style.height = '200px'
+// 浏览器：暂存这个修改，标记为脏节点，等待下一次布局时机
+</code></pre>
+<ul>
+<li><strong>后果</strong>：每次读操作都会触发浏览器立即执行重排，导致性能损耗。</li>
+<li><strong>优化</strong>：</li>
 </ul>
+<pre><code class="language-javascript">// 读写分离：先批量读，再批量写；或者先批量写，再批量读
+requestAnimationFrame(() =&gt; {
+	// 1. 先读后写
+	// 先执行读操作（获取当前布局信息）
+	const width = element.offsetWidth
+	// 再执行所有写操作（批量暂存）
+	element.style.width = '100px'
+	element.style.height = '200px'
+
+	// 2. 先写后读
+	// 先执行所有写操作（批量暂存）
+	element.style.width = '100px'
+	element.style.height = '200px'
+	// 最后执行读操作（触发一次布局）
+	const width = element.offsetWidth
+})
+</code></pre>
+<p><strong>关键结论</strong>：<br>
+连续的多次读操作（中间无写操作）是安全的，浏览器会通过缓存机制优化，不会重复计算布局，性能开销很小。<br>
+<strong>真正需要避免的是 “写 - 读 - 写”“读 - 写 - 读” 这类读写交替的操作，它们会频繁打破浏览器的优化机制，导致多次布局计算</strong>。</p>
+<h3>4. 分层阶段（Layer Stage）</h3>
+<p>分层阶段的目标是将布局树中的元素分配到不同的渲染层（Render Layers），通过隔离动态内容、复用静态内容提升渲染效率。</p>
+<h4>4.1 分层触发条件</h4>
+<p>元素被分配到独立渲染层的条件（满足任意一条即触发）：</p>
+<table>
+<thead>
+<tr>
+<th>触发类型</th>
+<th>具体条件</th>
+<th>示例 HTML/CSS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>默认分层</td>
+<td>文档根元素（<code>&lt;html&gt;</code>）</td>
+<td><code>&lt;html&gt;...&lt;/html&gt;</code></td>
+</tr>
+<tr>
+<td>定位与堆叠</td>
+<td>- <code>position: absolute/relative</code>且<code>z-index ≠ auto</code><br> - <code>position: fixed/sticky</code><br>- flex/grid 容器的子元素且 <code>z-index ≠ auto</code></td>
+<td><code>&lt;div style=&quot;position: absolute; z-index: 10;&quot;&gt;&lt;/div&gt;</code></td>
+</tr>
+<tr>
+<td>视觉效果属性</td>
+<td>- <code>opacity &lt; 1</code><br>- <code>mix-blend-mode ≠ normal</code><br>- <code>transform/perspective/filter/backdrop-filter/clip-path/mask ≠ none</code></td>
+<td><code>&lt;div style=&quot;transform: translateZ(0);&quot;&gt;&lt;/div&gt;</code>（触发 GPU 加速）</td>
+</tr>
+<tr>
+<td>媒体与插件</td>
+<td><code>&lt;video&gt;</code>、<code>&lt;canvas&gt;</code>、<code>&lt;iframe&gt;</code>、WebGL 上下文</td>
+<td><code>&lt;video src=&quot;video.mp4&quot; controls&gt;&lt;/video&gt;</code></td>
+</tr>
+<tr>
+<td>溢出与滚动</td>
+<td><code>overflow: auto/scroll</code>且内容超出容器尺寸（产生实际滚动条）</td>
+<td><code>&lt;div style=&quot;overflow: auto; height: 300px;&quot;&gt;长内容...&lt;/div&gt;</code></td>
+</tr>
+<tr>
+<td>主动提示</td>
+<td>- <code>will-change: 可触发分层的属性</code>（如<code>transform</code>、<code>opacity</code>）<br>- <code>contain: layout/paint/strict/content</code></td>
+<td><code>&lt;div style=&quot;will-change: transform;&quot;&gt;&lt;/div&gt;</code>（预优化动画元素）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>合成层的内存成本</strong>：虽然合成层提升性能，但过多的合成层可能导致内存占用增加。</p>
+<p><strong>合成层的合并</strong>：浏览器会尝试合并相邻的静态层以减少 GPU 资源消耗。</p>
+</blockquote>
+<h4>4.2 渲染层与合成层的层级关系</h4>
+<p>分层并非单一层级，而是存在&quot;渲染层 → 合成层&quot;的升级关系：</p>
+<pre><code class="language-mermaid">  graph TD
+  A[布局树] --&gt; B(渲染层 RenderLayer)
+  B --&gt; C{满足合成条件?}
+  C --&gt;|是| D[合成层 CompositingLayer]
+  C --&gt;|否| E[合并到父合成层]
+  D --&gt; F[GPU纹理]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>层级类型</th>
+<th>特性与优化</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>渲染层</td>
+<td>存储绘制指令，管理层叠顺序</td>
+<td>静态文本块、无动画的按钮</td>
+</tr>
+<tr>
+<td>合成层</td>
+<td>独立 GPU 纹理、由合成线程直接处理、支持 GPU 加速动画</td>
+<td>动画元素（<code>transform: translate</code>）、半透明浮层（<code>opacity: 0.8</code>）</td>
+</tr>
+</tbody>
+</table>
+<h4>4.3 层的堆叠与排序</h4>
+<p>层叠顺序由<strong>层叠上下文</strong>决定，子层无法超出父层的堆叠范围。</p>
+<ol>
+<li>
+<p><strong>层叠上下文规则</strong>：</p>
+<ul>
+<li>每个层有自己的&quot;层序&quot;（类似全局<code>z-index</code>）。</li>
+<li>堆叠顺序遵循<a href="https://www.w3.org/TR/css-position-3/#stacking-context">CSS Positioned Layout 3</a>规范：</li>
+</ul>
+<pre><code class="language-text">背景与边框 → 负z-index层 → 块级元素 → 浮动元素 → 行内元素 → 正z-index层
+</code></pre>
 </li>
 <li>
-<p><strong>文字排版</strong>：</p>
-<ul>
-<li>在行内格式化上下文（IFC）中计算：
-<ul>
-<li>文本换行位置</li>
-<li>行盒高度（由行内最高元素决定）</li>
-<li>基线对齐（<code>vertical-align</code>）
-<blockquote>
-<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-inline-3/#inline-formatting">W3C CSS Inline Layout §2</a></p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
+<p><strong>合成层排序示例</strong>：</p>
 </li>
 </ol>
-<h4>3.3 处理复杂布局模式</h4>
-<ul>
-<li>
-<p><strong>Flexbox 布局</strong>：</p>
-<ul>
-<li>计算主轴/交叉轴尺寸</li>
-<li>分配剩余空间（<code>flex-grow/shrink</code>）</li>
-<li>处理项目对齐（<code>justify-content</code>/<code>align-items</code>）
+<pre><code class="language-mermaid">  flowchart TB
+  A[根合成层] --&gt; B[层A z-index:1]
+  A --&gt; C[层B z-index:5]
+  A --&gt; D[层C z-index:10]
+  D --&gt; E[子层 z-index:15]
+</code></pre>
+<h4>4.4 层的优化策略</h4>
+<p>浏览器通过合并与拆分层平衡内存与性能：</p>
+<table>
+<thead>
+<tr>
+<th>优化操作</th>
+<th>触发条件</th>
+<th>性能影响</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>层合并</td>
+<td>同层级且无重叠的静态层</td>
+<td>减少 GPU 内存占用，降低合成开销</td>
+</tr>
+<tr>
+<td>层拆分（瓦片化）</td>
+<td>大尺寸层（如长列表）、超出视口的层</td>
+<td>拆分为 256x256 瓦片，仅光栅化可视区域，减少内存占用</td>
+</tr>
+<tr>
+<td>层提升（Promote）</td>
+<td>动画元素（<code>transform/opacity</code>）、频繁重绘的元素</td>
+<td>提升至合成层，避免触发重排重绘</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
-<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-flexbox-1/#layout-algorithm">W3C Flexbox §9</a></p>
+<p><strong>最佳实践</strong>：对动画元素使用<code>transform</code>替代<code>top/left</code>，触发合成层以提升性能。</p>
 </blockquote>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Grid 布局</strong>：</p>
-<ul>
-<li>计算网格轨道（行/列）尺寸</li>
-<li>放置网格项目到指定区域</li>
-<li>处理网格间隙（<code>gap</code>）
-<blockquote>
-<p><strong>依据</strong>：<a href="https://drafts.csswg.org/css-grid-2/#grid-layout-algorithm">W3C Grid Layout §11</a></p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-<h4>3.4 存储布局结果</h4>
-<ul>
-<li>记录计算得到的几何信息：
-<ul>
-<li>位置坐标（x, y）</li>
-<li>尺寸（width, height）</li>
-<li>盒模型各部分值（content/padding/border/margin）</li>
-</ul>
-</li>
-<li>建立空间关系：
-<ul>
-<li>元素间相对位置</li>
-<li>物理重叠情况（为分层阶段准备）</li>
-</ul>
-</li>
-</ul>
 ]]></content:encoded>
             <author>rongchuancui@gmail.com (Clark Cui)</author>
         </item>
@@ -201,6 +501,7 @@
             <guid>https://clark-cui.top/posts/浏览器渲染原理（一）.html</guid>
             <pubDate>Sun, 29 Jun 2025 00:00:00 GMT</pubDate>
             <content:encoded><![CDATA[<h2>浏览器的多进程架构</h2>
+<hr>
 <h3>进程与线程</h3>
 <p><strong>进程</strong>：<br>
 指计算机中已执行的程序，曾经是分时系统的基本运作单位。在面向进程设计的系统中，是程序的基本执行实体；在面向线程设计的系统中，进程本身不是基本执行单位，而是线程的容器。<br>
@@ -247,12 +548,6 @@
 <ImageBuilder :source="['浏览器进程架构.png']" size="medium"/>
 <p>其中，<strong>渲染进程</strong>是我们最应该关注的进程，它负责通过一系列渲染步骤（又称作浏览器渲染管线）将 HTML、JavaScript、CSS、图片等资源最终解析为可以显示和交互的页面。</p>
 <p><strong>渲染进程管理规则</strong>：</p>
-<ul>
-<li>
-<p>打开新标签页 → 创建新渲染进程</p>
-</li>
-<li>
-<p>页面导航决策：</p>
 <pre><code class="language-mermaid">flowchart TD
 A[新页面请求] --&gt; B{与当前页面是否同站？}
 B --&gt;|是| C[复用当前渲染进程]
@@ -267,11 +562,10 @@ B --&gt;|否| D[创建新渲染进程]
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 <p>如下图所示：<br>
 <ImageBuilder :source="['浏览器进程架构-同站进程复用1.png','浏览器进程架构-同站进程复用2.png','浏览器进程架构-同站进程复用3.png']" size="medium" /></p>
 <blockquote>
+<p>判断 eTLD+1 的方法依赖于公共后缀列表（Public Suffix List），参考<a href="https://publicsuffix.org/list/">公共后缀列表</a></p>
 <p>多进程架构的优势：崩溃隔离，沙箱化等，参考<a href="https://developer.chrome.com/blog/inside-browser-part1?hl=zh-cn#the_benefit_of_multi-process_architecture_in_chrome">Chrome 中多进程架构的好处</a></p>
 </blockquote>
 <hr>
@@ -363,7 +657,7 @@ B --&gt;|否| D[创建新渲染进程]
 <li>使用<a href="https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements">开放元素栈</a>维护元素的层级关系</li>
 <li><strong>脚本处理规则</strong>：
 <ul>
-<li>遇到<code>&lt;script&gt;</code>时暂停 DOM 构建并执行脚本（除非标记<code>async</code>/<code>defer</code>）</li>
+<li>遇到<code>&lt;script&gt;</code>时暂停 DOM 构建并执行脚本，如果脚本需要下载，则需要等待脚本下载并执行完成。（除非标记<code>async</code>/<code>defer</code>）</li>
 <li>特殊行为：调用<code>document.write()</code>会插入内容到当前位置并重启解析</li>
 </ul>
 </li>
@@ -391,13 +685,17 @@ B --&gt;|否| D[创建新渲染进程]
 <li>
 <p><strong>预解析扫描器（Preload Scanner）</strong></p>
 <ul>
-<li>主解析器在解析 HTML 时，会启动一个轻量级的扫描器（独立线程）提前发现并下载 CSS/JS/图片资源</li>
+<li>主解析器在解析 HTML 文档时，会启动一个轻量级的扫描器（独立线程）提前发现并下载 CSS/JS/图片资源
+<blockquote>
+<p>关于预解析扫描器是否是一个独立的线程，存在争议。但可以肯定的是，预解析扫描器与主解析器之间是并行的。参考<a href="https://html.whatwg.com.cn/multipage/parsing.html#active-speculative-html-parser">HTML 标准</a>。</p>
+</blockquote>
+</li>
 </ul>
 </li>
 <li>
-<p><strong>回流最小化（Layout Thrashing Avoidance）</strong></p>
+<p><strong>避免布局抖动（Layout Thrashing）</strong></p>
 <ul>
-<li>构建过程中如果 JS 读取布局属性（如 offsetHeight），会强制触发同步布局计算（重排），导致性能问题，因此应避免在 DOM 构建过程中读取布局属性</li>
+<li>构建过程中如果 JS 读取布局属性（如 offsetHeight），会强制触发同步布局计算（重排），导致性能问题，因此应避免在 DOM 构建过程中读取布局属性，以防触发强制同步布局。</li>
 </ul>
 </li>
 </ul>
@@ -629,7 +927,7 @@ margin-left: 10px;
   条件检测 --&gt;|不匹配| 忽略规则
 </code></pre>
 <h4>2.8 伪元素/类处理</h4>
-<p><strong>实际位置</strong>：在渲染树阶段创建，不在样式计算阶段（不确定）</p>
+<p><strong>注意</strong>： 伪元素的样式在样式计算阶段确定，但对应的渲染节点在后续渲染树构建时才生成。</p>
 <pre><code class="language-mermaid">  flowchart LR
   DOM树 --样式计算--&gt; 渲染树
   渲染树 --添加--&gt; 伪元素渲染对象
