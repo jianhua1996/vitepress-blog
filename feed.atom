@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://clark-cui.top/</id>
     <title>Clark Cui</title>
-    <updated>2025-08-24T05:10:42.662Z</updated>
+    <updated>2025-08-30T13:20:24.210Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <author>
         <name>Clark Cui</name>
@@ -16,12 +16,11 @@
     <icon>https://clark-cui.top/horse.svg</icon>
     <rights>MIT License</rights>
     <entry>
-        <title type="html"><![CDATA[浏览器工作原理（三）]]></title>
+        <title type="html"><![CDATA[浏览器渲染原理（三）]]></title>
         <id>https://clark-cui.top/posts/浏览器渲染原理（三）.html</id>
         <link href="https://clark-cui.top/posts/浏览器渲染原理（三）.html"/>
         <updated>2025-08-23T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器渲染管线</h2>
-<hr>
 <h3>5 绘制（Painting）</h3>
 <p>绘制发生在主线程 ​​，目标是将布局树中的元素转换为<strong>绘制指令列表（Paint Records）</strong> ​​，为后续的合成阶段提供数据支持。</p>
 <pre><code class="language-mermaid">flowchart LR
@@ -39,7 +38,7 @@
 <blockquote>
 <p>注意：绘制指令是一种底层的、描述如何渲染元素的抽象操作列表，实际由浏览器引擎生成。我们可以暂时理解为类似 <code>canvas api</code> 的指令集。</p>
 </blockquote>
-<h4>5.1 绘制指令类型</h4>
+<h4>5.1. 绘制指令类型</h4>
 <table>
 <thead>
 <tr>
@@ -76,13 +75,9 @@
 </tr>
 </tbody>
 </table>
-<h4>5.2 绘制顺序规则</h4>
-<pre><code class="language-mermaid">graph TD
-    A[绘制顺序] --&gt; B[文档流顺序]
-    B --&gt; C[堆叠上下文]
-    C --&gt; D[z-index]
-    D --&gt; E[层叠顺序]
-</code></pre>
+<h4>5.2 绘制状态管理</h4>
+<p>绘制过程中，浏览器会维护 <strong>绘制状态栈</strong>，通过 <code>save()</code>（保存当前颜色、字体、变换等状态）和 <code>restore()</code>（恢复上一次保存的状态）管理指令上下文，避免不同元素的绘制属性相互干扰。</p>
+<h4>5.3. 绘制顺序规则</h4>
 <table>
 <thead>
 <tr>
@@ -101,7 +96,10 @@
 </tr>
 </tbody>
 </table>
-<h4>5.3 触发重绘的操作</h4>
+<ul>
+<li>同一上下文内的绘制顺序见上篇文章：<a href="/posts/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86%EF%BC%88%E4%BA%8C%EF%BC%89#_4-1-1-%E5%B1%82%E5%8F%A0%E4%B8%8A%E4%B8%8B%E6%96%87%E7%BB%98%E5%88%B6%E9%A1%BA%E5%BA%8F">浏览器渲染原理（二）- 层叠上下文绘制顺序</a></li>
+</ul>
+<h4>5.4. 触发重绘的操作</h4>
 <table>
 <thead>
 <tr>
@@ -123,24 +121,19 @@
 </tr>
 <tr>
 <td>修改 transform</td>
-<td>❌</td>
-<td>直接由合成线程处理</td>
+<td>❌（特定场景）</td>
+<td>仅当元素已升级为合成层时，直接由合成线程处理</td>
 </tr>
 <tr>
 <td>修改 opacity</td>
-<td>❌</td>
-<td>直接由合成线程处理</td>
+<td>❌（特定场景）</td>
+<td>仅当元素已升级为合成层时，直接由合成线程处理</td>
 </tr>
 </tbody>
 </table>
-<h4>5.4 绘制指令的优化</h4>
+<h4>5.5. 绘制指令的优化</h4>
 <p><strong>优化策略</strong>：</p>
-<ul>
-<li><strong>减少绘制指令</strong>：避免频繁修改样式，如批量读写布局属性。</li>
-<li><strong>合并绘制指令</strong>：通过 <code>will-change</code> 或 <code>transform</code> 触发合成层，减少主线程压力。</li>
-<li><strong>简化 CSS 选择器</strong>：避免复杂选择器（如<code>.box .title</code>），减少样式计算时间。</li>
-<li><strong>使用硬件加速</strong>：通过 <code>transform: translateZ(0)</code> 或 <code>will-change: transform</code> 提升合成层性能。</li>
-</ul>
+<p>todo: 待补充，见 <a href="https://web.dev/articles/howbrowserswork?hl=zh-cn#painting">how browsers work</a></p>
 ]]></content>
         <author>
             <name>Clark Cui</name>
@@ -149,21 +142,24 @@
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[浏览器工作原理（二）]]></title>
+        <title type="html"><![CDATA[浏览器渲染原理（二）]]></title>
         <id>https://clark-cui.top/posts/浏览器渲染原理（二）.html</id>
         <link href="https://clark-cui.top/posts/浏览器渲染原理（二）.html"/>
         <updated>2025-07-27T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器渲染管线</h2>
-<hr>
 <h3>3. 布局阶段 (Layout / Reflow)</h3>
 <p>布局阶段是将样式计算结果转换为精确几何尺寸的过程，其核心目标是确定每个可见元素在屏幕上的<strong>位置</strong>和<strong>大小</strong>。</p>
-<h4>3.1 构建布局树（Layout Tree Construction）</h4>
-<p>布局树基于渲染树（包含 DOM 结构和计算样式）构建，增加了精确的几何位置信息：</p>
-<pre><code class="language-mermaid">  flowchart TD
-  A[渲染树] --&gt; B[过滤不可见节点]
-  B --&gt; C[创建布局对象]
-  C --&gt; D[处理匿名盒模型]
-  D --&gt; E[生成布局树]
+<h4>3.1. 构建布局树（Layout Tree Construction）</h4>
+<p>布局树是对渲染树的几何属性（位置、尺寸）计算后生成的树结构，仅包含需参与几何计算的可见节点：</p>
+<pre><code class="language-mermaid">  flowchart LR
+    X[DOM树] --&gt; A[过滤不可见节点]
+    Y[CSSOM树] --&gt; A
+    A --&gt; B[处理伪元素]
+    B--&gt; C{渲染树}
+    C1{渲染树} --&gt; D[创建布局对象]
+    D --&gt; E[处理匿名盒模型]
+    E--&gt; F[几何属性计算]
+    F --&gt; G{布局树}
 </code></pre>
 <p><strong>关键步骤说明</strong>：</p>
 <table>
@@ -176,7 +172,7 @@
 </thead>
 <tbody>
 <tr>
-<td>过滤不可见节点</td>
+<td>过滤不可见节点 <strong>（在渲染树构建阶段已完成）</strong></td>
 <td>移除 <code>display: none</code> 的元素；保留 <code>visibility: hidden</code>（占据空间但不可见）</td>
 <td><code>visibility: hidden</code> 仍参与布局计算</td>
 </tr>
@@ -189,6 +185,11 @@
 <td>处理匿名盒模型</td>
 <td>补全混合内容流的布局层级（如块级容器内的内联内容）</td>
 <td>解决 CSS 盒模型规则下的内容排列问题（见下表示例）</td>
+</tr>
+<tr>
+<td>计算几何属性</td>
+<td>根据样式信息计算几何属性（如<code>width/height</code>、<code>margin/padding</code>、<code>position</code>）</td>
+<td>依赖<strong>包含块</strong>（元素布局的参考坐标系）</td>
 </tr>
 </tbody>
 </table>
@@ -220,9 +221,9 @@
 <blockquote>
 <p><strong>注意</strong>：匿名盒无法通过 JavaScript 直接访问，但会影响布局计算（如边距折叠、行高计算）。参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_display/Visual_formatting_model#%E7%9B%92%E5%AD%90%E7%94%9F%E6%88%90">MDN 匿名盒</a></p>
 </blockquote>
-<h4>3.2 布局计算（Layout Computation）</h4>
+<h4>3.2. 布局计算（Layout Computation）</h4>
 <p>布局计算的核心是为布局树中的每个节点计算精确的宽度、高度、位置（top/left/right/bottom），依赖<strong>包含块</strong>（元素布局的参考坐标系）。</p>
-<h5>3.2.1 包含块的确定规则</h5>
+<h5>3.2.1. 包含块的确定规则</h5>
 <table>
 <thead>
 <tr>
@@ -240,7 +241,7 @@
 <tr>
 <td><code>absolute</code></td>
 <td>由最近的非<code>static</code>定位祖先元素的<strong>内边距盒（padding box）</strong> 创建；无则用初始包含块</td>
-<td>祖先满足以下任一条件：<br>1. <code>transform/perspective</code> ≠ <code>none</code><br>2. <code>will-change: transform/perspective</code><br>3. <code>filter</code> ≠ <code>none</code> 或者 <code>will-change: filter</code>（Firfox） <br>4. <code>contain: layout/paint/strict/content</code> <br>5. <code>backdrop-filter</code> ≠ <code>none</code>（有争议）</td>
+<td>祖先满足以下任一条件：<br>1. <code>transform/perspective</code> ≠ <code>none</code><br>2. <code>will-change: transform/perspective</code><br>3. <code>filter</code> ≠ <code>none</code> 或者 <code>will-change: filter</code>（Firefox） <br>4. <code>contain: layout/paint/strict/content</code> <br>5. <code>backdrop-filter</code> ≠ <code>none</code>（有争议）</td>
 </tr>
 <tr>
 <td><code>fixed</code></td>
@@ -252,8 +253,8 @@
 <blockquote>
 <p>参考：<br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_display/Containing_block">MDN 包含块</a><br>- <a href="https://www.w3.org/TR/css-position-3/#containing-block">W3C CSS Positioned Layout</a></p>
 </blockquote>
-<h5>3.2.2 几何属性计算顺序与特殊布局</h5>
-<p>布局计算从根元素（<code>&lt;html&gt;</code>）开始递归处理子元素，核心计算内容包括：</p>
+<h5>3.2.2. 几何属性计算顺序与特殊布局</h5>
+<p>布局计算以&quot;包含块&quot;为单位递归：先计算父包含块的几何属性，再基于此计算子元素的位置与尺寸，整体遵循&quot;从包含块到子元素&quot;的依赖顺序</p>
 <table>
 <thead>
 <tr>
@@ -310,7 +311,7 @@
 <blockquote>
 <p>参考：<br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_display/Block_formatting_context">MDN 块级格式化上下文</a><br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_flexible_box_layout">MDN 弹性布局</a><br>- <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_grid_layout">MDN 网格布局</a><br>- <a href="https://developer.mozilla.org/zh-CN/docs/Learn_web_development/Core/CSS_layout/Floats">MDN 浮动布局</a></p>
 </blockquote>
-<h4>3.3 增量布局与性能优化</h4>
+<h4>3.3. 增量布局与性能优化</h4>
 <p>为避免全量重排（Full Reflow），浏览器采用<strong>增量布局</strong>策略，仅更新受影响的子树。</p>
 <p><strong>增量布局机制（Incremental Layout）</strong>：</p>
 <pre><code class="language-mermaid">  flowchart LR
@@ -327,7 +328,7 @@
 <blockquote>
 <p>参考：<a href="https://web.dev/articles/howbrowserswork?hl=zh-cn#layout">Web Dev howbrowserswork</a></p>
 </blockquote>
-<p><strong>强制同步布局（Forced Synchronous Layout）</strong>：</p>
+<p><strong>避免布局抖动（Layout Thrashing）</strong>：</p>
 <pre><code class="language-javascript">// 错误示例：连续交叉读写布局属性导致触发多次重排
 // 步骤1：写操作（修改width）
 element.style.width = '100px'
@@ -347,8 +348,8 @@ element.style.height = '200px'
 </ul>
 <pre><code class="language-javascript">// 读写分离：先批量读，再批量写；或者先批量写，再批量读
 requestAnimationFrame(() =&gt; {
-	// 1. 先读后写
-	// 先执行读操作（获取当前布局信息）
+	// 1. 先读后写（推荐）
+	// 先执行读操作（获取当前布局信息，利用缓存，无强制同步布局）
 	const width = element.offsetWidth
 	// 再执行所有写操作（批量暂存）
 	element.style.width = '100px'
@@ -358,7 +359,7 @@ requestAnimationFrame(() =&gt; {
 	// 先执行所有写操作（批量暂存）
 	element.style.width = '100px'
 	element.style.height = '200px'
-	// 最后执行读操作（触发一次布局）
+	// 最后执行读操作（依然会触发一次强制同步布局）
 	const width = element.offsetWidth
 })
 </code></pre>
@@ -367,8 +368,8 @@ requestAnimationFrame(() =&gt; {
 <strong>真正需要避免的是 “写 - 读 - 写”“读 - 写 - 读” 这类读写交替的操作，它们会频繁打破浏览器的优化机制，导致多次布局计算</strong>。</p>
 <h3>4. 分层阶段（Layer Stage）</h3>
 <p>分层阶段的目标是将布局树中的元素分配到不同的渲染层（Render Layers），通过隔离动态内容、复用静态内容提升渲染效率。</p>
-<h4>4.1 分层触发条件</h4>
-<p>元素被分配到独立渲染层的条件（满足任意一条即触发）：</p>
+<h4>4.1. 分层触发条件</h4>
+<p>渲染层的拆分通常与层叠上下文（Stacking Context）密切相关，而层叠上下文的实际触发条件如下：</p>
 <table>
 <thead>
 <tr>
@@ -411,10 +412,146 @@ requestAnimationFrame(() =&gt; {
 </tbody>
 </table>
 <blockquote>
-<p><strong>合成层的内存成本</strong>：虽然合成层提升性能，但过多的合成层可能导致内存占用增加。</p>
-<p><strong>合成层的合并</strong>：浏览器会尝试合并相邻的静态层以减少 GPU 资源消耗。</p>
+<p>参考： <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_positioned_layout/Stacking_context">MDN 层叠上下文</a></p>
 </blockquote>
-<h4>4.2 渲染层与合成层的层级关系</h4>
+<h5>4.1.1 层叠上下文绘制顺序</h5>
+<table>
+<thead>
+<tr>
+<th>顺序</th>
+<th>绘制内容</th>
+<th>详细说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>自身背景与边框</strong></td>
+<td>层叠上下文元素的背景和边框最先绘制</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>负 z-index 子层叠上下文</strong></td>
+<td>递归处理所有<code>z-index &lt; 0</code>的子层叠上下文<br>（按 z-index 升序，同值按 DOM 顺序）</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>文档流内容</strong></td>
+<td>按顺序绘制：<br>1. 块级元素（背景/边框）<br>2. 浮动元素<br>3. 行内元素（含文本装饰）</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td><strong>z-index:auto/0 的定位元素</strong></td>
+<td>绘制定位元素及其内容<br>（若创建新层叠上下文则递归处理）</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td><strong>正 z-index 子层叠上下文</strong></td>
+<td>递归处理所有<code>z-index &gt;= 1</code>的子层叠上下文<br>（按 z-index 升序，同值按 DOM 顺序）</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td><strong>轮廓(outline)</strong></td>
+<td>最后绘制所有元素的轮廓线</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>特殊说明（根层叠上下文差异）</strong>：</p>
+<ul>
+<li><strong>根元素背景</strong>：仅根层叠上下文需要先绘制整个画布背景</li>
+<li><strong>绘制范围</strong>：根层叠上下文的背景覆盖无限画布，普通层叠上下文的背景限定在元素边界内</li>
+</ul>
+<p>参考：<a href="https://www.w3.org/TR/CSS2/zindex.html#painting-order">w3c 层叠上下文的详细描述</a></p>
+</blockquote>
+<h5>4.1.2 层叠上下文绘制示例</h5>
+<pre><code class="language-html">&lt;div
+	class=&quot;A&quot;
+	style=&quot;position: relative; z-index: 1&quot;
+&gt;
+	&lt;!-- 层叠上下文 --&gt;
+	背景A
+	&lt;div
+		class=&quot;B&quot;
+		style=&quot;position: absolute; z-index: -1&quot;
+	&gt;
+		&lt;!-- 负z-index子上下文 --&gt;
+		背景B（递归步骤2）
+		&lt;div
+			class=&quot;C&quot;
+			style=&quot;opacity: 0.8&quot;
+		&gt;
+			&lt;!-- 隐式层叠上下文 --&gt;
+			内容C（在B的递归中处理）
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div
+		class=&quot;D&quot;
+		style=&quot;float: left&quot;
+	&gt;
+		浮动元素（步骤3）
+	&lt;/div&gt;
+	&lt;div
+		class=&quot;E&quot;
+		style=&quot;position: absolute; z-index: 0&quot;
+	&gt;
+		&lt;!-- z-index:0 --&gt;
+		内容E（步骤4）
+	&lt;/div&gt;
+	&lt;div
+		class=&quot;F&quot;
+		style=&quot;position: absolute; z-index: 2&quot;
+	&gt;
+		&lt;!-- 正z-index子上下文 --&gt;
+		背景F（递归步骤5）
+	&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>递归绘制顺序详解</strong>：</p>
+<ol>
+<li>绘制 A 的背景和边框</li>
+<li>递归处理 B（负 z-index 子上下文）：
+<ul>
+<li>绘制 B 的背景和边框</li>
+<li>递归处理 C（opacity 创建的隐式层叠上下文）：
+<ul>
+<li>绘制 C 的背景和边框</li>
+<li>绘制 C 的文档流内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>绘制 A 的文档流内容：
+<ul>
+<li>块级元素</li>
+<li>浮动元素 D</li>
+<li>行内元素</li>
+</ul>
+</li>
+<li>绘制定位元素 E（z-index:0）及其内容</li>
+<li>递归处理 F（正 z-index 子上下文）：
+<ul>
+<li>绘制 F 的背景和边框</li>
+<li>绘制 F 的内容</li>
+</ul>
+</li>
+<li>绘制所有元素的外轮廓(outline)</li>
+</ol>
+<blockquote>
+<p><strong>关键特点</strong>：</p>
+<ol>
+<li><strong>层级隔离</strong>：每个子层叠上下文独立绘制，不受外部 z-index 影响</li>
+<li><strong>深度优先递归</strong>：遇到子层叠上下文时立即展开处理</li>
+<li><strong>位置决定顺序</strong>：
+<ul>
+<li>负 z-index 内容在父背景后、文档流前</li>
+<li>正 z-index 内容在文档流后、轮廓前</li>
+</ul>
+</li>
+<li><strong>创建方式无关</strong>：无论通过 z-index/opacity/transform 等何种方式创建，绘制规则一致</li>
+</ol>
+</blockquote>
+<h4>4.2. 渲染层与合成层的层级关系</h4>
 <p>分层并非单一层级，而是存在&quot;渲染层 → 合成层&quot;的升级关系：</p>
 <pre><code class="language-mermaid">  graph TD
   A[布局树] --&gt; B(渲染层 RenderLayer)
@@ -444,29 +581,12 @@ requestAnimationFrame(() =&gt; {
 </tr>
 </tbody>
 </table>
-<h4>4.3 层的堆叠与排序</h4>
+<h4>4.3. 层的堆叠与排序</h4>
 <p>层叠顺序由<strong>层叠上下文</strong>决定，子层无法超出父层的堆叠范围。</p>
-<ol>
-<li>
-<p><strong>层叠上下文规则</strong>：</p>
 <ul>
-<li>每个层有自己的&quot;层序&quot;（类似全局<code>z-index</code>）。</li>
-<li>堆叠顺序遵循<a href="https://www.w3.org/TR/css-position-3/#stacking-context">CSS Positioned Layout 3</a>规范：</li>
+<li>见本文 → <a href="#_4-1-1-%E5%B1%82%E5%8F%A0%E4%B8%8A%E4%B8%8B%E6%96%87%E7%BB%98%E5%88%B6%E9%A1%BA%E5%BA%8F">4.1.1 层叠上下文绘制顺序</a>。</li>
 </ul>
-<pre><code class="language-text">背景与边框 → 负z-index层 → 块级元素 → 浮动元素 → 行内元素 → 正z-index层
-</code></pre>
-</li>
-<li>
-<p><strong>合成层排序示例</strong>：</p>
-</li>
-</ol>
-<pre><code class="language-mermaid">  flowchart TB
-  A[根合成层] --&gt; B[层A z-index:1]
-  A --&gt; C[层B z-index:5]
-  A --&gt; D[层C z-index:10]
-  D --&gt; E[子层 z-index:15]
-</code></pre>
-<h4>4.4 层的优化策略</h4>
+<h4>4.4. 层的优化策略</h4>
 <p>浏览器通过合并与拆分层平衡内存与性能：</p>
 <table>
 <thead>
@@ -505,12 +625,11 @@ requestAnimationFrame(() =&gt; {
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[浏览器工作原理（一）]]></title>
+        <title type="html"><![CDATA[浏览器渲染原理（一）]]></title>
         <id>https://clark-cui.top/posts/浏览器渲染原理（一）.html</id>
         <link href="https://clark-cui.top/posts/浏览器渲染原理（一）.html"/>
         <updated>2025-06-29T00:00:00.000Z</updated>
         <content type="html"><![CDATA[<h2>浏览器的多进程架构</h2>
-<hr>
 <h3>进程与线程</h3>
 <p><strong>进程</strong>：<br>
 指计算机中已执行的程序，曾经是分时系统的基本运作单位。在面向进程设计的系统中，是程序的基本执行实体；在面向线程设计的系统中，进程本身不是基本执行单位，而是线程的容器。<br>
@@ -557,10 +676,10 @@ requestAnimationFrame(() =&gt; {
 <ImageBuilder :source="['浏览器进程架构.png']" size="medium"/>
 <p>其中，<strong>渲染进程</strong>是我们最应该关注的进程，它负责通过一系列渲染步骤（又称作浏览器渲染管线）将 HTML、JavaScript、CSS、图片等资源最终解析为可以显示和交互的页面。</p>
 <p><strong>渲染进程管理规则</strong>：</p>
-<pre><code class="language-mermaid">flowchart TD
-A[新页面请求] --&gt; B{与当前页面是否同站？}
-B --&gt;|是| C[复用当前渲染进程]
-B --&gt;|否| D[创建新渲染进程]
+<pre><code class="language-mermaid">  flowchart TD
+  A[新页面请求] --&gt; B{与当前页面是否同站？}
+  B --&gt;|是| C[复用当前渲染进程]
+  B --&gt;|否| D[创建新渲染进程]
 </code></pre>
 <ul>
 <li>同站判定：相同的 eTLD+1（有效顶级域名+二级域名）</li>
@@ -594,7 +713,7 @@ B --&gt;|否| D[创建新渲染进程]
 <hr>
 <h3>1. HTML 解析与 DOM 树构建</h3>
 <p>HTML 解析是浏览器渲染管线的第一步，它将 HTML 文档转换为 DOM 树。这个过程遵循<a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing">WHATWG HTML 标准</a>中定义的算法。</p>
-<h4>1.1 字节流解码（Byte Decoding）</h4>
+<h4>1.1. 字节流解码（Byte Decoding）</h4>
 <p><strong>目标</strong>：将原始字节流转换为可读字符</p>
 <p><strong>编码识别优先级</strong>：</p>
 <ol>
@@ -612,7 +731,7 @@ B --&gt;|否| D[创建新渲染进程]
 </blockquote>
 </li>
 </ol>
-<h4>1.2 令牌化（Tokenization）</h4>
+<h4>1.2. 令牌化（Tokenization）</h4>
 <p><strong>目标</strong>：将字符串切割为有意义的语法单元（Tokens）</p>
 <p><strong>分词规则</strong>：</p>
 <table>
@@ -652,21 +771,25 @@ B --&gt;|否| D[创建新渲染进程]
 </tbody>
 </table>
 <p><strong>容错机制</strong>：自动修正错误语法（如未闭合标签、错误嵌套）</p>
-<h4>1.3 DOM 树构建（Tree Construction）</h4>
+<h4>1.3. DOM 树构建（Tree Construction）</h4>
 <p><strong>目标</strong>：将 Token 序列转换为具有层级关系的 DOM（文档对象模型）树</p>
 <p><strong>核心过程</strong>：</p>
-<pre><code class="language-mermaid">   flowchart TB
-   T[Token序列] --&gt; P[开放元素栈]
-   P --&gt; N[创建节点]
-   N --&gt; R[建立父子关系]
-   R --&gt; D[完成DOM树]
+<pre><code class="language-mermaid">  flowchart TB
+  T[Token序列] --&gt; P[开放元素栈]
+  P --&gt; N[创建节点]
+  N --&gt; R[建立父子关系]
+  R --&gt; D[完成DOM树]
 </code></pre>
 <p><strong>关键技术细节</strong>：</p>
 <ul>
 <li>使用<a href="https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements">开放元素栈</a>维护元素的层级关系</li>
 <li><strong>脚本处理规则</strong>：
 <ul>
-<li>遇到<code>&lt;script&gt;</code>时暂停 DOM 构建并执行脚本，如果脚本需要下载，则需要等待脚本下载并执行完成。（除非标记<code>async</code>/<code>defer</code>）</li>
+<li>遇到<code>&lt;script&gt;</code>时暂停 DOM 构建并执行脚本，如果脚本需要下载，则需要等待脚本下载并执行完成。（除非标记<code>async</code>/<code>defer</code>）
+<blockquote>
+<p>async/defer 的区别，参考： <a href="https://zh.javascript.info/script-async-defer#zong-jie">脚本：async，defer</a></p>
+</blockquote>
+</li>
 <li>特殊行为：调用<code>document.write()</code>会插入内容到当前位置并重启解析</li>
 </ul>
 </li>
@@ -678,10 +801,10 @@ B --&gt;|否| D[创建新渲染进程]
 </ul>
 </li>
 </ul>
-<h4>1.4 触发文档就绪事件（Document Readiness）</h4>
+<h4>1.4. 触发文档就绪事件（Document Readiness）</h4>
 <pre><code class="language-mermaid">  flowchart LR
   DOM完成 --&gt; 执行defer脚本 --&gt; DOMContentLoaded
-  DOMContentLoaded --&gt; 等待资源 --&gt; load
+  DOMContentLoaded --&gt; 等待所有外部资源加载完成 --&gt; load
 </code></pre>
 <h4>构建过程的核心优化机制</h4>
 <ul>
@@ -701,16 +824,10 @@ B --&gt;|否| D[创建新渲染进程]
 </li>
 </ul>
 </li>
-<li>
-<p><strong>避免布局抖动（Layout Thrashing）</strong></p>
-<ul>
-<li>构建过程中如果 JS 读取布局属性（如 offsetHeight），会强制触发同步布局计算（重排），导致性能问题，因此应避免在 DOM 构建过程中读取布局属性，以防触发强制同步布局。</li>
-</ul>
-</li>
 </ul>
 <h3>2. 样式计算</h3>
 <p>样式计算是浏览器渲染管线中的关键步骤，它将 DOM 树和 CSS 规则结合生成带有样式的渲染树。此过程遵循<a href="https://www.w3.org/TR/css-syntax-3/">W3C CSS Syntax Level 3</a>和<a href="https://www.w3.org/TR/css-cascade-4/">CSS Cascading and Inheritance Level 4</a>等规范。</p>
-<h4>2.1 CSSOM 树构建</h4>
+<h4>2.1. CSSOM 树构建</h4>
 <pre><code class="language-mermaid">  flowchart LR
   CSS文本 --&gt; 字节解码 --&gt; 令牌化 --&gt; 规则解析 --&gt; CSSOM树
 </code></pre>
@@ -746,7 +863,7 @@ interface CSSRule {
 </ul>
 </li>
 </ol>
-<h4>2.2 规则匹配</h4>
+<h4>2.2. 规则匹配</h4>
 <p><strong>匹配过程</strong>：</p>
 <pre><code class="language-mermaid">  flowchart LR
   D[DOM节点] --&gt; S[选择器引擎]
@@ -780,7 +897,7 @@ d = 元素/伪元素选择器的规则数量
 </ul>
 </li>
 </ol>
-<h4>2.3 层叠顺序计算</h4>
+<h4>2.3. 层叠顺序计算</h4>
 <p>样式层叠遵循<a href="https://www.w3.org/TR/css-cascade-4/#cascading">CSS Cascading and Inheritance 规范</a>定义的层叠顺序：</p>
 <ol>
 <li>
@@ -809,7 +926,7 @@ d = 元素/伪元素选择器的规则数量
 </ul>
 </li>
 </ol>
-<h4>2.4 继承属性处理</h4>
+<h4>2.4. 继承属性处理</h4>
 <p><strong>继承机制</strong>：</p>
 <pre><code class="language-mermaid">  flowchart TD
   父元素 --可继承属性--&gt; 子元素
@@ -858,7 +975,7 @@ if (property.isInherited) {
 </table>
 </li>
 </ol>
-<h4>2.5 相对值转换</h4>
+<h4>2.5. 相对值转换</h4>
 <table>
 <thead>
 <tr>
@@ -870,8 +987,8 @@ if (property.isInherited) {
 <tbody>
 <tr>
 <td>em</td>
-<td>父元素 <code>font-size</code></td>
-<td>1em = 父元素的 <code>font-size</code> 值</td>
+<td>- 用于普通属性时，相对于本元素的字体大小 <br> - 用于 <code>font-size</code> 时相对于父元素的字体大小</td>
+<td></td>
 </tr>
 <tr>
 <td>rem</td>
@@ -900,7 +1017,7 @@ if (property.isInherited) {
 </tr>
 </tbody>
 </table>
-<h4>2.6 属性值标准化</h4>
+<h4>2.6. 属性值标准化</h4>
 <p><strong>标准化操作</strong>：</p>
 <ol>
 <li>
@@ -930,12 +1047,12 @@ margin-left: 10px;
 </ul>
 </li>
 </ol>
-<h4>2.7 媒体查询处理</h4>
+<h4>2.7. 媒体查询处理</h4>
 <pre><code class="language-mermaid">  flowchart LR
   媒体规则 --&gt; 条件检测 --&gt;|匹配| 应用规则
   条件检测 --&gt;|不匹配| 忽略规则
 </code></pre>
-<h4>2.8 伪元素/类处理</h4>
+<h4>2.8. 伪元素/类处理</h4>
 <p><strong>注意</strong>： 伪元素的样式在样式计算阶段确定，但对应的渲染节点在后续渲染树构建时才生成。</p>
 <pre><code class="language-mermaid">  flowchart LR
   DOM树 --样式计算--&gt; 渲染树
